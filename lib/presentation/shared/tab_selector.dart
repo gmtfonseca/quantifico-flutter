@@ -23,15 +23,15 @@ class TabSelector extends StatelessWidget {
   List<BottomNavigationBarItem> _buildItems() {
     return [
       BottomNavigationBarItem(
-        icon: Icon(Icons.people),
+        icon: Icon(Icons.home),
         title: Text('Home'),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.list),
+        icon: Icon(Icons.assessment),
         title: Text('Insights'),
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.show_chart),
+        icon: Icon(Icons.assignment),
         title: Text('Notas Fiscais'),
       ),
     ];
