@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:quantifico/data/model/chart/annual_sales_record.dart';
+import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/provider/chart_web_provider.dart';
 
 class ChartRepository {
@@ -11,5 +11,9 @@ class ChartRepository {
 
   Future<List<AnnualSalesRecord>> getAnnualSalesData() async {
     return await chartWebProvider.fetchAnnualSalesData();
+  }
+
+  Future<List<CustomerSalesRecord>> getCustomerSalesData() async {
+    return await chartWebProvider.fetchCustomerSalesData();
   }
 }

@@ -1,6 +1,4 @@
-import 'dart:convert';
-
-import 'package:quantifico/data/model/chart/annual_sales_record.dart';
+import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/util/web_client.dart';
 
 class ChartWebProvider {
@@ -8,9 +6,14 @@ class ChartWebProvider {
   ChartWebProvider({this.webClient});
 
   Future<List<AnnualSalesRecord>> fetchAnnualSalesData() async {
-    final response = await webClient.fetch('/nfs/plot/faturamento-anual');
-    final List body = json.decode(response.body) as List;
+    final List body = await webClient.fetch('nfs/plot/faturamento-anual');
     final data = body.map((record) => AnnualSalesRecord.fromJson(record)).toList();
+    return data;
+  }
+
+  Future<List<CustomerSalesRecord>> fetchCustomerSalesData() async {
+    final List body = await webClient.fetch('nfs/plot/faturamento-cliente');
+    final data = body.map((record) => CustomerSalesRecord.fromJson(record)).toList();
     return data;
   }
 }
