@@ -7,9 +7,9 @@ const String _token =
 
 const String _baseUrl = 'http://10.0.2.2:3000';
 
-class UnauthorizedRequest implements Exception {}
+class UnauthorizedException implements Exception {}
 
-class BadRequest implements Exception {}
+class BadRequestException implements Exception {}
 
 class WebClient {
   final String baseUrl;
@@ -25,9 +25,9 @@ class WebClient {
       case 200:
         return json.decode(response.body);
       case 400:
-        throw BadRequest();
+        throw BadRequestException();
       case 401:
-        throw UnauthorizedRequest();
+        throw UnauthorizedException();
       default:
         throw Exception('Exception: status code ${response.statusCode}');
     }

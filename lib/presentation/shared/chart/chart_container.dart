@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quantifico/bloc/chart/chart_state.dart';
+import 'package:quantifico/presentation/shared/loading_indicator.dart';
 
 class ChartContainer extends StatelessWidget {
   final String title;
@@ -66,7 +67,7 @@ class ChartContainer extends StatelessWidget {
 
   Widget _buildContent() {
     if (chartState is DataLoading) {
-      return Center(child: Text('Loading'));
+      return LoadingIndicator();
     } else if (chartState is DataNotLoaded) {
       return Center(child: Text('An occurred while loading the data'));
     } else {
