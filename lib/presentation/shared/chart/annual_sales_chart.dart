@@ -30,7 +30,7 @@ class AnnualSalesChart extends StatelessWidget {
           title: 'Faturamento Anual',
           chartState: state,
           chart: _buildChart(state),
-          filtersDialog: AnnualSalesFiltersDialog(
+          filterDialog: AnnualSalesFiltersDialog(
             startYear: state is DataLoadedFiltered ? state.activeFilter.startYear : null,
             endYear: state is DataLoadedFiltered ? state.activeFilter.endYear : null,
             onApply: ({int startYear, int endYear}) {

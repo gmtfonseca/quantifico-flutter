@@ -31,7 +31,7 @@ class CustomerSalesChart extends StatelessWidget {
             title: 'Faturamento x Cliente',
             chartState: state,
             chart: _buildChart(state),
-            filtersDialog: CustomerSalesFilterDialog(
+            filterDialog: CustomerSalesFilterDialog(
               limit: state is DataLoadedFiltered ? state.activeFilter.limit : ChartConfig.maxRecordLimit,
               onApply: ({int limit}) {
                 bloc.add(

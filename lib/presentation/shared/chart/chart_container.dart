@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:quantifico/bloc/chart/chart_state.dart';
+import 'package:quantifico/presentation/shared/chart/full_screen_chart.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 
 class ChartContainer extends StatelessWidget {
   final String title;
   final ChartState chartState;
   final Widget chart;
-  final Widget filtersDialog;
+  final Widget filterDialog;
+  final double height;
 
   ChartContainer({
     Key key,
     this.title,
     @required this.chartState,
     @required this.chart,
-    this.filtersDialog,
+    this.filterDialog,
+    this.height = 450,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 450,
+      height: height,
       child: Card(
         elevation: 10,
         child: Column(
@@ -63,17 +66,21 @@ class ChartContainer extends StatelessWidget {
       IconButton(
         icon: Icon(Icons.favorite_border),
         onPressed: () {},
-      )
+      ),
+      IconButton(
+        icon: Icon(Icons.fullscreen),
+        onPressed: () => _openFullScreenMode(context),
+      ),
     ];
 
-    if (filtersDialog != null) {
+    if (filterDialog != null) {
       options.add(
         IconButton(
-          icon: Icon(Icons.filter_list),
+          icon: Icon(Icons.more_vert),
           onPressed: () {
             showDialog(
               context: context,
-              child: filtersDialog,
+              child: filterDialog,
             );
           },
         ),
@@ -90,5 +97,19 @@ class ChartContainer extends StatelessWidget {
     } else {
       return chart;
     }
+  }
+
+  void _openFullScreenMode(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return FullScreenChart(
+            title: title,
+            child: chart,
+          );
+        },
+      ),
+    );
   }
 }
