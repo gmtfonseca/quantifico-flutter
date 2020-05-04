@@ -5,8 +5,23 @@ class ChartWebProvider {
   final WebClient webClient;
   ChartWebProvider({this.webClient});
 
-  Future<List<AnnualSalesRecord>> fetchAnnualSalesData() async {
-    final List body = await webClient.fetch('nfs/plot/faturamento-anual');
+  Future<List<AnnualSalesRecord>> fetchAnnualSalesData({
+    int startYear,
+    int endYear,
+  }) async {
+    final Map<String, String> params = Map();
+    if (startYear != null) {
+      params['anoinicial'] = startYear.toString();
+    }
+
+    if (endYear != null) {
+      params['anofinal'] = endYear.toString();
+    }
+
+    final List body = await webClient.fetch(
+      'nfs/plot/faturamento-anual',
+      params: params,
+    );
     final data = body.map((record) => AnnualSalesRecord.fromJson(record)).toList();
     return data;
   }

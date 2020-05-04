@@ -25,7 +25,7 @@ class _InsightScreenState extends State<InsightScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final verticalSpacing = SizedBox(height: 25);
+    final verticalSpacing = SizedBox(height: 15);
     return RefreshIndicator(
       onRefresh: () async {
         _refreshCharts();

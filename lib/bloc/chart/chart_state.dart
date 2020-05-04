@@ -21,6 +21,20 @@ class DataLoaded<T> extends ChartState {
 
   @override
   String toString() {
-    return 'ChartLoaded $data';
+    return 'DataLoaded $data';
+  }
+}
+
+class DataLoadedFiltered<T, F> extends DataLoaded<T> {
+  final F activeFilter;
+
+  const DataLoadedFiltered(List<T> data, this.activeFilter) : super(data);
+
+  @override
+  List<Object> get props => [data, activeFilter];
+
+  @override
+  String toString() {
+    return 'DataLoadedFiltered { data $data}, activeFilter: $activeFilter';
   }
 }

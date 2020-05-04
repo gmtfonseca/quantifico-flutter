@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 const String _token =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTg4NDczMzMzLCJleHAiOjE1ODg1NTk3MzN9.j8Wf1i6t8wy5DeA1DZ28nopB4YBqwYjGDikawDMqiCk";
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTg4NjAyOTgxLCJleHAiOjE1ODg2ODkzODF9.nML_EoVhZcAySd1L05YMD0KWkgBNT4wFk5E4aJ4RHgA";
 
-const String _baseUrl = 'http://10.0.2.2:3000';
+const String _baseUrl = '10.0.2.2:3000';
 
 class UnauthorizedException implements Exception {}
 
@@ -19,8 +19,12 @@ class WebClient {
 
   String url(endpoint) => '$baseUrl/$endpoint';
 
-  Future<dynamic> fetch(String endpoint) async {
-    final response = await http.get(url(endpoint), headers: headers);
+  Future<dynamic> fetch(String endpoint, {Map<String, String> params}) async {
+    final uri = Uri.http(baseUrl, endpoint, params);
+    final response = await http.get(
+      uri,
+      headers: headers,
+    );
     switch (response.statusCode) {
       case 200:
         return json.decode(response.body);

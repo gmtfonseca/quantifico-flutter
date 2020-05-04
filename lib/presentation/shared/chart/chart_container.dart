@@ -5,13 +5,15 @@ import 'package:quantifico/presentation/shared/loading_indicator.dart';
 class ChartContainer extends StatelessWidget {
   final String title;
   final ChartState chartState;
-  final Widget child;
+  final Widget chart;
+  final Widget filtersDialog;
 
   ChartContainer({
     Key key,
     this.title,
-    this.chartState,
-    this.child,
+    @required this.chartState,
+    @required this.chart,
+    this.filtersDialog,
   }) : super(key: key);
 
   @override
@@ -50,19 +52,34 @@ class ChartContainer extends StatelessWidget {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            IconButton(
-              icon: Icon(Icons.favorite_border),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Icon(Icons.more_vert),
-              onPressed: () {},
-            )
-          ],
+          children: _buildOptions(context),
         ),
       ],
     );
+  }
+
+  List<Widget> _buildOptions(BuildContext context) {
+    final options = [
+      IconButton(
+        icon: Icon(Icons.favorite_border),
+        onPressed: () {},
+      )
+    ];
+
+    if (filtersDialog != null) {
+      options.add(
+        IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: () {
+            showDialog(
+              context: context,
+              child: filtersDialog,
+            );
+          },
+        ),
+      );
+    }
+    return options;
   }
 
   Widget _buildContent() {
@@ -71,7 +88,7 @@ class ChartContainer extends StatelessWidget {
     } else if (chartState is DataNotLoaded) {
       return Center(child: Text('An occurred while loading the data'));
     } else {
-      return child;
+      return chart;
     }
   }
 }

@@ -7,23 +7,18 @@ abstract class ChartEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class SetFilter extends ChartEvent {
-  const SetFilter();
-
-  @override
-  String toString() => 'SetFilter';
-}
-
-class ClearFilter extends ChartEvent {
-  const ClearFilter();
-
-  @override
-  String toString() => 'ClearFilter';
-}
-
 class LoadData extends ChartEvent {
   const LoadData();
 
   @override
   String toString() => 'LoadData';
+}
+
+class UpdateFilter<T> extends ChartEvent {
+  final T filter;
+
+  const UpdateFilter(this.filter);
+
+  @override
+  String toString() => 'UpdateFilter';
 }

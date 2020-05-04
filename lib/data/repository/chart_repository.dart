@@ -9,8 +9,14 @@ class ChartRepository {
     @required this.chartWebProvider,
   });
 
-  Future<List<AnnualSalesRecord>> getAnnualSalesData() async {
-    return await chartWebProvider.fetchAnnualSalesData();
+  Future<List<AnnualSalesRecord>> getAnnualSalesData({
+    int startYear,
+    int endYear,
+  }) async {
+    return await chartWebProvider.fetchAnnualSalesData(
+      startYear: startYear,
+      endYear: endYear,
+    );
   }
 
   Future<List<CustomerSalesRecord>> getCustomerSalesData() async {
