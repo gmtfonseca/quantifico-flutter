@@ -13,14 +13,24 @@ class InsightScreen extends StatefulWidget {
 class _InsightScreenState extends State<InsightScreen> {
   AnnualSalesBloc _annualSalesBloc;
   CustomerSalesBloc _customerSalesBloc;
+  List<Bloc> _charts = [];
 
   @override
   void didChangeDependencies() {
     final chartRepository = RepositoryProvider.of<ChartRepository>(context);
     _annualSalesBloc = AnnualSalesBloc(chartRepository: chartRepository);
+    _charts.add(_annualSalesBloc);
     _customerSalesBloc = CustomerSalesBloc(chartRepository: chartRepository);
+    _charts.add(_customerSalesBloc);
     _refreshCharts();
     super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _annualSalesBloc?.close();
+    _customerSalesBloc?.close();
+    super.dispose();
   }
 
   @override
@@ -42,16 +52,12 @@ class _InsightScreenState extends State<InsightScreen> {
   }
 
   void _refreshCharts() {
-    if (_annualSalesBloc.state is DataLoadedFiltered) {
-      _annualSalesBloc.add(UpdateFilter((_annualSalesBloc.state as DataLoadedFiltered).activeFilter));
-    } else {
-      _annualSalesBloc.add(LoadData());
-    }
-
-    if (_customerSalesBloc.state is DataLoadedFiltered) {
-      _customerSalesBloc.add(UpdateFilter((_customerSalesBloc.state as DataLoadedFiltered).activeFilter));
-    } else {
-      _customerSalesBloc.add(LoadData());
+    for (Bloc chart in _charts) {
+      if (chart.state is DataLoadedFiltered) {
+        chart.add(UpdateFilter((chart.state as DataLoadedFiltered).activeFilter));
+      } else {
+        chart.add(LoadData());
+      }
     }
   }
 }
