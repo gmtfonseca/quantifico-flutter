@@ -42,7 +42,16 @@ class _InsightScreenState extends State<InsightScreen> {
   }
 
   void _refreshCharts() {
-    _annualSalesBloc.add(LoadData());
-    _customerSalesBloc.add(LoadData());
+    if (_annualSalesBloc.state is DataLoadedFiltered) {
+      _annualSalesBloc.add(UpdateFilter((_annualSalesBloc.state as DataLoadedFiltered).activeFilter));
+    } else {
+      _annualSalesBloc.add(LoadData());
+    }
+
+    if (_customerSalesBloc.state is DataLoadedFiltered) {
+      _customerSalesBloc.add(UpdateFilter((_customerSalesBloc.state as DataLoadedFiltered).activeFilter));
+    } else {
+      _customerSalesBloc.add(LoadData());
+    }
   }
 }
