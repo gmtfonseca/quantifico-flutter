@@ -11,8 +11,8 @@ class DataLoading extends ChartState {}
 
 class DataNotLoaded extends ChartState {}
 
-class DataLoaded<T> extends ChartState {
-  final List<T> data;
+class DataLoaded<DataType> extends ChartState {
+  final List<DataType> data;
 
   const DataLoaded(this.data);
 
@@ -25,10 +25,10 @@ class DataLoaded<T> extends ChartState {
   }
 }
 
-class DataLoadedFiltered<T, F> extends DataLoaded<T> {
-  final F activeFilter;
+class DataLoadedFiltered<DataType, FilterType> extends DataLoaded<DataType> {
+  final FilterType activeFilter;
 
-  const DataLoadedFiltered(List<T> data, this.activeFilter) : super(data);
+  const DataLoadedFiltered(List<DataType> data, this.activeFilter) : super(data);
 
   @override
   List<Object> get props => [data, activeFilter];

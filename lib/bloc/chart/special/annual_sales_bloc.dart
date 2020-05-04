@@ -18,7 +18,7 @@ class AnnualSalesBloc extends Bloc<ChartEvent, ChartState> {
   Stream<ChartState> mapEventToState(ChartEvent event) async* {
     if (event is LoadData) {
       yield* _mapLoadDataToState(event);
-    } else if (event is UpdateFilter<AnnualSalesFilter>) {
+    } else if (event is UpdateFilter) {
       yield* _mapUpdateFilterToState(event);
     }
   }

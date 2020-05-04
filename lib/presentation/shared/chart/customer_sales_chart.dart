@@ -3,7 +3,9 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/chart.dart';
 import 'package:quantifico/bloc/chart/special/customer_sales_bloc.dart';
+import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/chart.dart';
+import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
 
@@ -29,7 +31,16 @@ class CustomerSalesChart extends StatelessWidget {
             title: 'Faturamento x Cliente',
             chartState: state,
             chart: _buildChart(state),
-            filtersDialog: CustomerSalesFilters(),
+            filtersDialog: CustomerSalesFilterDialog(
+              limit: state is DataLoadedFiltered ? state.activeFilter.limit : ChartConfig.maxRecordLimit,
+              onApply: ({int limit}) {
+                bloc.add(
+                  UpdateFilter(
+                    CustomerSalesFilter(limit: limit),
+                  ),
+                );
+              },
+            ),
           );
         });
   }
@@ -65,24 +76,34 @@ class CustomerSalesChart extends StatelessWidget {
   }
 }
 
-class CustomerSalesFilters extends StatefulWidget {
-  @override
-  _CustomerSalesFiltersState createState() => _CustomerSalesFiltersState();
+class CustomerSalesFilterDialog extends StatefulWidget {
+  final void Function({int limit}) onApply;
+  final int limit;
+
+  CustomerSalesFilterDialog({
+    this.onApply,
+    this.limit,
+  });
+
+  _CustomerSalesFilterDialogState createState() => _CustomerSalesFilterDialogState();
 }
 
-class _CustomerSalesFiltersState extends State<CustomerSalesFilters> {
+class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
   double _limit;
 
   @override
   void initState() {
-    _limit = 1;
+    _limit = widget.limit.toDouble();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ChartFilterDialog(
-      content: Slider(
+      onApply: () {
+        widget.onApply(limit: _limit.round());
+      },
+      child: Slider(
         label: '${_limit.round()}',
         value: _limit,
         onChanged: (value) {
@@ -91,8 +112,8 @@ class _CustomerSalesFiltersState extends State<CustomerSalesFilters> {
           });
         },
         min: 1.0,
-        max: 15.0,
-        divisions: 15,
+        max: ChartConfig.maxRecordLimit.toDouble(),
+        divisions: ChartConfig.maxRecordLimit,
       ),
     );
   }

@@ -26,8 +26,17 @@ class ChartWebProvider {
     return data;
   }
 
-  Future<List<CustomerSalesRecord>> fetchCustomerSalesData() async {
-    final List body = await webClient.fetch('nfs/plot/faturamento-cliente');
+  Future<List<CustomerSalesRecord>> fetchCustomerSalesData({int limit}) async {
+    final Map<String, String> params = Map();
+
+    if (limit != null) {
+      params['limit'] = limit.toString();
+    }
+
+    final List body = await webClient.fetch(
+      'nfs/plot/faturamento-cliente',
+      params: params,
+    );
     final data = body.map((record) => CustomerSalesRecord.fromJson(record)).toList();
     return data;
   }

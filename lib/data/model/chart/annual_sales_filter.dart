@@ -1,4 +1,6 @@
-class AnnualSalesFilter {
+import 'package:equatable/equatable.dart';
+
+class AnnualSalesFilter extends Equatable {
   final int startYear;
   final int endYear;
 
@@ -6,4 +8,10 @@ class AnnualSalesFilter {
     this.startYear,
     this.endYear,
   });
+
+  @override
+  List<Object> get props => [
+        startYear,
+        endYear,
+      ];
 }

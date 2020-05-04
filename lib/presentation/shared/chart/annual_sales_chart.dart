@@ -81,7 +81,11 @@ class AnnualSalesFiltersDialog extends StatefulWidget {
   final int startYear;
   final int endYear;
 
-  AnnualSalesFiltersDialog({this.onApply, this.startYear, this.endYear});
+  AnnualSalesFiltersDialog({
+    this.onApply,
+    this.startYear,
+    this.endYear,
+  });
 
   @override
   _AnnualSalesFiltersDialogState createState() => _AnnualSalesFiltersDialogState();
@@ -107,7 +111,7 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
           endYear: _endYearController.text.isNotEmpty ? int.parse(_endYearController.text) : null,
         );
       },
-      content: Padding(
+      child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [

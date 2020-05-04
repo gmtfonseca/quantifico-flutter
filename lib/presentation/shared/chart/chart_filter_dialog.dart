@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class ChartFilterDialog extends StatelessWidget {
-  final Widget content;
+  final Widget child;
   final VoidCallback onApply;
 
   ChartFilterDialog({
     Key key,
-    this.content,
+    this.child,
     this.onApply,
   }) : super(key: key);
 
@@ -28,7 +28,7 @@ class ChartFilterDialog extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: content,
+            child: child,
           ),
           ButtonBar(
             alignment: MainAxisAlignment.spaceEvenly,
