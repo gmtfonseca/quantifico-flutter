@@ -8,6 +8,7 @@ import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
+import 'package:quantifico/util/string_util.dart';
 
 import 'chart_filter_dialog.dart';
 
@@ -46,6 +47,8 @@ class CustomerSalesChart extends StatelessWidget {
   }
 
   Widget _buildChart(ChartState state) {
+    const MAX_CUSTOMER_LENGTH = 35;
+
     if (state is DataLoaded<CustomerSalesRecord>) {
       final series = [
         charts.Series<CustomerSalesRecord, String>(
@@ -54,7 +57,10 @@ class CustomerSalesChart extends StatelessWidget {
           domainFn: (CustomerSalesRecord record, _) => record.customer,
           measureFn: (CustomerSalesRecord record, _) => record.sales,
           data: state.data,
-          labelAccessorFn: (CustomerSalesRecord record, _) => '${record.customer}',
+          labelAccessorFn: (CustomerSalesRecord record, _) => toLimitedLength(
+            record.customer,
+            MAX_CUSTOMER_LENGTH,
+          ),
         ),
       ];
 
@@ -103,17 +109,24 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
       onApply: () {
         widget.onApply(limit: _limit.round());
       },
-      child: Slider(
-        label: '${_limit.round()}',
-        value: _limit,
-        onChanged: (value) {
-          setState(() {
-            _limit = value;
-          });
-        },
-        min: 1.0,
-        max: ChartConfig.maxRecordLimit.toDouble(),
-        divisions: ChartConfig.maxRecordLimit,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text('Limite'),
+          Slider(
+            label: '${_limit.round()}',
+            value: _limit,
+            onChanged: (value) {
+              setState(() {
+                _limit = value;
+              });
+            },
+            min: 1.0,
+            max: ChartConfig.maxRecordLimit.toDouble(),
+            divisions: ChartConfig.maxRecordLimit,
+          ),
+        ],
       ),
     );
   }

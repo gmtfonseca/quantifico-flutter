@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 const String _token =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTg4NjAyOTgxLCJleHAiOjE1ODg2ODkzODF9.nML_EoVhZcAySd1L05YMD0KWkgBNT4wFk5E4aJ4RHgA";
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTg4NzEyMjgzLCJleHAiOjE1ODg3OTg2ODN9.NZQaEqG_7uMn8lgB2cdzjmg7ZM39giUhXByXiaWHr5c";
 
 const String _baseUrl = '10.0.2.2:3000';
 

@@ -57,10 +57,7 @@ class ChartContainer extends StatelessWidget {
           padding: EdgeInsets.only(left: 16.0),
           child: Text(
             title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20.0,
-            ),
+            style: Theme.of(context).textTheme.title,
           ),
         ),
         Row(

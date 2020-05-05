@@ -11,7 +11,7 @@ class CustomerSalesRecord extends Equatable {
   });
 
   CustomerSalesRecord.fromJson(Map json)
-      : customer = json['razaoSocial'].toString(),
+      : customer = json['razaoSocial']?.toString(),
         sales = double.parse(json['totalFaturado'].toString());
 
   @override

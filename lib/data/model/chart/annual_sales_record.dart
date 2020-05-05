@@ -11,7 +11,7 @@ class AnnualSalesRecord extends Equatable {
   });
 
   AnnualSalesRecord.fromJson(Map json)
-      : year = json['ano'].toString(),
+      : year = json['ano']?.toString(),
         sales = double.parse(json['totalFaturado'].toString());
 
   @override

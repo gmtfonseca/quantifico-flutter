@@ -55,7 +55,7 @@ class AnnualSalesChart extends StatelessWidget {
         charts.Series<AnnualSalesRecord, String>(
           id: 'Sales',
           colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-          domainFn: (AnnualSalesRecord record, _) => record.year,
+          domainFn: (AnnualSalesRecord record, _) => record.year ?? 'Outro',
           measureFn: (AnnualSalesRecord record, _) => record.sales,
           data: state.data,
         )
