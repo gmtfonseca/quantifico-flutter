@@ -20,6 +20,7 @@ class Quantifico extends StatelessWidget {
     return MaterialApp(
       title: 'Quantifico',
       theme: ThemeData(
+        fontFamily: 'Raleway',
         primarySwatch: Colors.deepPurple,
       ),
       home: BlocProvider<TabBloc>(

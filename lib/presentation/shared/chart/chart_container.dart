@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quantifico/bloc/chart/chart_state.dart';
+import 'package:quantifico/config.dart';
 import 'package:quantifico/presentation/shared/chart/full_screen_chart.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 
@@ -21,14 +22,20 @@ class ChartContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
+    SizeConfig().init(context);
+    return Container(
+      color: Color(0xffFAF8F9),
+      height: MediaQuery.of(context).orientation == Orientation.portrait ? height : SizeConfig.safeBlockVertical * 80,
       child: Card(
-        elevation: 10,
+        color: Color(0xffFAF8F9),
+        elevation: 0,
         child: Column(
           children: [
             _buildHeader(context),
-            Divider(),
+            Divider(
+              color: Color(0xffe0e0e0),
+              thickness: 2.0,
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -50,7 +57,10 @@ class ChartContainer extends StatelessWidget {
           padding: EdgeInsets.only(left: 16.0),
           child: Text(
             title,
-            style: Theme.of(context).textTheme.title,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+            ),
           ),
         ),
         Row(
@@ -93,7 +103,16 @@ class ChartContainer extends StatelessWidget {
     if (chartState is DataLoading) {
       return LoadingIndicator();
     } else if (chartState is DataNotLoaded) {
-      return Center(child: Text('An occurred while loading the data'));
+      return Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Não foi possível carregar gráfico'),
+            SizedBox(width: 5),
+            Icon(Icons.sentiment_dissatisfied),
+          ],
+        ),
+      );
     } else {
       return chart;
     }

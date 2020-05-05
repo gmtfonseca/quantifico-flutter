@@ -40,13 +40,18 @@ class _InsightScreenState extends State<InsightScreen> {
       onRefresh: () async {
         _refreshCharts();
       },
-      child: ListView(
-        padding: EdgeInsets.all(8.0),
-        children: [
-          AnnualSalesChart(bloc: _annualSalesBloc),
-          verticalSpacing,
-          CustomerSalesChart(bloc: _customerSalesBloc),
-        ],
+      child: Container(
+        color: Color(0xffe0e0e0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: ListView(
+            children: [
+              AnnualSalesChart(bloc: _annualSalesBloc),
+              verticalSpacing,
+              CustomerSalesChart(bloc: _customerSalesBloc),
+            ],
+          ),
+        ),
       ),
     );
   }
