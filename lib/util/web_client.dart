@@ -17,8 +17,6 @@ class WebClient {
 
   WebClient([this.baseUrl = _baseUrl]) : headers = {HttpHeaders.authorizationHeader: _token};
 
-  String url(endpoint) => '$baseUrl/$endpoint';
-
   Future<dynamic> fetch(String endpoint, {Map<String, String> params}) async {
     final uri = Uri.http(baseUrl, endpoint, params);
     final response = await http.get(

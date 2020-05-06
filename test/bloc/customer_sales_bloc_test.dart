@@ -16,7 +16,7 @@ void main() {
 
     setUp(() {
       chartRepository = MockChartWebRepository();
-      when(chartRepository.getCustomerSalesData()).thenAnswer((_) => Future.value([]));
+      when(chartRepository.getCustomerSalesData(limit: anyNamed('limit'))).thenAnswer((_) => Future.value([]));
       customerSalesBloc = CustomerSalesBloc(chartRepository: chartRepository);
     });
 
@@ -33,7 +33,7 @@ void main() {
     blocTest<CustomerSalesBloc, ChartEvent, ChartState>(
       'should emit DataNotLoaded if repository throws',
       build: () {
-        when(chartRepository.getCustomerSalesData()).thenThrow(Exception());
+        when(chartRepository.getCustomerSalesData(limit: anyNamed('limit'))).thenThrow(Exception());
         return customerSalesBloc;
       },
       act: (CustomerSalesBloc bloc) async => bloc.add(LoadData()),
