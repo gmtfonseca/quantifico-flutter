@@ -20,9 +20,9 @@ class ChartWebProvider {
 
     final List body = await webClient.fetch(
       'nfs/plot/faturamento-anual',
-      params: params,
+      params: params.isNotEmpty ? params : null,
     );
-    final data = body.map((record) => AnnualSalesRecord.fromJson(record)).toList();
+    final data = body?.map((record) => AnnualSalesRecord.fromJson(record))?.toList();
     return data;
   }
 
@@ -35,9 +35,24 @@ class ChartWebProvider {
 
     final List body = await webClient.fetch(
       'nfs/plot/faturamento-cliente',
-      params: params,
+      params: params.isNotEmpty ? params : null,
     );
-    final data = body.map((record) => CustomerSalesRecord.fromJson(record)).toList();
+    final data = body?.map((record) => CustomerSalesRecord.fromJson(record))?.toList();
+    return data;
+  }
+
+  Future<List<CitySalesRecord>> fetchCitySalesData({int limit}) async {
+    final Map<String, String> params = Map();
+
+    if (limit != null) {
+      params['limit'] = limit.toString();
+    }
+
+    final List body = await webClient.fetch(
+      'nfs/plot/faturamento-cidade',
+      params: params.isNotEmpty ? params : null,
+    );
+    final data = body?.map((record) => CitySalesRecord.fromJson(record))?.toList();
     return data;
   }
 }

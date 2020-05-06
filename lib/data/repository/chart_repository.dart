@@ -1,5 +1,4 @@
 import 'package:meta/meta.dart';
-import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/provider/chart_web_provider.dart';
 
@@ -20,7 +19,11 @@ class ChartRepository {
     );
   }
 
-  Future<List<CustomerSalesRecord>> getCustomerSalesData({int limit = ChartConfig.maxRecordLimit}) async {
+  Future<List<CustomerSalesRecord>> getCustomerSalesData({int limit}) async {
     return await chartWebProvider.fetchCustomerSalesData(limit: limit);
+  }
+
+  Future<List<CitySalesRecord>> getCitySalesData({int limit}) async {
+    return await chartWebProvider.fetchCitySalesData(limit: limit);
   }
 }

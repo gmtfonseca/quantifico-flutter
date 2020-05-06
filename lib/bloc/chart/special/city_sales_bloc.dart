@@ -3,14 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:quantifico/bloc/chart/chart.dart';
 import 'package:quantifico/config.dart';
-import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
-import 'package:quantifico/data/model/chart/customer_sales_record.dart';
+import 'package:quantifico/data/model/chart/chart.dart';
+import 'package:quantifico/data/model/chart/city_sales_filter.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 
-class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
+class CitySalesBloc extends Bloc<ChartEvent, ChartState> {
   final ChartRepository chartRepository;
 
-  CustomerSalesBloc({@required this.chartRepository});
+  CitySalesBloc({@required this.chartRepository});
 
   @override
   ChartState get initialState => DataLoading();
@@ -26,8 +26,8 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapLoadDataToState(LoadData event) async* {
     try {
-      final data = await chartRepository.getCustomerSalesData(limit: ChartConfig.maxRecordLimit);
-      yield DataLoaded<CustomerSalesRecord>(data);
+      final data = await chartRepository.getCitySalesData(limit: ChartConfig.maxRecordLimit);
+      yield DataLoaded<CitySalesRecord>(data);
     } catch (e) {
       yield DataNotLoaded();
       throw e;
@@ -36,8 +36,8 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
     try {
-      final data = await chartRepository.getCustomerSalesData(limit: event.filter?.limit);
-      yield DataLoadedFiltered<CustomerSalesRecord, CustomerSalesFilter>(data, event.filter);
+      final data = await chartRepository.getCitySalesData(limit: event.filter?.limit);
+      yield DataLoadedFiltered<CitySalesRecord, CitySalesFilter>(data, event.filter);
     } catch (e) {
       yield DataNotLoaded();
       throw e;

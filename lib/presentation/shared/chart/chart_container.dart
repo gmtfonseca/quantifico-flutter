@@ -24,18 +24,13 @@ class ChartContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      color: Color(0xffFAF8F9),
-      height: MediaQuery.of(context).orientation == Orientation.portrait ? height : SizeConfig.safeBlockVertical * 80,
-      child: Card(
-        color: Color(0xffFAF8F9),
-        elevation: 0,
+      height: height,
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: Material(
         child: Column(
           children: [
             _buildHeader(context),
-            Divider(
-              color: Color(0xffe0e0e0),
-              thickness: 2.0,
-            ),
+            Divider(thickness: 1.5),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -57,7 +52,10 @@ class ChartContainer extends StatelessWidget {
           padding: EdgeInsets.only(left: 16.0),
           child: Text(
             title,
-            style: Theme.of(context).textTheme.title,
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
         Row(
