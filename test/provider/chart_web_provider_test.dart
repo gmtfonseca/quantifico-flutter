@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:quantifico/data/model/chart/annual_sales_record.dart';
+
 import 'package:quantifico/data/model/chart/chart.dart';
+
 import 'package:quantifico/data/provider/chart_web_provider.dart';
 import 'package:quantifico/util/web_client.dart';
 
@@ -58,6 +59,22 @@ void main() {
       expect(data, [
         CitySalesRecord(city: 'Foo', sales: 300231.98),
         CitySalesRecord(city: 'Bar', sales: 207123.65),
+      ]);
+    });
+
+    test('should monthly sales properly', () async {
+      when(webClient.fetch('nfs/plot/faturamento-mensal')).thenAnswer(
+        (_) => Future<dynamic>.value(
+          [
+            {'ano': '2010', 'mes': '1', 'totalFaturado': 300231.98},
+            {'ano': '2011', 'mes': '2', 'totalFaturado': 207123.65}
+          ],
+        ),
+      );
+      final data = await chartWebProvider.fetchMonthlySalesData();
+      expect(data, [
+        MonthlySalesRecord(year: '2010', month: '1', sales: 300231.98),
+        MonthlySalesRecord(year: '2011', month: '2', sales: 207123.65),
       ]);
     });
   });

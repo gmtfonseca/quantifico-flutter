@@ -26,4 +26,8 @@ class ChartRepository {
   Future<List<CitySalesRecord>> getCitySalesData({int limit}) async {
     return await chartWebProvider.fetchCitySalesData(limit: limit);
   }
+
+  Future<List<MonthlySalesRecord>> getMonthlySalesData({List<int> years}) async {
+    return await chartWebProvider.fetchMonthlySalesData(years: years);
+  }
 }

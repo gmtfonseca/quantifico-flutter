@@ -55,4 +55,17 @@ class ChartWebProvider {
     final data = body?.map((record) => CitySalesRecord.fromJson(record))?.toList();
     return data;
   }
+
+  Future<List<MonthlySalesRecord>> fetchMonthlySalesData({List<int> years}) async {
+    final Map<String, String> params = Map();
+
+    // Implement years filter
+
+    final List body = await webClient.fetch(
+      'nfs/plot/faturamento-mensal',
+      params: params.isNotEmpty ? params : null,
+    );
+    final data = body?.map((record) => MonthlySalesRecord.fromJson(record))?.toList();
+    return data;
+  }
 }

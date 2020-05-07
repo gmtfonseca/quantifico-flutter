@@ -52,6 +52,8 @@ class _InsightScreenState extends State<InsightScreen> {
           padding: const EdgeInsets.symmetric(vertical: 4.0),
           child: ListView(
             children: [
+              MonthlySalesChart(),
+              verticalSpacing,
               CitySalesChart(bloc: _citySalesBloc),
               verticalSpacing,
               AnnualSalesChart(bloc: _annualSalesBloc),
