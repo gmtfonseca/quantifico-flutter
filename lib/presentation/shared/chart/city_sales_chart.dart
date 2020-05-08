@@ -30,20 +30,22 @@ class CitySalesChart extends StatelessWidget {
             title: 'Faturamento x Cidade',
             chartState: state,
             chart: _buildChart(state),
-            filterDialog: CitySalesFilterDialog(
-              limit: state is SeriesLoadedFiltered
-                  ? (state.activeFilter as CitySalesFilter).limit
-                  : ChartConfig.maxRecordLimit,
-              onApply: ({int limit}) {
-                bloc.add(
-                  UpdateFilter(
-                    CitySalesFilter(limit: limit),
-                  ),
-                );
-              },
-            ),
+            filterDialog: _buildFilterDialog(state),
           );
         });
+  }
+
+  Widget _buildFilterDialog(ChartState state) {
+    return CitySalesFilterDialog(
+      limit: state is SeriesLoadedFiltered ? (state.activeFilter as CitySalesFilter).limit : ChartConfig.maxRecordLimit,
+      onApply: ({int limit}) {
+        bloc.add(
+          UpdateFilter(
+            CitySalesFilter(limit: limit),
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildChart(ChartState state) {

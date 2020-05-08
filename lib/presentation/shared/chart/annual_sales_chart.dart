@@ -29,19 +29,23 @@ class AnnualSalesChart extends StatelessWidget {
           title: 'Faturamento Anual',
           chartState: state,
           chart: _buildChart(state),
-          filterDialog: AnnualSalesFiltersDialog(
-            startYear: state is SeriesLoadedFiltered ? (state.activeFilter as AnnualSalesFilter).startYear : null,
-            endYear: state is SeriesLoadedFiltered ? (state.activeFilter as AnnualSalesFilter).endYear : null,
-            onApply: ({int startYear, int endYear}) {
-              bloc.add(
-                UpdateFilter(
-                  AnnualSalesFilter(
-                    startYear: startYear,
-                    endYear: endYear,
-                  ),
-                ),
-              );
-            },
+          filterDialog: _buildFilterDialog(state),
+        );
+      },
+    );
+  }
+
+  Widget _buildFilterDialog(ChartState state) {
+    return AnnualSalesFiltersDialog(
+      startYear: state is SeriesLoadedFiltered ? (state.activeFilter as AnnualSalesFilter).startYear : null,
+      endYear: state is SeriesLoadedFiltered ? (state.activeFilter as AnnualSalesFilter).endYear : null,
+      onApply: ({int startYear, int endYear}) {
+        bloc.add(
+          UpdateFilter(
+            AnnualSalesFilter(
+              startYear: startYear,
+              endYear: endYear,
+            ),
           ),
         );
       },

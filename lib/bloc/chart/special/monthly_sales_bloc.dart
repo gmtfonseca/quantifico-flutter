@@ -27,10 +27,16 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapLoadSeriesToState() async* {
     try {
-      final monthlySalesData = await chartRepository.getMonthlySalesData(years: [DateTime.now().year]);
-      final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
-      final seriesList = _buildSeries(monthlySalesMap);
-      yield SeriesLoaded<MonthSales, int>(seriesList);
+      final monthlySalesData = await chartRepository.getMonthlySalesData(
+        years: [DateTime.now().year],
+      );
+      if (monthlySalesData.isNotEmpty) {
+        final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
+        final seriesList = _buildSeries(monthlySalesMap);
+        yield SeriesLoaded<MonthSales, int>(seriesList);
+      } else {
+        yield SeriesLoadedEmpty();
+      }
     } catch (e) {
       yield SeriesNotLoaded();
       throw e;
@@ -39,11 +45,16 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
     try {
-      final monthlySalesData =
-          await chartRepository.getMonthlySalesData(years: (event.filter as MonthlySalesFilter)?.years);
-      final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
-      final seriesList = _buildSeries(monthlySalesMap);
-      yield SeriesLoadedFiltered<MonthSales, int, MonthlySalesFilter>(seriesList, event.filter);
+      final monthlySalesData = await chartRepository.getMonthlySalesData(
+        years: (event.filter as MonthlySalesFilter)?.years,
+      );
+      if (monthlySalesData.isNotEmpty) {
+        final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
+        final seriesList = _buildSeries(monthlySalesMap);
+        yield SeriesLoadedFiltered<MonthSales, int, MonthlySalesFilter>(seriesList, event.filter);
+      } else {
+        yield SeriesLoadedEmpty();
+      }
     } catch (e) {
       yield SeriesNotLoaded();
       throw e;

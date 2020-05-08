@@ -29,18 +29,22 @@ class MonthlySalesChart extends StatelessWidget {
             title: 'Faturamento Mensal',
             chartState: state,
             chart: _buildChart(state),
-            filterDialog: MonthlySalesFilterDialog(
-              years: state is SeriesLoadedFiltered ? (state.activeFilter as MonthlySalesFilter).years : null,
-              onApply: ({List<int> years}) {
-                bloc.add(
-                  UpdateFilter(
-                    MonthlySalesFilter(years: years),
-                  ),
-                );
-              },
-            ),
+            filterDialog: _buildFilterDialog(state),
           );
         });
+  }
+
+  Widget _buildFilterDialog(ChartState state) {
+    return MonthlySalesFilterDialog(
+      years: state is SeriesLoadedFiltered ? (state.activeFilter as MonthlySalesFilter).years : null,
+      onApply: ({List<int> years}) {
+        bloc.add(
+          UpdateFilter(
+            MonthlySalesFilter(years: years),
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildChart(ChartState state) {

@@ -12,6 +12,8 @@ class SeriesLoading extends ChartState {}
 
 class SeriesNotLoaded extends ChartState {}
 
+class SeriesLoadedEmpty extends ChartState {}
+
 class SeriesLoaded<T, D> extends ChartState {
   final List<charts.Series<T, D>> series;
 

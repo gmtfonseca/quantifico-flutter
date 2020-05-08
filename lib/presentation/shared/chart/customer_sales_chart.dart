@@ -30,17 +30,21 @@ class CustomerSalesChart extends StatelessWidget {
           title: 'Faturamento x Cliente',
           chartState: state,
           chart: _buildChart(state),
-          filterDialog: CustomerSalesFilterDialog(
-            limit: state is SeriesLoadedFiltered
-                ? (state.activeFilter as CustomerSalesFilter).limit
-                : ChartConfig.maxRecordLimit,
-            onApply: ({int limit}) {
-              bloc.add(
-                UpdateFilter(
-                  CustomerSalesFilter(limit: limit),
-                ),
-              );
-            },
+          filterDialog: _buildFilterDialog(state),
+        );
+      },
+    );
+  }
+
+  Widget _buildFilterDialog(ChartState state) {
+    return CustomerSalesFilterDialog(
+      limit: state is SeriesLoadedFiltered
+          ? (state.activeFilter as CustomerSalesFilter).limit
+          : ChartConfig.maxRecordLimit,
+      onApply: ({int limit}) {
+        bloc.add(
+          UpdateFilter(
+            CustomerSalesFilter(limit: limit),
           ),
         );
       },

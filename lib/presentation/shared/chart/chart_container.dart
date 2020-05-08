@@ -108,6 +108,17 @@ class ChartContainer extends StatelessWidget {
           ],
         ),
       );
+    } else if (chartState is SeriesLoadedEmpty) {
+      return Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Sem dados para exibir'),
+            SizedBox(width: 5),
+            Icon(Icons.sentiment_neutral),
+          ],
+        ),
+      );
     } else {
       return chart;
     }

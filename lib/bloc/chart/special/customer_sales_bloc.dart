@@ -28,9 +28,15 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapLoadSeriesToState() async* {
     try {
-      final customerSalesData = await chartRepository.getCustomerSalesData(limit: ChartConfig.maxRecordLimit);
-      final series = _buildSeries(customerSalesData);
-      yield SeriesLoaded<CustomerSalesRecord, String>(series);
+      final customerSalesData = await chartRepository.getCustomerSalesData(
+        limit: ChartConfig.maxRecordLimit,
+      );
+      if (customerSalesData.isNotEmpty) {
+        final series = _buildSeries(customerSalesData);
+        yield SeriesLoaded<CustomerSalesRecord, String>(series);
+      } else {
+        yield SeriesLoadedEmpty();
+      }
     } catch (e) {
       yield SeriesNotLoaded();
       throw e;
@@ -39,10 +45,15 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
     try {
-      final customerSalesData =
-          await chartRepository.getCustomerSalesData(limit: (event.filter as CustomerSalesFilter)?.limit);
-      final series = _buildSeries(customerSalesData);
-      yield SeriesLoadedFiltered<CustomerSalesRecord, String, CustomerSalesFilter>(series, event.filter);
+      final customerSalesData = await chartRepository.getCustomerSalesData(
+        limit: (event.filter as CustomerSalesFilter)?.limit,
+      );
+      if (customerSalesData.isNotEmpty) {
+        final series = _buildSeries(customerSalesData);
+        yield SeriesLoadedFiltered<CustomerSalesRecord, String, CustomerSalesFilter>(series, event.filter);
+      } else {
+        yield SeriesLoadedEmpty();
+      }
     } catch (e) {
       yield SeriesNotLoaded();
       throw e;

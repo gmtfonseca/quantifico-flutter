@@ -27,8 +27,12 @@ class AnnualSalesBloc extends Bloc<ChartEvent, ChartState> {
   Stream<ChartState> _mapLoadSeriesToState() async* {
     try {
       final annualSalesData = await chartRepository.getAnnualSalesData();
-      final series = _buildSeries(annualSalesData);
-      yield SeriesLoaded<AnnualSalesRecord, String>(series);
+      if (annualSalesData.isNotEmpty) {
+        final series = _buildSeries(annualSalesData);
+        yield SeriesLoaded<AnnualSalesRecord, String>(series);
+      } else {
+        yield SeriesLoadedEmpty();
+      }
     } catch (e) {
       yield SeriesNotLoaded();
       throw e;
@@ -41,9 +45,12 @@ class AnnualSalesBloc extends Bloc<ChartEvent, ChartState> {
         startYear: (event.filter as AnnualSalesFilter)?.startYear,
         endYear: (event.filter as AnnualSalesFilter)?.endYear,
       );
-
-      final series = _buildSeries(annualSalesData);
-      yield SeriesLoadedFiltered<AnnualSalesRecord, String, AnnualSalesFilter>(series, event.filter);
+      if (annualSalesData.isNotEmpty) {
+        final series = _buildSeries(annualSalesData);
+        yield SeriesLoadedFiltered<AnnualSalesRecord, String, AnnualSalesFilter>(series, event.filter);
+      } else {
+        yield SeriesLoadedEmpty();
+      }
     } catch (e) {
       yield SeriesNotLoaded();
       throw e;
