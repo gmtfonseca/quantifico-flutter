@@ -21,30 +21,30 @@ void main() {
     });
 
     blocTest<AnnualSalesBloc, ChartEvent, ChartState>(
-      'should emit DataLoaded when repository succeeds',
+      'should emit SeriesLoaded when repository succeeds',
       build: () => annualSalesBloc,
-      act: (AnnualSalesBloc bloc) async => bloc.add(LoadData()),
-      expect: <ChartState>[
-        DataLoading(),
-        DataLoaded<AnnualSalesRecord>([]),
+      act: (AnnualSalesBloc bloc) async => bloc.add(LoadSeries()),
+      expect: [
+        SeriesLoading(),
+        isA<SeriesLoaded<AnnualSalesRecord, String>>(),
       ],
     );
 
     blocTest<AnnualSalesBloc, ChartEvent, ChartState>(
-      'should emit DataNotLoaded if repository throws',
+      'should emit SeriesNotLoaded if repository throws',
       build: () {
         when(chartRepository.getAnnualSalesData()).thenThrow(Exception());
         return annualSalesBloc;
       },
-      act: (AnnualSalesBloc bloc) async => bloc.add(LoadData()),
-      expect: <ChartState>[
-        DataLoading(),
-        DataNotLoaded(),
+      act: (AnnualSalesBloc bloc) async => bloc.add(LoadSeries()),
+      expect: [
+        SeriesLoading(),
+        SeriesNotLoaded(),
       ],
     );
 
     blocTest<AnnualSalesBloc, ChartEvent, ChartState>(
-      'should emit DataLoadedFiltered when repository succeeds',
+      'should emit SeriesLoadedFiltered when repository succeeds',
       build: () {
         when(chartRepository.getAnnualSalesData(
           startYear: 2001,
@@ -62,15 +62,9 @@ void main() {
           ),
         );
       },
-      expect: <ChartState>[
-        DataLoading(),
-        DataLoadedFiltered<AnnualSalesRecord, AnnualSalesFilter>(
-          [],
-          const AnnualSalesFilter(
-            startYear: 2001,
-            endYear: 2010,
-          ),
-        ),
+      expect: [
+        SeriesLoading(),
+        isA<SeriesLoadedFiltered<AnnualSalesRecord, String, AnnualSalesFilter>>(),
       ],
     );
   });

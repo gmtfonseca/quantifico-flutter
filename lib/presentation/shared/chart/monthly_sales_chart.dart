@@ -1,118 +1,213 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:quantifico/presentation/shared/chart/chart.dart';
-
-class MonthlySalesChartRecord {
-  final int month;
-  final double sales;
-
-  MonthlySalesChartRecord({this.month, this.sales});
-}
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quantifico/bloc/chart/chart.dart';
+import 'package:quantifico/bloc/chart/special/monthly_sales_bloc.dart';
+import 'package:quantifico/data/model/chart/monthly_sales_filter.dart';
+import 'package:quantifico/presentation/shared/chart/chart_container.dart';
+import 'package:intl/intl.dart';
+import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
 
 class MonthlySalesChart extends StatelessWidget {
+  final MonthlySalesBloc bloc;
+
   MonthlySalesChart({
     Key key,
+    @required this.bloc,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return _buildChart();
+    return BlocBuilder<MonthlySalesBloc, ChartState>(
+        bloc: bloc,
+        builder: (
+          BuildContext context,
+          ChartState state,
+        ) {
+          return ChartContainer(
+            title: 'Faturamento Mensal',
+            chartState: state,
+            chart: _buildChart(state),
+            filterDialog: MonthlySalesFilterDialog(
+              years: state is SeriesLoadedFiltered ? (state.activeFilter as MonthlySalesFilter).years : null,
+              onApply: ({List<int> years}) {
+                bloc.add(
+                  UpdateFilter(
+                    MonthlySalesFilter(years: years),
+                  ),
+                );
+              },
+            ),
+          );
+        });
   }
 
-  Widget _buildChart() {
-    final List<MonthlySalesChartRecord> data1 = [
-      MonthlySalesChartRecord(month: 1, sales: 13.0),
-      MonthlySalesChartRecord(month: 2, sales: 12.0),
-      MonthlySalesChartRecord(month: 3, sales: 25.0),
-      MonthlySalesChartRecord(month: 4, sales: 11.0),
-      MonthlySalesChartRecord(month: 5, sales: 27.0),
-      MonthlySalesChartRecord(month: 6, sales: 13.0),
-      MonthlySalesChartRecord(month: 7, sales: 26.0),
-      MonthlySalesChartRecord(month: 8, sales: 10.0),
-      MonthlySalesChartRecord(month: 9, sales: 6.0),
-      MonthlySalesChartRecord(month: 10, sales: 14.0),
-      MonthlySalesChartRecord(month: 11, sales: 13.0),
-      MonthlySalesChartRecord(month: 12, sales: 22.0),
-    ];
+  Widget _buildChart(ChartState state) {
+    if (state is SeriesLoaded) {
+      final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
+        NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
+      );
 
-    final List<MonthlySalesChartRecord> data2 = [
-      MonthlySalesChartRecord(month: 1, sales: 18.0),
-      MonthlySalesChartRecord(month: 2, sales: 15.0),
-      MonthlySalesChartRecord(month: 3, sales: 14.0),
-      MonthlySalesChartRecord(month: 4, sales: 10.0),
-      MonthlySalesChartRecord(month: 5, sales: 20.0),
-      MonthlySalesChartRecord(month: 6, sales: 25.0),
-      MonthlySalesChartRecord(month: 7, sales: 23.0),
-      MonthlySalesChartRecord(month: 8, sales: 21.0),
-      MonthlySalesChartRecord(month: 9, sales: 6.0),
-      MonthlySalesChartRecord(month: 10, sales: 16.0),
-      MonthlySalesChartRecord(month: 11, sales: 12.0),
-      MonthlySalesChartRecord(month: 12, sales: 14.0),
-    ];
+      final customTickFormatter = charts.BasicNumericTickFormatterSpec((num month) {
+        switch (month.toInt()) {
+          case 1:
+            return "Jan";
+          case 2:
+            return "Fev";
+          case 3:
+            return "Mar";
+          case 4:
+            return "Abr";
+          case 5:
+            return "Mai";
+          case 6:
+            return "Jun";
+          case 7:
+            return "Jul";
+          case 8:
+            return "Ago";
+          case 9:
+            return "Set";
+          case 10:
+            return "Out";
+          case 11:
+            return "Nov";
+          case 12:
+            return "Dez";
+          default:
+            return '';
+        }
+      });
 
-    //Map<String, List<MonthlySalesChartRecord>>
-
-    final List<charts.Series<MonthlySalesChartRecord, int>> series = [
-      charts.Series<MonthlySalesChartRecord, int>(
-        id: '2012',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (MonthlySalesChartRecord sales, _) => sales.month,
-        measureFn: (MonthlySalesChartRecord sales, _) => sales.sales,
-        data: data1,
-      ),
-      charts.Series<MonthlySalesChartRecord, int>(
-        id: '2013',
-        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-        domainFn: (MonthlySalesChartRecord sales, _) => sales.month,
-        measureFn: (MonthlySalesChartRecord sales, _) => sales.sales,
-        data: data2,
-      ),
-    ];
-
-    final customTickFormatter = charts.BasicNumericTickFormatterSpec((num month) {
-      final m = month.toInt();
-      if (m == 1) {
-        return "Jan";
-      } else if (m == 2) {
-        return "Feb";
-      } else if (m == 3) {
-        return "Mar";
-      } else if (m == 4) {
-        return "Abr";
-      } else if (m == 5) {
-        return "Mai";
-      } else if (m == 6) {
-        return "Jun";
-      } else if (m == 7) {
-        return "Jul";
-      } else if (m == 8) {
-        return "Ago";
-      } else if (m == 9) {
-        return "Set";
-      } else if (m == 10) {
-        return "Out";
-      } else if (m == 11) {
-        return "Nov";
-      } else {
-        return "Dez";
-      }
-    });
-
-    return Container(
-      color: Colors.white,
-      height: 350,
-      child: charts.LineChart(
-        series,
-        defaultRenderer: charts.LineRendererConfig(),
+      const MONTHS_IN_YEAR = 12;
+      return charts.LineChart(
+        state.series,
+        animate: true,
+        behaviors: [charts.SeriesLegend()],
+        primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
         domainAxis: charts.NumericAxisSpec(
           tickProviderSpec: charts.BasicNumericTickProviderSpec(
-            desiredTickCount: 12,
+            desiredTickCount: MONTHS_IN_YEAR,
             zeroBound: false,
             dataIsInWholeNumbers: true,
           ),
           tickFormatterSpec: customTickFormatter,
         ),
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+}
+
+class MonthlySalesFilterDialog extends StatefulWidget {
+  final void Function({List<int> years}) onApply;
+  final List<int> years;
+
+  MonthlySalesFilterDialog({
+    this.onApply,
+    this.years,
+  });
+
+  _MonthlySalesFilterDialogState createState() => _MonthlySalesFilterDialogState();
+}
+
+class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
+  List<int> _years;
+  bool _addButtonEnabled;
+  TextEditingController _yearController = TextEditingController();
+
+  @override
+  void initState() {
+    _years = widget.years ?? [DateTime.now().year];
+    _updateAddButtonAvailability();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget verticalSpacing = SizedBox(height: 15);
+    return ChartFilterDialog(
+      onApply: () {
+        widget.onApply(years: _years);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Quais anos você deseja visualizar?', style: Theme.of(context).textTheme.subhead),
+            verticalSpacing,
+            Row(
+              children: [
+                _buildYearTextField(),
+                _buildAddButton(),
+              ],
+            ),
+            verticalSpacing,
+            Wrap(
+              spacing: 10,
+              children: _buildYearChips(),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Widget _buildYearTextField() {
+    return Expanded(
+      child: TextField(
+        controller: _yearController,
+        onChanged: (year) {
+          setState(() {
+            _updateAddButtonAvailability();
+          });
+        },
+        decoration: InputDecoration(
+          labelText: 'Ano',
+        ),
+        keyboardType: TextInputType.number,
+        inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
+        maxLength: 4,
+      ),
+    );
+  }
+
+  Widget _buildAddButton() {
+    return FlatButton(
+      child: Text('ADICIONAR'),
+      onPressed: _addButtonEnabled
+          ? () {
+              setState(() {
+                _years.add(int.parse(_yearController.text));
+                _yearController.clear();
+                _updateAddButtonAvailability();
+              });
+            }
+          : null,
+    );
+  }
+
+  List<Widget> _buildYearChips() {
+    return _years
+        .map((year) => Chip(
+              label: Text(year.toString()),
+              onDeleted: () {
+                setState(() {
+                  _years.remove(year);
+                  _updateAddButtonAvailability();
+                });
+              },
+            ))
+        .toList()
+        .cast<Widget>();
+  }
+
+  void _updateAddButtonAvailability() {
+    const YEAR_LENGTH = 4;
+    const MAX_YEARS = 6;
+    _addButtonEnabled = _yearController.text.length == YEAR_LENGTH && _years.length < MAX_YEARS;
   }
 }

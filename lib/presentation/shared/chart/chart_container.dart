@@ -95,9 +95,9 @@ class ChartContainer extends StatelessWidget {
   }
 
   Widget _buildContent() {
-    if (chartState is DataLoading) {
+    if (chartState is SeriesLoading) {
       return LoadingIndicator();
-    } else if (chartState is DataNotLoaded) {
+    } else if (chartState is SeriesNotLoaded) {
       return Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

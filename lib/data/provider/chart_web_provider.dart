@@ -1,5 +1,6 @@
 import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/util/web_client.dart';
+import 'package:meta/meta.dart';
 
 class ChartWebProvider {
   final WebClient webClient;
@@ -56,10 +57,13 @@ class ChartWebProvider {
     return data;
   }
 
-  Future<List<MonthlySalesRecord>> fetchMonthlySalesData({List<int> years}) async {
-    final Map<String, String> params = Map();
+  Future<List<MonthlySalesRecord>> fetchMonthlySalesData({@required List<int> years}) async {
+    if (years.isEmpty) {
+      return [];
+    }
 
-    // Implement years filter
+    final Map<String, String> params = Map();
+    params['anos'] = years.join(',');
 
     final List body = await webClient.fetch(
       'nfs/plot/faturamento-mensal',

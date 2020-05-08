@@ -7,11 +7,11 @@ abstract class ChartEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadData extends ChartEvent {
-  const LoadData();
+class LoadSeries extends ChartEvent {
+  const LoadSeries();
 
   @override
-  String toString() => 'LoadData';
+  String toString() => 'LoadSeries';
 }
 
 class UpdateFilter<T> extends ChartEvent {

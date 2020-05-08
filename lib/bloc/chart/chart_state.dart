@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 abstract class ChartState extends Equatable {
   const ChartState();
@@ -7,34 +8,37 @@ abstract class ChartState extends Equatable {
   List<Object> get props => [];
 }
 
-class DataLoading extends ChartState {}
+class SeriesLoading extends ChartState {}
 
-class DataNotLoaded extends ChartState {}
+class SeriesNotLoaded extends ChartState {}
 
-class DataLoaded<DataType> extends ChartState {
-  final List<DataType> data;
+class SeriesLoaded<T, D> extends ChartState {
+  final List<charts.Series<T, D>> series;
 
-  const DataLoaded(this.data);
+  const SeriesLoaded(this.series);
 
   @override
-  List<Object> get props => [data];
+  List<Object> get props => [series];
 
   @override
   String toString() {
-    return 'DataLoaded $data';
+    return 'SeriesLoaded $series';
   }
 }
 
-class DataLoadedFiltered<DataType, FilterType> extends DataLoaded<DataType> {
-  final FilterType activeFilter;
+class SeriesLoadedFiltered<T, D, F> extends SeriesLoaded<T, D> {
+  final F activeFilter;
 
-  const DataLoadedFiltered(List<DataType> data, this.activeFilter) : super(data);
+  const SeriesLoadedFiltered(
+    List<charts.Series<T, D>> series,
+    this.activeFilter,
+  ) : super(series);
 
   @override
-  List<Object> get props => [data, activeFilter];
+  List<Object> get props => [series, activeFilter];
 
   @override
   String toString() {
-    return 'DataLoadedFiltered { data $data}, activeFilter: $activeFilter';
+    return 'SeriesLoadedFiltered { series $series}, activeFilter: $activeFilter';
   }
 }

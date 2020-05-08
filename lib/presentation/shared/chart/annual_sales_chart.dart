@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/special/annual_sales_bloc.dart';
 import 'package:quantifico/bloc/chart/chart.dart';
 import 'package:quantifico/data/model/chart/annual_sales_filter.dart';
-import 'package:quantifico/data/model/chart/annual_sales_record.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
 import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
@@ -31,8 +30,8 @@ class AnnualSalesChart extends StatelessWidget {
           chartState: state,
           chart: _buildChart(state),
           filterDialog: AnnualSalesFiltersDialog(
-            startYear: state is DataLoadedFiltered ? state.activeFilter.startYear : null,
-            endYear: state is DataLoadedFiltered ? state.activeFilter.endYear : null,
+            startYear: state is SeriesLoadedFiltered ? (state.activeFilter as AnnualSalesFilter).startYear : null,
+            endYear: state is SeriesLoadedFiltered ? (state.activeFilter as AnnualSalesFilter).endYear : null,
             onApply: ({int startYear, int endYear}) {
               bloc.add(
                 UpdateFilter(
@@ -50,23 +49,13 @@ class AnnualSalesChart extends StatelessWidget {
   }
 
   Widget _buildChart(ChartState state) {
-    if (state is DataLoaded<AnnualSalesRecord>) {
-      final series = [
-        charts.Series<AnnualSalesRecord, String>(
-          id: 'Sales',
-          colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-          domainFn: (AnnualSalesRecord record, _) => record.year ?? 'Outro',
-          measureFn: (AnnualSalesRecord record, _) => record.sales,
-          data: state.data,
-        )
-      ];
-
+    if (state is SeriesLoaded) {
       final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
         NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
       );
 
       return charts.BarChart(
-        series,
+        state.series,
         animate: true,
         primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
       );

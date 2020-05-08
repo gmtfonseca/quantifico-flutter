@@ -12,7 +12,6 @@ void main() {
   group('Chart Web Provider', () {
     MockWebClient webClient = MockWebClient();
     ChartWebProvider chartWebProvider = ChartWebProvider(webClient: webClient);
-    setUp(() {});
 
     test('should fetch annual sales properly', () async {
       when(webClient.fetch('nfs/plot/faturamento-anual')).thenAnswer(
@@ -63,7 +62,7 @@ void main() {
     });
 
     test('should monthly sales properly', () async {
-      when(webClient.fetch('nfs/plot/faturamento-mensal')).thenAnswer(
+      when(webClient.fetch('nfs/plot/faturamento-mensal', params: anyNamed('params'))).thenAnswer(
         (_) => Future<dynamic>.value(
           [
             {'ano': '2010', 'mes': '1', 'totalFaturado': 300231.98},
@@ -71,7 +70,7 @@ void main() {
           ],
         ),
       );
-      final data = await chartWebProvider.fetchMonthlySalesData();
+      final data = await chartWebProvider.fetchMonthlySalesData(years: [2010]);
       expect(data, [
         MonthlySalesRecord(year: '2010', month: '1', sales: 300231.98),
         MonthlySalesRecord(year: '2011', month: '2', sales: 207123.65),

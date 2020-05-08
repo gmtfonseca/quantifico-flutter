@@ -4,11 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/chart.dart';
 import 'package:quantifico/bloc/chart/special/city_sales_bloc.dart';
 import 'package:quantifico/config.dart';
-import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/model/chart/city_sales_filter.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
-import 'package:quantifico/util/string_util.dart';
 
 import 'chart_filter_dialog.dart';
 
@@ -33,7 +31,9 @@ class CitySalesChart extends StatelessWidget {
             chartState: state,
             chart: _buildChart(state),
             filterDialog: CitySalesFilterDialog(
-              limit: state is DataLoadedFiltered ? state.activeFilter.limit : ChartConfig.maxRecordLimit,
+              limit: state is SeriesLoadedFiltered
+                  ? (state.activeFilter as CitySalesFilter).limit
+                  : ChartConfig.maxRecordLimit,
               onApply: ({int limit}) {
                 bloc.add(
                   UpdateFilter(
@@ -47,29 +47,13 @@ class CitySalesChart extends StatelessWidget {
   }
 
   Widget _buildChart(ChartState state) {
-    const MAX_CITY_LENGTH = 35;
-
-    if (state is DataLoaded<CitySalesRecord>) {
-      final series = [
-        charts.Series<CitySalesRecord, String>(
-          id: 'Sales',
-          colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
-          domainFn: (CitySalesRecord record, _) => record.city,
-          measureFn: (CitySalesRecord record, _) => record.sales,
-          data: state.data,
-          labelAccessorFn: (CitySalesRecord record, _) => toLimitedLength(
-            record.city,
-            MAX_CITY_LENGTH,
-          ),
-        ),
-      ];
-
+    if (state is SeriesLoaded) {
       final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
         NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
       );
 
       return charts.BarChart(
-        series,
+        state.series,
         animate: true,
         vertical: false,
         barRendererDecorator: charts.BarLabelDecorator<String>(),

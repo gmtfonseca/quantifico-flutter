@@ -4,11 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/chart.dart';
 import 'package:quantifico/bloc/chart/special/customer_sales_bloc.dart';
 import 'package:quantifico/config.dart';
-import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
-import 'package:quantifico/util/string_util.dart';
 
 import 'chart_filter_dialog.dart';
 
@@ -23,53 +21,40 @@ class CustomerSalesChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CustomerSalesBloc, ChartState>(
-        bloc: bloc,
-        builder: (
-          BuildContext context,
-          ChartState state,
-        ) {
-          return ChartContainer(
-            title: 'Faturamento x Cliente',
-            chartState: state,
-            chart: _buildChart(state),
-            filterDialog: CustomerSalesFilterDialog(
-              limit: state is DataLoadedFiltered ? state.activeFilter.limit : ChartConfig.maxRecordLimit,
-              onApply: ({int limit}) {
-                bloc.add(
-                  UpdateFilter(
-                    CustomerSalesFilter(limit: limit),
-                  ),
-                );
-              },
-            ),
-          );
-        });
+      bloc: bloc,
+      builder: (
+        BuildContext context,
+        ChartState state,
+      ) {
+        return ChartContainer(
+          title: 'Faturamento x Cliente',
+          chartState: state,
+          chart: _buildChart(state),
+          filterDialog: CustomerSalesFilterDialog(
+            limit: state is SeriesLoadedFiltered
+                ? (state.activeFilter as CustomerSalesFilter).limit
+                : ChartConfig.maxRecordLimit,
+            onApply: ({int limit}) {
+              bloc.add(
+                UpdateFilter(
+                  CustomerSalesFilter(limit: limit),
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   Widget _buildChart(ChartState state) {
-    const MAX_CUSTOMER_LENGTH = 35;
-
-    if (state is DataLoaded<CustomerSalesRecord>) {
-      final series = [
-        charts.Series<CustomerSalesRecord, String>(
-          id: 'Sales',
-          colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
-          domainFn: (CustomerSalesRecord record, _) => record.customer,
-          measureFn: (CustomerSalesRecord record, _) => record.sales,
-          data: state.data,
-          labelAccessorFn: (CustomerSalesRecord record, _) => toLimitedLength(
-            record.customer,
-            MAX_CUSTOMER_LENGTH,
-          ),
-        ),
-      ];
-
+    if (state is SeriesLoaded) {
       final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
         NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
       );
 
       return charts.BarChart(
-        series,
+        state.series,
         animate: true,
         vertical: false,
         barRendererDecorator: charts.BarLabelDecorator<String>(),

@@ -6,6 +6,8 @@ import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
 import 'package:quantifico/data/model/chart/customer_sales_record.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:quantifico/util/string_util.dart';
 
 class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
   final ChartRepository chartRepository;
@@ -13,34 +15,54 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
   CustomerSalesBloc({@required this.chartRepository});
 
   @override
-  ChartState get initialState => DataLoading();
+  ChartState get initialState => SeriesLoading();
 
   @override
   Stream<ChartState> mapEventToState(ChartEvent event) async* {
-    if (event is LoadData) {
-      yield* _mapLoadDataToState(event);
+    if (event is LoadSeries) {
+      yield* _mapLoadSeriesToState();
     } else if (event is UpdateFilter) {
       yield* _mapUpdateFilterToState(event);
     }
   }
 
-  Stream<ChartState> _mapLoadDataToState(LoadData event) async* {
+  Stream<ChartState> _mapLoadSeriesToState() async* {
     try {
-      final data = await chartRepository.getCustomerSalesData(limit: ChartConfig.maxRecordLimit);
-      yield DataLoaded<CustomerSalesRecord>(data);
+      final customerSalesData = await chartRepository.getCustomerSalesData(limit: ChartConfig.maxRecordLimit);
+      final series = _buildSeries(customerSalesData);
+      yield SeriesLoaded<CustomerSalesRecord, String>(series);
     } catch (e) {
-      yield DataNotLoaded();
+      yield SeriesNotLoaded();
       throw e;
     }
   }
 
   Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
     try {
-      final data = await chartRepository.getCustomerSalesData(limit: event.filter?.limit);
-      yield DataLoadedFiltered<CustomerSalesRecord, CustomerSalesFilter>(data, event.filter);
+      final customerSalesData =
+          await chartRepository.getCustomerSalesData(limit: (event.filter as CustomerSalesFilter)?.limit);
+      final series = _buildSeries(customerSalesData);
+      yield SeriesLoadedFiltered<CustomerSalesRecord, String, CustomerSalesFilter>(series, event.filter);
     } catch (e) {
-      yield DataNotLoaded();
+      yield SeriesNotLoaded();
       throw e;
     }
+  }
+
+  List<charts.Series<CustomerSalesRecord, String>> _buildSeries(List<CustomerSalesRecord> data) {
+    const MAX_CITY_LENGTH = 35;
+    return [
+      charts.Series<CustomerSalesRecord, String>(
+        id: 'Sales',
+        colorFn: (_, __) => charts.MaterialPalette.green.shadeDefault,
+        domainFn: (CustomerSalesRecord record, _) => record.customer,
+        measureFn: (CustomerSalesRecord record, _) => record.sales,
+        data: data,
+        labelAccessorFn: (CustomerSalesRecord record, _) => toLimitedLength(
+          record.customer,
+          MAX_CITY_LENGTH,
+        ),
+      )
+    ];
   }
 }

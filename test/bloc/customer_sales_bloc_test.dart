@@ -23,10 +23,10 @@ void main() {
     blocTest<CustomerSalesBloc, ChartEvent, ChartState>(
       'should emit DataLoaded when repository succeeds',
       build: () => customerSalesBloc,
-      act: (CustomerSalesBloc bloc) async => bloc.add(LoadData()),
-      expect: <ChartState>[
-        DataLoading(),
-        DataLoaded<CustomerSalesRecord>([]),
+      act: (CustomerSalesBloc bloc) async => bloc.add(LoadSeries()),
+      expect: [
+        SeriesLoading(),
+        isA<SeriesLoaded<CustomerSalesRecord, String>>(),
       ],
     );
 
@@ -36,10 +36,10 @@ void main() {
         when(chartRepository.getCustomerSalesData(limit: anyNamed('limit'))).thenThrow(Exception());
         return customerSalesBloc;
       },
-      act: (CustomerSalesBloc bloc) async => bloc.add(LoadData()),
+      act: (CustomerSalesBloc bloc) async => bloc.add(LoadSeries()),
       expect: <ChartState>[
-        DataLoading(),
-        DataNotLoaded(),
+        SeriesLoading(),
+        SeriesNotLoaded(),
       ],
     );
 
@@ -56,12 +56,9 @@ void main() {
           ),
         );
       },
-      expect: <ChartState>[
-        DataLoading(),
-        DataLoadedFiltered<CustomerSalesRecord, CustomerSalesFilter>(
-          [],
-          const CustomerSalesFilter(limit: 10),
-        ),
+      expect: [
+        SeriesLoading(),
+        isA<SeriesLoadedFiltered<CustomerSalesRecord, String, CustomerSalesFilter>>(),
       ],
     );
   });

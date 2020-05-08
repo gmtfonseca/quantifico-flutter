@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-class MonthlySalesRecord {
+class MonthlySalesRecord extends Equatable {
   final String year;
   final String month;
   final double sales;
@@ -18,12 +18,18 @@ class MonthlySalesRecord {
         sales = double.parse(json['totalFaturado'].toString());
 
   @override
+  List<Object> get props => [
+        year,
+        month,
+        sales,
+      ];
+
+  @override
   String toString() {
     return 'MonthlySalesRecord{year: $year, month: $month, sales $sales}';
   }
 }
 
-/*
 class MonthSales extends Equatable {
   final String month;
   final double sales;
@@ -45,7 +51,7 @@ class MonthSales extends Equatable {
   }
 }
 
-
+/*
 class MonthlySalesRecord extends Equatable {
   final String year;
   final List<MonthSales> months;
