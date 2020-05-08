@@ -19,6 +19,11 @@ class FilterableState<F> extends ChartState {
 
 class SeriesLoadedEmpty<F> extends FilterableState {
   const SeriesLoadedEmpty({F activeFilter}) : super(activeFilter: activeFilter);
+
+  @override
+  String toString() {
+    return 'SeriesLoadedEmpty activeFilter: $activeFilter';
+  }
 }
 
 class SeriesLoaded<T, D, F> extends FilterableState {
