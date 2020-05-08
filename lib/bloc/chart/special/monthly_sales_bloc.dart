@@ -33,7 +33,7 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
       if (monthlySalesData.isNotEmpty) {
         final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
         final seriesList = _buildSeries(monthlySalesMap);
-        yield SeriesLoaded<MonthSales, int>(seriesList);
+        yield SeriesLoaded<MonthSales, int, MonthlySalesFilter>(seriesList);
       } else {
         yield SeriesLoadedEmpty();
       }
@@ -51,9 +51,9 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
       if (monthlySalesData.isNotEmpty) {
         final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
         final seriesList = _buildSeries(monthlySalesMap);
-        yield SeriesLoadedFiltered<MonthSales, int, MonthlySalesFilter>(seriesList, event.filter);
+        yield SeriesLoaded<MonthSales, int, MonthlySalesFilter>(seriesList, activeFilter: event.filter);
       } else {
-        yield SeriesLoadedEmpty();
+        yield SeriesLoadedEmpty<MonthlySalesFilter>(activeFilter: event.filter);
       }
     } catch (e) {
       yield SeriesNotLoaded();

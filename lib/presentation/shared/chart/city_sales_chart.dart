@@ -37,7 +37,7 @@ class CitySalesChart extends StatelessWidget {
 
   Widget _buildFilterDialog(ChartState state) {
     return CitySalesFilterDialog(
-      limit: state is SeriesLoadedFiltered ? (state.activeFilter as CitySalesFilter).limit : ChartConfig.maxRecordLimit,
+      limit: state is FilterableState ? (state.activeFilter as CitySalesFilter)?.limit : ChartConfig.maxRecordLimit,
       onApply: ({int limit}) {
         bloc.add(
           UpdateFilter(

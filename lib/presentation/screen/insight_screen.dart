@@ -73,8 +73,8 @@ class _InsightScreenState extends State<InsightScreen> {
 
   void _refreshCharts() {
     for (Bloc chart in _charts) {
-      if (chart.state is SeriesLoadedFiltered) {
-        chart.add(UpdateFilter((chart.state as SeriesLoadedFiltered).activeFilter));
+      if (chart.state is FilterableState) {
+        chart.add(UpdateFilter((chart.state as FilterableState).activeFilter));
       } else {
         chart.add(LoadSeries());
       }

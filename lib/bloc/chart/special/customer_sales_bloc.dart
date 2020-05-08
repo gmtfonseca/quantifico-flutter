@@ -33,7 +33,7 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
       );
       if (customerSalesData.isNotEmpty) {
         final series = _buildSeries(customerSalesData);
-        yield SeriesLoaded<CustomerSalesRecord, String>(series);
+        yield SeriesLoaded<CustomerSalesRecord, String, CustomerSalesFilter>(series);
       } else {
         yield SeriesLoadedEmpty();
       }
@@ -50,9 +50,9 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
       );
       if (customerSalesData.isNotEmpty) {
         final series = _buildSeries(customerSalesData);
-        yield SeriesLoadedFiltered<CustomerSalesRecord, String, CustomerSalesFilter>(series, event.filter);
+        yield SeriesLoaded<CustomerSalesRecord, String, CustomerSalesFilter>(series, activeFilter: event.filter);
       } else {
-        yield SeriesLoadedEmpty();
+        yield SeriesLoadedEmpty<CustomerSalesFilter>(activeFilter: event.filter);
       }
     } catch (e) {
       yield SeriesNotLoaded();

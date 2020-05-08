@@ -37,8 +37,8 @@ class AnnualSalesChart extends StatelessWidget {
 
   Widget _buildFilterDialog(ChartState state) {
     return AnnualSalesFiltersDialog(
-      startYear: state is SeriesLoadedFiltered ? (state.activeFilter as AnnualSalesFilter).startYear : null,
-      endYear: state is SeriesLoadedFiltered ? (state.activeFilter as AnnualSalesFilter).endYear : null,
+      startYear: state is FilterableState ? (state.activeFilter as AnnualSalesFilter)?.startYear : null,
+      endYear: state is FilterableState ? (state.activeFilter as AnnualSalesFilter)?.endYear : null,
       onApply: ({int startYear, int endYear}) {
         bloc.add(
           UpdateFilter(
@@ -110,6 +110,7 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
           children: [
             TextField(
               controller: _startYearController,
+              maxLength: 4,
               decoration: InputDecoration(
                 icon: Icon(Icons.calendar_today),
                 labelText: 'Ano inicial',
@@ -120,6 +121,7 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
             SizedBox(height: 25),
             TextField(
               controller: _endYearController,
+              maxLength: 4,
               decoration: InputDecoration(
                 icon: Icon(Icons.calendar_today),
                 labelText: 'Ano final',

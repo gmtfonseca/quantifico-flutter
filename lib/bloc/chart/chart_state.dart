@@ -12,35 +12,25 @@ class SeriesLoading extends ChartState {}
 
 class SeriesNotLoaded extends ChartState {}
 
-class SeriesLoadedEmpty extends ChartState {}
+class FilterableState<F> extends ChartState {
+  final F activeFilter;
+  const FilterableState({this.activeFilter});
+}
 
-class SeriesLoaded<T, D> extends ChartState {
+class SeriesLoadedEmpty<F> extends FilterableState {
+  const SeriesLoadedEmpty({F activeFilter}) : super(activeFilter: activeFilter);
+}
+
+class SeriesLoaded<T, D, F> extends FilterableState {
   final List<charts.Series<T, D>> series;
 
-  const SeriesLoaded(this.series);
+  const SeriesLoaded(this.series, {F activeFilter}) : super(activeFilter: activeFilter);
 
   @override
   List<Object> get props => [series];
 
   @override
   String toString() {
-    return 'SeriesLoaded $series';
-  }
-}
-
-class SeriesLoadedFiltered<T, D, F> extends SeriesLoaded<T, D> {
-  final F activeFilter;
-
-  const SeriesLoadedFiltered(
-    List<charts.Series<T, D>> series,
-    this.activeFilter,
-  ) : super(series);
-
-  @override
-  List<Object> get props => [series, activeFilter];
-
-  @override
-  String toString() {
-    return 'SeriesLoadedFiltered { series $series}, activeFilter: $activeFilter';
+    return 'SeriesLoaded $series, activeFilter: $activeFilter';
   }
 }

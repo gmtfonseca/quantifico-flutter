@@ -36,7 +36,7 @@ class MonthlySalesChart extends StatelessWidget {
 
   Widget _buildFilterDialog(ChartState state) {
     return MonthlySalesFilterDialog(
-      years: state is SeriesLoadedFiltered ? (state.activeFilter as MonthlySalesFilter).years : null,
+      years: state is FilterableState ? (state.activeFilter as MonthlySalesFilter)?.years : null,
       onApply: ({List<int> years}) {
         bloc.add(
           UpdateFilter(
