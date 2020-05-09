@@ -9,6 +9,8 @@ import 'package:quantifico/data/repository/chart_repository.dart';
 
 class MockChartWebRepository extends Mock implements ChartRepository {}
 
+//TODO - Refactor like annual bloc test
+
 void main() {
   group('CustomerSalesBloc', () {
     ChartRepository chartRepository;
@@ -26,7 +28,7 @@ void main() {
       act: (CustomerSalesBloc bloc) async => bloc.add(LoadSeries()),
       expect: [
         SeriesLoading(),
-        isA<SeriesLoaded<CustomerSalesRecord, String>>(),
+        isA<SeriesLoaded<CustomerSalesRecord, String, CustomerSalesFilter>>(),
       ],
     );
 
@@ -58,7 +60,7 @@ void main() {
       },
       expect: [
         SeriesLoading(),
-        isA<SeriesLoadedFiltered<CustomerSalesRecord, String, CustomerSalesFilter>>(),
+        isA<SeriesLoaded<CustomerSalesRecord, String, CustomerSalesFilter>>(),
       ],
     );
   });

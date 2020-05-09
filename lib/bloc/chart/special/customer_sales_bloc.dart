@@ -28,6 +28,7 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapLoadSeriesToState() async* {
     try {
+      yield SeriesLoading();
       final customerSalesData = await chartRepository.getCustomerSalesData(
         limit: ChartConfig.maxRecordLimit,
       );
@@ -50,6 +51,7 @@ class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
     try {
+      yield SeriesLoading();
       final customerSalesData = await chartRepository.getCustomerSalesData(
         limit: (event.filter as CustomerSalesFilter)?.limit,
       );

@@ -27,6 +27,7 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapLoadSeriesToState() async* {
     try {
+      yield SeriesLoading();
       final defaultFilter = MonthlySalesFilter(years: [DateTime.now().year]);
       final monthlySalesData = await chartRepository.getMonthlySalesData(
         years: defaultFilter.years,
@@ -49,6 +50,7 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
 
   Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
     try {
+      yield SeriesLoading();
       final monthlySalesData = await chartRepository.getMonthlySalesData(
         years: (event.filter as MonthlySalesFilter)?.years,
       );
