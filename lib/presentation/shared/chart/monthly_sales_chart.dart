@@ -128,7 +128,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
 
   @override
   void initState() {
-    _years = widget.years ?? [DateTime.now().year];
+    _years = List.from(widget.years);
     _updateAddButtonAvailability();
     super.initState();
   }
@@ -158,7 +158,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
             ),
             verticalSpacing,
             Wrap(
-              spacing: 5,
+              spacing: 10,
               children: _buildYearChips(),
             ),
           ],
