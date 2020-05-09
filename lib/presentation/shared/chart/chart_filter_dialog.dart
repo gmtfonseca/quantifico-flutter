@@ -15,15 +15,16 @@ class ChartFilterDialog extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
       backgroundColor: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: ListView(
+        shrinkWrap: true,
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 16.0),
-            child: Text(
-              'Filtros',
-              style: Theme.of(context).textTheme.subtitle,
+            child: Center(
+              child: Text(
+                'Filtros',
+                style: Theme.of(context).textTheme.subtitle,
+              ),
             ),
           ),
           Padding(

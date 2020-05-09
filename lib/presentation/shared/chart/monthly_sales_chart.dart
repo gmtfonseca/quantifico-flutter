@@ -145,7 +145,10 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Quais anos você deseja visualizar?', style: Theme.of(context).textTheme.subhead),
+            Text(
+              'Quais anos você deseja visualizar?',
+              style: Theme.of(context).textTheme.body1,
+            ),
             verticalSpacing,
             Row(
               children: [
@@ -155,7 +158,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
             ),
             verticalSpacing,
             Wrap(
-              spacing: 10,
+              spacing: 5,
               children: _buildYearChips(),
             ),
           ],
@@ -168,6 +171,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
     return Expanded(
       child: TextField(
         controller: _yearController,
+        autofocus: true,
         onChanged: (year) {
           setState(() {
             _updateAddButtonAvailability();
@@ -215,7 +219,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
 
   void _updateAddButtonAvailability() {
     const YEAR_LENGTH = 4;
-    const MAX_YEARS = 6;
+    const MAX_YEARS = 4;
     _addButtonEnabled = _yearController.text.length == YEAR_LENGTH && _years.length < MAX_YEARS;
   }
 }

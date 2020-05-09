@@ -83,11 +83,10 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
   }
 
   List<charts.Series<MonthSales, int>> _buildSeries(Map<String, Map<String, double>> monthlySalesMap) {
-    final List colors = [
-      charts.MaterialPalette.blue,
+    final colors = [
       charts.MaterialPalette.red,
-      charts.MaterialPalette.yellow,
-      charts.MaterialPalette.green
+      charts.MaterialPalette.blue,
+      charts.MaterialPalette.green,
     ];
 
     final List<charts.Series<MonthSales, int>> seriesList = [];
