@@ -73,24 +73,21 @@ class ChartContainer extends StatelessWidget {
         onPressed: () {},
       ),
       IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: filterDialog != null
+              ? () {
+                  showDialog(
+                    context: context,
+                    child: filterDialog,
+                  );
+                }
+              : null),
+      IconButton(
         icon: Icon(Icons.fullscreen),
         onPressed: () => _openFullScreenMode(context),
       ),
     ];
 
-    if (filterDialog != null) {
-      options.add(
-        IconButton(
-          icon: Icon(Icons.more_vert),
-          onPressed: () {
-            showDialog(
-              context: context,
-              child: filterDialog,
-            );
-          },
-        ),
-      );
-    }
     return options;
   }
 
