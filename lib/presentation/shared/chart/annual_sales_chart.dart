@@ -36,20 +36,24 @@ class AnnualSalesChart extends StatelessWidget {
   }
 
   Widget _buildFilterDialog(ChartState state) {
-    return AnnualSalesFiltersDialog(
-      startYear: state is FilterableState ? (state.activeFilter as AnnualSalesFilter)?.startYear : null,
-      endYear: state is FilterableState ? (state.activeFilter as AnnualSalesFilter)?.endYear : null,
-      onApply: ({int startYear, int endYear}) {
-        bloc.add(
-          UpdateFilter(
-            AnnualSalesFilter(
-              startYear: startYear,
-              endYear: endYear,
+    if (state is FilterableState) {
+      return AnnualSalesFiltersDialog(
+        startYear: (state.activeFilter as AnnualSalesFilter)?.startYear,
+        endYear: (state.activeFilter as AnnualSalesFilter)?.endYear,
+        onApply: ({int startYear, int endYear}) {
+          bloc.add(
+            UpdateFilter(
+              AnnualSalesFilter(
+                startYear: startYear,
+                endYear: endYear,
+              ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    } else {
+      return null;
+    }
   }
 
   Widget _buildChart(ChartState state) {

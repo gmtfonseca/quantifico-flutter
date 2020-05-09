@@ -15,6 +15,9 @@ class SeriesNotLoaded extends ChartState {}
 class FilterableState<F> extends ChartState {
   final F activeFilter;
   const FilterableState({this.activeFilter});
+
+  @override
+  List<Object> get props => [activeFilter];
 }
 
 class SeriesLoadedEmpty<F> extends FilterableState {

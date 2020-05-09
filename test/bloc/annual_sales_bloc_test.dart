@@ -21,12 +21,26 @@ void main() {
     });
 
     blocTest<AnnualSalesBloc, ChartEvent, ChartState>(
-      'should emit SeriesLoaded when repository succeeds',
+      'should emit SeriesLoadedEmpty when repository returns empty response',
       build: () => annualSalesBloc,
       act: (AnnualSalesBloc bloc) async => bloc.add(LoadSeries()),
       expect: [
         SeriesLoading(),
-        isA<SeriesLoaded<AnnualSalesRecord, String>>(),
+        isA<SeriesLoadedEmpty>(),
+      ],
+    );
+
+    blocTest<AnnualSalesBloc, ChartEvent, ChartState>(
+      'should emit SeriesLoaded when repository returns non-empty response',
+      build: () {
+        when(chartRepository.getAnnualSalesData())
+            .thenAnswer((_) => Future.value([AnnualSalesRecord(year: '2010', sales: 1)]));
+        return annualSalesBloc;
+      },
+      act: (AnnualSalesBloc bloc) async => bloc.add(LoadSeries()),
+      expect: [
+        SeriesLoading(),
+        isA<SeriesLoaded<AnnualSalesRecord, String, AnnualSalesFilter>>(),
       ],
     );
 
@@ -44,7 +58,7 @@ void main() {
     );
 
     blocTest<AnnualSalesBloc, ChartEvent, ChartState>(
-      'should emit SeriesLoadedFiltered when repository succeeds',
+      'should emit SeriesLoadedEmpty when repository succeeds fltered request with empty response',
       build: () {
         when(chartRepository.getAnnualSalesData(
           startYear: 2001,
@@ -64,7 +78,31 @@ void main() {
       },
       expect: [
         SeriesLoading(),
-        isA<SeriesLoadedFiltered<AnnualSalesRecord, String, AnnualSalesFilter>>(),
+        isA<SeriesLoadedEmpty<AnnualSalesFilter>>(),
+      ],
+    );
+    blocTest<AnnualSalesBloc, ChartEvent, ChartState>(
+      'should emit SeriesLoaded with filters when repository succeeds fltered request with non-empty response',
+      build: () {
+        when(chartRepository.getAnnualSalesData(
+          startYear: 2001,
+          endYear: 2010,
+        )).thenAnswer((_) => Future.value([AnnualSalesRecord(year: '2010', sales: 1)]));
+        return annualSalesBloc;
+      },
+      act: (AnnualSalesBloc bloc) async {
+        bloc.add(
+          UpdateFilter<AnnualSalesFilter>(
+            const AnnualSalesFilter(
+              startYear: 2001,
+              endYear: 2010,
+            ),
+          ),
+        );
+      },
+      expect: [
+        SeriesLoading(),
+        isA<SeriesLoaded<AnnualSalesRecord, String, AnnualSalesFilter>>(),
       ],
     );
   });

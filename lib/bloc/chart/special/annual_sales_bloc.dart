@@ -47,7 +47,10 @@ class AnnualSalesBloc extends Bloc<ChartEvent, ChartState> {
       );
       if (annualSalesData.isNotEmpty) {
         final series = _buildSeries(annualSalesData);
-        yield SeriesLoaded<AnnualSalesRecord, String, AnnualSalesFilter>(series, activeFilter: event.filter);
+        yield SeriesLoaded<AnnualSalesRecord, String, AnnualSalesFilter>(
+          series,
+          activeFilter: event.filter,
+        );
       } else {
         yield SeriesLoadedEmpty<AnnualSalesFilter>(activeFilter: event.filter);
       }

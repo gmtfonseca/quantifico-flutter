@@ -31,9 +31,14 @@ class CitySalesBloc extends Bloc<ChartEvent, ChartState> {
       final citySalesData = await chartRepository.getCitySalesData(limit: ChartConfig.maxRecordLimit);
       if (citySalesData.isNotEmpty) {
         final series = _buildSeries(citySalesData);
-        yield SeriesLoaded<CitySalesRecord, String, CitySalesFilter>(series);
+        yield SeriesLoaded<CitySalesRecord, String, CitySalesFilter>(
+          series,
+          activeFilter: CitySalesFilter(limit: ChartConfig.maxRecordLimit),
+        );
       } else {
-        yield SeriesLoadedEmpty();
+        yield SeriesLoadedEmpty<CitySalesFilter>(
+          activeFilter: CitySalesFilter(limit: ChartConfig.maxRecordLimit),
+        );
       }
     } catch (e) {
       yield SeriesNotLoaded();

@@ -35,16 +35,20 @@ class MonthlySalesChart extends StatelessWidget {
   }
 
   Widget _buildFilterDialog(ChartState state) {
-    return MonthlySalesFilterDialog(
-      years: state is FilterableState ? (state.activeFilter as MonthlySalesFilter)?.years : null,
-      onApply: ({List<int> years}) {
-        bloc.add(
-          UpdateFilter(
-            MonthlySalesFilter(years: years),
-          ),
-        );
-      },
-    );
+    if (state is FilterableState) {
+      return MonthlySalesFilterDialog(
+        years: (state.activeFilter as MonthlySalesFilter)?.years,
+        onApply: ({List<int> years}) {
+          bloc.add(
+            UpdateFilter(
+              MonthlySalesFilter(years: years),
+            ),
+          );
+        },
+      );
+    } else {
+      return null;
+    }
   }
 
   Widget _buildChart(ChartState state) {

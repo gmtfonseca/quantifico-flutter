@@ -37,16 +37,20 @@ class CustomerSalesChart extends StatelessWidget {
   }
 
   Widget _buildFilterDialog(ChartState state) {
-    return CustomerSalesFilterDialog(
-      limit: state is FilterableState ? (state.activeFilter as CustomerSalesFilter)?.limit : ChartConfig.maxRecordLimit,
-      onApply: ({int limit}) {
-        bloc.add(
-          UpdateFilter(
-            CustomerSalesFilter(limit: limit),
-          ),
-        );
-      },
-    );
+    if (state is FilterableState) {
+      return CustomerSalesFilterDialog(
+        limit: (state.activeFilter as CustomerSalesFilter)?.limit,
+        onApply: ({int limit}) {
+          bloc.add(
+            UpdateFilter(
+              CustomerSalesFilter(limit: limit),
+            ),
+          );
+        },
+      );
+    } else {
+      return null;
+    }
   }
 
   Widget _buildChart(ChartState state) {
@@ -86,7 +90,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
 
   @override
   void initState() {
-    _limit = widget.limit.toDouble();
+    _limit = widget.limit?.toDouble() ?? 1.0;
     super.initState();
   }
 
