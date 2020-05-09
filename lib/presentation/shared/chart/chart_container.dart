@@ -84,7 +84,7 @@ class ChartContainer extends StatelessWidget {
               : null),
       IconButton(
         icon: Icon(Icons.fullscreen),
-        onPressed: () => _openFullScreenMode(context),
+        onPressed: chartState is SeriesLoaded ? () => _openFullScreenMode(context) : null,
       ),
     ];
 
