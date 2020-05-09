@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 const String _token =
     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTg5MDMzMDM4LCJleHAiOjE1ODkxMTk0Mzh9.sxwHfrp5bnQjb2MILg8s2fnj2Ok4WGqfXxSQnv6htFU";
 
-//const String _baseUrl = '10.0.2.2:3000';
+const String _baseUrl = '10.0.2.2:3000';
 //lt -h "http://serverless.social" -p 3000
-const String _baseUrl = 'little-frog-50.serverless.social';
+//const String _baseUrl = 'little-frog-50.serverless.social';
 
 class UnauthorizedException implements Exception {}
 

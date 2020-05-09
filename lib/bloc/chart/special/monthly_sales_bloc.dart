@@ -87,6 +87,7 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
       charts.MaterialPalette.red,
       charts.MaterialPalette.blue,
       charts.MaterialPalette.green,
+      charts.MaterialPalette.yellow,
     ];
 
     final List<charts.Series<MonthSales, int>> seriesList = [];
