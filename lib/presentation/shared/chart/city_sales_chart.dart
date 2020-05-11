@@ -27,7 +27,7 @@ class CitySalesChart extends StatelessWidget {
           ChartState state,
         ) {
           return ChartContainer(
-            title: 'Faturamento x Cidade',
+            title: 'Faturamento por Cidade',
             chartState: state,
             chart: _buildChart(state),
             filterDialog: _buildFilterDialog(state),

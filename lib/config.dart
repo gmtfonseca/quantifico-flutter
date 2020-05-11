@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ChartConfig {
-  static const maxRecordLimit = 15;
+  static const maxRecordLimit = 10;
 }
 
 class SizeConfig {

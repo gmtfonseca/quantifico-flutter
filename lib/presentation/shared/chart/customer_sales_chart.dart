@@ -27,7 +27,7 @@ class CustomerSalesChart extends StatelessWidget {
         ChartState state,
       ) {
         return ChartContainer(
-          title: 'Faturamento x Cliente',
+          title: 'Faturamento por Cliente',
           chartState: state,
           chart: _buildChart(state),
           filterDialog: _buildFilterDialog(state),
