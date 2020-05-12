@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/chart_state.dart';
+import 'package:quantifico/bloc/chart_container/chart_container.dart';
 import 'package:quantifico/config.dart';
+import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/presentation/shared/chart/full_screen_chart.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 
 class ChartContainer extends StatelessWidget {
   final String title;
-  final ChartState chartState;
-  final Widget chart;
+  final ChartContainerBloc bloc;
+  final Chart chart;
   final Widget filterDialog;
   final double height;
 
   ChartContainer({
     Key key,
-    this.title,
-    @required this.chartState,
+    @required this.bloc,
     @required this.chart,
+    this.title,
     this.filterDialog,
     this.height = 450,
   }) : super(key: key);
@@ -44,57 +47,91 @@ class ChartContainer extends StatelessWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 16.0),
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w400,
+    return BlocBuilder<ChartContainerBloc, ChartContainerState>(
+      bloc: bloc,
+      builder: (
+        BuildContext context,
+        ChartContainerState state,
+      ) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 16.0),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
             ),
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: _buildOptions(context),
-        ),
-      ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: _buildOptions(context, state),
+            ),
+          ],
+        );
+      },
     );
   }
 
-  List<Widget> _buildOptions(BuildContext context) {
+  List<Widget> _buildOptions(BuildContext context, ChartContainerState state) {
     final options = [
-      IconButton(
-        icon: Icon(Icons.favorite_border),
-        onPressed: () {},
-      ),
-      IconButton(
-          icon: Icon(Icons.filter_list),
-          onPressed: filterDialog != null
-              ? () {
-                  showDialog(
-                    context: context,
-                    child: filterDialog,
-                  );
-                }
-              : null),
-      IconButton(
-        icon: Icon(Icons.fullscreen),
-        onPressed: chartState is SeriesLoaded ? () => _openFullScreenMode(context) : null,
-      ),
+      _buildStarButton(state),
+      _buildFilterButton(context),
+      _buildFullScreenButton(context),
     ];
 
     return options;
   }
 
+  Widget _buildStarButton(ChartContainerState state) {
+    return IconButton(
+      icon: _buildStarIcon(state),
+      onPressed: () {
+        if ((state as ChartContainerLoaded).isStarred) {
+          bloc.add(UnstarChart(chart.name));
+        } else {
+          bloc.add(StarChart(chart.name));
+        }
+      },
+    );
+  }
+
+  Widget _buildStarIcon(ChartContainerState state) {
+    if (state is ChartContainerLoaded) {
+      return Icon(state.isStarred ? Icons.star : Icons.star_border);
+    } else {
+      return SizedBox();
+    }
+  }
+
+  Widget _buildFilterButton(BuildContext context) {
+    return IconButton(
+        icon: Icon(Icons.filter_list),
+        onPressed: filterDialog != null
+            ? () {
+                showDialog(
+                  context: context,
+                  child: filterDialog,
+                );
+              }
+            : null);
+  }
+
+  Widget _buildFullScreenButton(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.fullscreen),
+      onPressed: chart.state is SeriesLoaded ? () => _openFullScreenMode(context) : null,
+    );
+  }
+
   Widget _buildContent() {
-    if (chartState is SeriesLoading) {
+    if (chart.state is SeriesLoading) {
       return LoadingIndicator();
-    } else if (chartState is SeriesNotLoaded) {
+    } else if (chart.state is SeriesNotLoaded) {
       return Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +142,7 @@ class ChartContainer extends StatelessWidget {
           ],
         ),
       );
-    } else if (chartState is SeriesLoadedEmpty) {
+    } else if (chart.state is SeriesLoadedEmpty) {
       return Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -117,7 +154,7 @@ class ChartContainer extends StatelessWidget {
         ),
       );
     } else {
-      return chart;
+      return chart.widget;
     }
   }
 
@@ -128,7 +165,7 @@ class ChartContainer extends StatelessWidget {
         builder: (context) {
           return FullScreenChart(
             title: title,
-            child: chart,
+            child: chart.widget,
           );
         },
       ),

@@ -4,33 +4,47 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/special/annual_sales_bloc.dart';
 import 'package:quantifico/bloc/chart/chart.dart';
+import 'package:quantifico/bloc/chart_container/chart_container.dart';
 import 'package:quantifico/data/model/chart/annual_sales_filter.dart';
+import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
 import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
 
 class AnnualSalesChart extends StatelessWidget {
   final AnnualSalesBloc bloc;
+  final ChartContainerBloc containerBloc;
 
   AnnualSalesChart({
     Key key,
     @required this.bloc,
+    this.containerBloc,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    containerBloc?.add(LoadContainer(this.runtimeType.toString()));
+
     return BlocBuilder<AnnualSalesBloc, ChartState>(
       bloc: bloc,
       builder: (
         BuildContext context,
         ChartState state,
       ) {
-        return ChartContainer(
-          title: 'Faturamento Anual',
-          chartState: state,
-          chart: _buildChart(state),
-          filterDialog: _buildFilterDialog(state),
-        );
+        if (containerBloc != null) {
+          return ChartContainer(
+            bloc: containerBloc,
+            title: 'Faturamento Anual',
+            chart: Chart(
+              name: this.runtimeType.toString(),
+              state: state,
+              widget: _buildChart(state),
+            ),
+            filterDialog: _buildFilterDialog(state),
+          );
+        } else {
+          return _buildChart(state);
+        }
       },
     );
   }

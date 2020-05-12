@@ -6,15 +6,22 @@ import 'package:quantifico/data/provider/chart_web_provider.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:quantifico/presentation/screen/main_screen.dart';
 import 'package:quantifico/util/web_client.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/tab/tab.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   BlocSupervisor.delegate = SimpleBlocDelegate();
-  runApp(Quantifico());
+  runApp(Quantifico(sharedPreferences: sharedPreferences));
 }
 
 class Quantifico extends StatelessWidget {
+  final SharedPreferences sharedPreferences;
+
+  Quantifico({this.sharedPreferences});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -33,9 +40,10 @@ class Quantifico extends StatelessWidget {
                 final chartWebProvider = ChartWebProvider(webClient: webClient);
                 return ChartRepository(
                   chartWebProvider: chartWebProvider,
+                  sharedPreferences: sharedPreferences,
                 );
               },
-            )
+            ),
           ],
           child: MainScreen(),
         ),

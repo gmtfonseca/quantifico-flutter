@@ -3,8 +3,11 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/chart.dart';
 import 'package:quantifico/bloc/chart/special/customer_sales_bloc.dart';
+import 'package:quantifico/bloc/chart_container/chart_container.dart';
 import 'package:quantifico/config.dart';
+import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
+import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +23,11 @@ class CustomerSalesChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chartRepository = RepositoryProvider.of<ChartRepository>(context);
+    // ignore: close_sinks
+    final chartContainerBloc = ChartContainerBloc(chartRepository: chartRepository)
+      ..add(LoadContainer(this.runtimeType.toString()));
+
     return BlocBuilder<CustomerSalesBloc, ChartState>(
       bloc: bloc,
       builder: (
@@ -27,9 +35,13 @@ class CustomerSalesChart extends StatelessWidget {
         ChartState state,
       ) {
         return ChartContainer(
+          bloc: chartContainerBloc,
           title: 'Faturamento por Cliente',
-          chartState: state,
-          chart: _buildChart(state),
+          chart: Chart(
+            name: 'CustomerSalesChart',
+            state: state,
+            widget: _buildChart(state),
+          ),
           filterDialog: _buildFilterDialog(state),
         );
       },

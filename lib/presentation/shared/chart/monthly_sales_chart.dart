@@ -4,7 +4,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/chart.dart';
 import 'package:quantifico/bloc/chart/special/monthly_sales_bloc.dart';
+import 'package:quantifico/bloc/chart_container/chart_container.dart';
+import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/model/chart/monthly_sales_filter.dart';
+import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
 import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
@@ -19,6 +22,10 @@ class MonthlySalesChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final chartRepository = RepositoryProvider.of<ChartRepository>(context);
+    // ignore: close_sinks
+    final chartContainerBloc = ChartContainerBloc(chartRepository: chartRepository)
+      ..add(LoadContainer(this.runtimeType.toString()));
     return BlocBuilder<MonthlySalesBloc, ChartState>(
         bloc: bloc,
         builder: (
@@ -26,9 +33,13 @@ class MonthlySalesChart extends StatelessWidget {
           ChartState state,
         ) {
           return ChartContainer(
+            bloc: chartContainerBloc,
             title: 'Faturamento Mensal',
-            chartState: state,
-            chart: _buildChart(state),
+            chart: Chart(
+              name: this.runtimeType.toString(),
+              state: state,
+              widget: _buildChart(state),
+            ),
             filterDialog: _buildFilterDialog(state),
           );
         });

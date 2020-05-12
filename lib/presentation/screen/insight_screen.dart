@@ -4,6 +4,8 @@ import 'package:quantifico/bloc/chart/chart.dart';
 import 'package:quantifico/bloc/chart/special/city_sales_bloc.dart';
 import 'package:quantifico/bloc/chart/special/monthly_sales_bloc.dart';
 import 'package:quantifico/bloc/chart/special/special.dart';
+import 'package:quantifico/bloc/chart_container/chart_container.dart';
+import 'package:quantifico/bloc/home_screen/home_screen.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
 
@@ -47,6 +49,9 @@ class _InsightScreenState extends State<InsightScreen> {
   @override
   Widget build(BuildContext context) {
     final verticalSpacing = SizedBox(height: 15);
+    final chartRepository = RepositoryProvider.of<ChartRepository>(context);
+    // ignore: close_sinks
+    final homeScreenBloc = BlocProvider.of<HomeScreenBloc>(context);
     return RefreshIndicator(
       onRefresh: () async {
         _refreshCharts();
@@ -57,11 +62,16 @@ class _InsightScreenState extends State<InsightScreen> {
           padding: const EdgeInsets.only(bottom: 4.0),
           child: ListView(
             children: [
+              AnnualSalesChart(
+                  bloc: _annualSalesBloc,
+                  containerBloc: ChartContainerBloc(
+                    chartRepository: chartRepository,
+                    homeScreenBloc: homeScreenBloc,
+                  )),
+              verticalSpacing,
               MonthlySalesChart(bloc: _monthlySalesBloc),
               verticalSpacing,
               CitySalesChart(bloc: _citySalesBloc),
-              verticalSpacing,
-              AnnualSalesChart(bloc: _annualSalesBloc),
               verticalSpacing,
               CustomerSalesChart(bloc: _customerSalesBloc),
             ],
