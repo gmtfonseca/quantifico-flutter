@@ -43,7 +43,6 @@ class CitySalesBloc extends Bloc<ChartEvent, ChartState> {
       }
     } catch (e) {
       yield SeriesNotLoaded();
-      throw e;
     }
   }
 
@@ -62,7 +61,6 @@ class CitySalesBloc extends Bloc<ChartEvent, ChartState> {
       }
     } catch (e) {
       yield SeriesNotLoaded();
-      throw e;
     }
   }
 

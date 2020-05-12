@@ -44,7 +44,6 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
       }
     } catch (e) {
       yield SeriesNotLoaded();
-      throw e;
     }
   }
 
@@ -66,7 +65,6 @@ class MonthlySalesBloc extends Bloc<ChartEvent, ChartState> {
       }
     } catch (e) {
       yield SeriesNotLoaded();
-      throw e;
     }
   }
 

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 const String _token =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTg5MjE5Mjg5LCJleHAiOjE1ODkzMDU2ODl9.DDtoAGl1yD33dGcPn0XuvQVwxw7wZQdiHS_lWvtjEFU";
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTg5MzA1ODcyLCJleHAiOjE1ODkzOTIyNzJ9.6Bxw_f7nBF9k9KqxxkvTEvXbQYHi02fZLPFMcbLjtRI";
 
 const String _baseUrl = '10.0.2.2:3000';
 //lt -h "http://serverless.social" -p 3000
