@@ -23,8 +23,6 @@ class AnnualSalesChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    containerBloc?.add(LoadContainer(this.runtimeType.toString()));
-
     return BlocBuilder<AnnualSalesBloc, ChartState>(
       bloc: bloc,
       builder: (
@@ -43,7 +41,10 @@ class AnnualSalesChart extends StatelessWidget {
             filterDialog: _buildFilterDialog(state),
           );
         } else {
-          return _buildChart(state);
+          return SizedBox(
+            height: 350,
+            child: _buildChart(state),
+          );
         }
       },
     );

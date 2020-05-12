@@ -12,20 +12,14 @@ import 'package:quantifico/presentation/shared/tab_selector.dart';
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<HomeScreenBloc>(
-      create: (context) {
-        final chartRepository = RepositoryProvider.of<ChartRepository>(context);
-        return HomeScreenBloc(chartRepository: chartRepository)..add(LoadHomeScreen());
-      },
-      child: SafeArea(
-        child: BlocBuilder<TabBloc, Tab>(
-          builder: (context, activeTab) {
-            return Scaffold(
-              body: _buildBody(context, activeTab),
-              bottomNavigationBar: _buildNavBar(context, activeTab),
-            );
-          },
-        ),
+    return SafeArea(
+      child: BlocBuilder<TabBloc, Tab>(
+        builder: (context, activeTab) {
+          return Scaffold(
+            body: _buildBody(context, activeTab),
+            bottomNavigationBar: _buildNavBar(context, activeTab),
+          );
+        },
       ),
     );
   }
@@ -33,7 +27,10 @@ class MainScreen extends StatelessWidget {
   _buildBody(BuildContext context, Tab activeTab) {
     switch (activeTab) {
       case Tab.home:
-        return HomeScreen();
+        final chartRepository = RepositoryProvider.of<ChartRepository>(context);
+        // ignore: close_sinks
+        final homeScreenBloc = HomeScreenBloc(chartRepository: chartRepository)..add(LoadHomeScreen());
+        return HomeScreen(bloc: homeScreenBloc);
       case Tab.insight:
         return InsightScreen();
       case Tab.invoice:

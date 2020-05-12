@@ -7,7 +7,6 @@ import 'package:quantifico/bloc/chart_container/chart_container.dart';
 import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/model/chart/city_sales_filter.dart';
-import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:intl/intl.dart';
 
@@ -15,34 +14,39 @@ import 'chart_filter_dialog.dart';
 
 class CitySalesChart extends StatelessWidget {
   final CitySalesBloc bloc;
+  final ChartContainerBloc containerBloc;
 
   CitySalesChart({
     Key key,
     @required this.bloc,
+    this.containerBloc,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final chartRepository = RepositoryProvider.of<ChartRepository>(context);
-    // ignore: close_sinks
-    final chartContainerBloc = ChartContainerBloc(chartRepository: chartRepository)
-      ..add(LoadContainer(this.runtimeType.toString()));
     return BlocBuilder<CitySalesBloc, ChartState>(
         bloc: bloc,
         builder: (
           BuildContext context,
           ChartState state,
         ) {
-          return ChartContainer(
-            bloc: chartContainerBloc,
-            title: 'Faturamento por Cidade',
-            chart: Chart(
-              name: 'CitySalesChart',
-              state: state,
-              widget: _buildChart(state),
-            ),
-            filterDialog: _buildFilterDialog(state),
-          );
+          if (containerBloc != null) {
+            return ChartContainer(
+              bloc: containerBloc,
+              title: 'Faturamento por Cidade',
+              chart: Chart(
+                name: 'CitySalesChart',
+                state: state,
+                widget: _buildChart(state),
+              ),
+              filterDialog: _buildFilterDialog(state),
+            );
+          } else {
+            return SizedBox(
+              height: 350,
+              child: _buildChart(state),
+            );
+          }
         });
   }
 

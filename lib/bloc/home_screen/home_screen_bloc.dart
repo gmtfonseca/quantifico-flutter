@@ -22,6 +22,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   Stream<HomeScreenState> _mapLoadHomeScreenToState() async* {
     try {
       final starredCharts = chartRepository.getStarred();
+      starredCharts.sort();
       yield HomeScreenLoaded(starredCharts: starredCharts);
     } catch (e) {
       yield HomeScreenNotLoaded();

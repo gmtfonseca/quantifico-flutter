@@ -15,35 +15,39 @@ import 'chart_filter_dialog.dart';
 
 class CustomerSalesChart extends StatelessWidget {
   final CustomerSalesBloc bloc;
+  final ChartContainerBloc containerBloc;
 
   CustomerSalesChart({
     Key key,
     @required this.bloc,
+    this.containerBloc,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final chartRepository = RepositoryProvider.of<ChartRepository>(context);
-    // ignore: close_sinks
-    final chartContainerBloc = ChartContainerBloc(chartRepository: chartRepository)
-      ..add(LoadContainer(this.runtimeType.toString()));
-
     return BlocBuilder<CustomerSalesBloc, ChartState>(
       bloc: bloc,
       builder: (
         BuildContext context,
         ChartState state,
       ) {
-        return ChartContainer(
-          bloc: chartContainerBloc,
-          title: 'Faturamento por Cliente',
-          chart: Chart(
-            name: 'CustomerSalesChart',
-            state: state,
-            widget: _buildChart(state),
-          ),
-          filterDialog: _buildFilterDialog(state),
-        );
+        if (containerBloc != null) {
+          return ChartContainer(
+            bloc: containerBloc,
+            title: 'Faturamento por Cliente',
+            chart: Chart(
+              name: 'CustomerSalesChart',
+              state: state,
+              widget: _buildChart(state),
+            ),
+            filterDialog: _buildFilterDialog(state),
+          );
+        } else {
+          return SizedBox(
+            height: 350,
+            child: _buildChart(state),
+          );
+        }
       },
     );
   }
