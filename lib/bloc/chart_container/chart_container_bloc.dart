@@ -1,16 +1,29 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:quantifico/bloc/chart/barrel.dart';
+import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_event.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_state.dart';
-import 'package:quantifico/bloc/home_screen/home_screen.dart';
-import 'package:quantifico/data/repository/chart_repository.dart';
+import 'package:quantifico/data/repository/chart_container_repository.dart';
 
 class ChartContainerBloc extends Bloc<ChartContainerEvent, ChartContainerState> {
-  final ChartRepository chartRepository;
-  final HomeScreenBloc homeScreenBloc;
+  final String chartName;
+  final ChartContainerRepository chartContainerRepository;
+  final ChartBloc chartBloc;
+  StreamSubscription chartSubscription;
 
-  ChartContainerBloc({@required this.chartRepository, this.homeScreenBloc});
+  ChartContainerBloc({
+    @required this.chartName,
+    @required this.chartContainerRepository,
+    @required this.chartBloc,
+  }) {
+    chartSubscription = chartBloc.listen((state) {
+      if (state is SeriesLoaded) {
+        add(LoadContainer());
+      }
+    });
+  }
 
   @override
   ChartContainerState get initialState => ChartContainerLoading();
@@ -18,45 +31,46 @@ class ChartContainerBloc extends Bloc<ChartContainerEvent, ChartContainerState> 
   @override
   Stream<ChartContainerState> mapEventToState(ChartContainerEvent event) async* {
     if (event is LoadContainer) {
-      yield* _mapLoadContainerToState(event);
+      yield* _mapLoadContainerToState();
     } else if (event is StarChart) {
-      yield* _mapStarToState(event);
+      yield* _mapStarToState();
     } else if (event is UnstarChart) {
-      yield* _mapUnstarToState(event);
+      yield* _mapUnstarToState();
     }
   }
 
-  Stream<ChartContainerState> _mapLoadContainerToState(LoadContainer event) async* {
+  Stream<ChartContainerState> _mapLoadContainerToState() async* {
     try {
-      final isStarred = chartRepository.isStarred(event.chartName);
+      final isStarred = chartContainerRepository.isStarred(chartName);
       yield ChartContainerLoaded(isStarred: isStarred);
     } catch (e) {
       yield ChartContainerNotLoaded();
-      throw e;
     }
   }
 
-  Stream<ChartContainerState> _mapStarToState(StarChart event) async* {
+  Stream<ChartContainerState> _mapStarToState() async* {
     try {
-      chartRepository.star(event.chartName);
-      final isStarred = chartRepository.isStarred(event.chartName);
+      chartContainerRepository.star(chartName);
+      final isStarred = chartContainerRepository.isStarred(chartName);
       yield ChartContainerLoaded(isStarred: isStarred);
-      homeScreenBloc?.add(LoadHomeScreen());
     } catch (e) {
       yield ChartContainerNotLoaded();
-      throw e;
     }
   }
 
-  Stream<ChartContainerState> _mapUnstarToState(UnstarChart event) async* {
+  Stream<ChartContainerState> _mapUnstarToState() async* {
     try {
-      chartRepository.unstar(event.chartName);
-      final isStarred = chartRepository.isStarred(event.chartName);
+      chartContainerRepository.unstar(chartName);
+      final isStarred = chartContainerRepository.isStarred(chartName);
       yield ChartContainerLoaded(isStarred: isStarred);
-      homeScreenBloc?.add(LoadHomeScreen());
     } catch (e) {
       yield ChartContainerNotLoaded();
-      throw e;
     }
+  }
+
+  @override
+  Future<void> close() {
+    chartSubscription?.cancel();
+    return super.close();
   }
 }

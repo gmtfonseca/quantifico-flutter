@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/chart/chart_state.dart';
-import 'package:quantifico/bloc/chart_container/chart_container.dart';
-import 'package:quantifico/config.dart';
-import 'package:quantifico/data/model/chart/chart.dart';
+import 'package:quantifico/bloc/chart_container/barrel.dart';
+import 'package:quantifico/presentation/shared/chart/chart.dart';
 import 'package:quantifico/presentation/shared/chart/full_screen_chart.dart';
-import 'package:quantifico/presentation/shared/loading_indicator.dart';
 
 class ChartContainer extends StatelessWidget {
   final String title;
   final ChartContainerBloc bloc;
   final Chart chart;
-  final Widget filterDialog;
+  final VoidCallback onStarOrUnstar;
   final double height;
 
   ChartContainer({
@@ -19,13 +16,12 @@ class ChartContainer extends StatelessWidget {
     @required this.bloc,
     @required this.chart,
     this.title,
-    this.filterDialog,
+    this.onStarOrUnstar,
     this.height = 450,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
     return Container(
       height: height,
       color: Theme.of(context).scaffoldBackgroundColor,
@@ -37,7 +33,7 @@ class ChartContainer extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: _buildContent(),
+                child: chart,
               ),
             )
           ],
@@ -59,13 +55,7 @@ class ChartContainer extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(left: 16.0),
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
+              child: _buildTitle(),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -77,85 +67,79 @@ class ChartContainer extends StatelessWidget {
     );
   }
 
+  Widget _buildTitle() {
+    if (title != null) {
+      return Text(
+        title,
+        style: TextStyle(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w400,
+        ),
+      );
+    } else {
+      return SizedBox();
+    }
+  }
+
   List<Widget> _buildOptions(BuildContext context, ChartContainerState state) {
     final options = [
       _buildStarButton(state),
-      _buildFilterButton(context),
-      _buildFullScreenButton(context),
+      _buildFilterButton(context, state),
+      _buildFullScreenButton(context, state),
     ];
 
     return options;
   }
 
   Widget _buildStarButton(ChartContainerState state) {
-    return IconButton(
-      icon: _buildStarIcon(state),
-      onPressed: () {
-        if ((state as ChartContainerLoaded).isStarred) {
-          bloc.add(UnstarChart(chart.name));
-        } else {
-          bloc.add(StarChart(chart.name));
-        }
-      },
-    );
-  }
-
-  Widget _buildStarIcon(ChartContainerState state) {
     if (state is ChartContainerLoaded) {
-      return Icon(state.isStarred ? Icons.star : Icons.star_border);
+      return IconButton(
+        icon: Icon(state.isStarred ? Icons.star : Icons.star_border),
+        onPressed: () {
+          if (state.isStarred) {
+            bloc.add(UnstarChart());
+            if (onStarOrUnstar != null) {
+              onStarOrUnstar();
+            }
+          } else {
+            bloc.add(StarChart());
+            if (onStarOrUnstar != null) {
+              onStarOrUnstar();
+            }
+          }
+        },
+      );
     } else {
-      return SizedBox();
+      return IconButton(
+        icon: Icon(Icons.star_border),
+        onPressed: null,
+      );
     }
   }
 
-  Widget _buildFilterButton(BuildContext context) {
-    return IconButton(
+  Widget _buildFilterButton(BuildContext context, ChartContainerState state) {
+    if (state is ChartContainerLoaded) {
+      return IconButton(
+          icon: Icon(Icons.filter_list),
+          onPressed: () {
+            showDialog(
+              context: context,
+              child: chart.filterDialog(),
+            );
+          });
+    } else {
+      return IconButton(
         icon: Icon(Icons.filter_list),
-        onPressed: filterDialog != null
-            ? () {
-                showDialog(
-                  context: context,
-                  child: filterDialog,
-                );
-              }
-            : null);
+        onPressed: null,
+      );
+    }
   }
 
-  Widget _buildFullScreenButton(BuildContext context) {
+  Widget _buildFullScreenButton(BuildContext context, ChartContainerState state) {
     return IconButton(
       icon: Icon(Icons.fullscreen),
-      onPressed: chart.state is SeriesLoaded ? () => _openFullScreenMode(context) : null,
+      onPressed: state is ChartContainerLoaded ? () => _openFullScreenMode(context) : null,
     );
-  }
-
-  Widget _buildContent() {
-    if (chart.state is SeriesLoading) {
-      return LoadingIndicator();
-    } else if (chart.state is SeriesNotLoaded) {
-      return Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Não foi possível carregar gráfico'),
-            SizedBox(width: 5),
-            Icon(Icons.sentiment_dissatisfied),
-          ],
-        ),
-      );
-    } else if (chart.state is SeriesLoadedEmpty) {
-      return Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Sem dados para exibir'),
-            SizedBox(width: 5),
-            Icon(Icons.sentiment_neutral),
-          ],
-        ),
-      );
-    } else {
-      return chart.widget;
-    }
   }
 
   void _openFullScreenMode(BuildContext context) {
@@ -165,7 +149,7 @@ class ChartContainer extends StatelessWidget {
         builder: (context) {
           return FullScreenChart(
             title: title,
-            child: chart.widget,
+            child: chart,
           );
         },
       ),

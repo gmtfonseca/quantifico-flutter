@@ -1,56 +1,78 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/chart/chart.dart';
-import 'package:quantifico/bloc/chart/special/monthly_sales_bloc.dart';
-import 'package:quantifico/bloc/chart_container/chart_container.dart';
-import 'package:quantifico/data/model/chart/chart.dart';
+import 'package:quantifico/bloc/chart/barrel.dart';
+import 'package:quantifico/bloc/chart/chart_bloc.dart';
+
 import 'package:quantifico/data/model/chart/monthly_sales_filter.dart';
-import 'package:quantifico/presentation/shared/chart/chart_container.dart';
+import 'package:quantifico/presentation/shared/chart/chart.dart';
+
 import 'package:intl/intl.dart';
 import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
 
-class MonthlySalesChart extends StatelessWidget {
-  final MonthlySalesBloc bloc;
-  final ChartContainerBloc containerBloc;
-
+class MonthlySalesChart extends Chart {
   MonthlySalesChart({
     Key key,
-    @required this.bloc,
-    this.containerBloc,
-  }) : super(key: key);
+    @required ChartBloc bloc,
+  }) : super(key: key, bloc: bloc);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<MonthlySalesBloc, ChartState>(
-        bloc: bloc,
-        builder: (
-          BuildContext context,
-          ChartState state,
-        ) {
-          if (containerBloc != null) {
-            return ChartContainer(
-              bloc: containerBloc,
-              title: 'Faturamento Mensal',
-              chart: Chart(
-                name: this.runtimeType.toString(),
-                state: state,
-                widget: _buildChart(state),
-              ),
-              filterDialog: _buildFilterDialog(state),
-            );
-          } else {
-            return SizedBox(
-              height: 350,
-              child: _buildChart(state),
-            );
-          }
-        });
+  Widget buildContent() {
+    final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
+      NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
+    );
+
+    final customTickFormatter = charts.BasicNumericTickFormatterSpec((num month) {
+      switch (month.toInt()) {
+        case 1:
+          return "Jan";
+        case 2:
+          return "Fev";
+        case 3:
+          return "Mar";
+        case 4:
+          return "Abr";
+        case 5:
+          return "Mai";
+        case 6:
+          return "Jun";
+        case 7:
+          return "Jul";
+        case 8:
+          return "Ago";
+        case 9:
+          return "Set";
+        case 10:
+          return "Out";
+        case 11:
+          return "Nov";
+        case 12:
+          return "Dez";
+        default:
+          return '';
+      }
+    });
+
+    const MONTHS_IN_YEAR = 12;
+    return charts.LineChart(
+      (bloc.state as SeriesLoaded).series,
+      animate: true,
+      behaviors: [charts.SeriesLegend()],
+      primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
+      domainAxis: charts.NumericAxisSpec(
+        tickProviderSpec: charts.BasicNumericTickProviderSpec(
+          desiredTickCount: MONTHS_IN_YEAR,
+          zeroBound: false,
+          dataIsInWholeNumbers: true,
+        ),
+        tickFormatterSpec: customTickFormatter,
+      ),
+    );
   }
 
-  Widget _buildFilterDialog(ChartState state) {
-    if (state is FilterableState) {
+  Widget filterDialog() {
+    if (bloc.state is FilterableState) {
+      final state = bloc.state as FilterableState;
       return MonthlySalesFilterDialog(
         years: (state.activeFilter as MonthlySalesFilter)?.years,
         onApply: ({List<int> years}) {
@@ -63,63 +85,6 @@ class MonthlySalesChart extends StatelessWidget {
       );
     } else {
       return null;
-    }
-  }
-
-  Widget _buildChart(ChartState state) {
-    if (state is SeriesLoaded) {
-      final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
-        NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
-      );
-
-      final customTickFormatter = charts.BasicNumericTickFormatterSpec((num month) {
-        switch (month.toInt()) {
-          case 1:
-            return "Jan";
-          case 2:
-            return "Fev";
-          case 3:
-            return "Mar";
-          case 4:
-            return "Abr";
-          case 5:
-            return "Mai";
-          case 6:
-            return "Jun";
-          case 7:
-            return "Jul";
-          case 8:
-            return "Ago";
-          case 9:
-            return "Set";
-          case 10:
-            return "Out";
-          case 11:
-            return "Nov";
-          case 12:
-            return "Dez";
-          default:
-            return '';
-        }
-      });
-
-      const MONTHS_IN_YEAR = 12;
-      return charts.LineChart(
-        state.series,
-        animate: true,
-        behaviors: [charts.SeriesLegend()],
-        primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
-        domainAxis: charts.NumericAxisSpec(
-          tickProviderSpec: charts.BasicNumericTickProviderSpec(
-            desiredTickCount: MONTHS_IN_YEAR,
-            zeroBound: false,
-            dataIsInWholeNumbers: true,
-          ),
-          tickFormatterSpec: customTickFormatter,
-        ),
-      );
-    } else {
-      return SizedBox();
     }
   }
 }

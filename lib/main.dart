@@ -9,6 +9,7 @@ import 'package:quantifico/util/web_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/tab/tab.dart';
+import 'data/repository/chart_container_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,12 @@ class Quantifico extends StatelessWidget {
                 final chartWebProvider = ChartWebProvider(webClient: webClient);
                 return ChartRepository(
                   chartWebProvider: chartWebProvider,
+                );
+              },
+            ),
+            RepositoryProvider<ChartContainerRepository>(
+              create: (context) {
+                return ChartContainerRepository(
                   sharedPreferences: sharedPreferences,
                 );
               },

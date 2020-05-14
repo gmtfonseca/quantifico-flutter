@@ -8,28 +8,24 @@ abstract class ChartContainerEvent extends Equatable {
 }
 
 class LoadContainer extends ChartContainerEvent {
-  final String chartName;
-
-  const LoadContainer(this.chartName);
+  const LoadContainer();
 
   @override
   String toString() => 'LoadContainer';
 }
 
 class StarChart extends ChartContainerEvent {
-  final String chartName;
-
-  const StarChart(this.chartName);
+  const StarChart();
 
   @override
   String toString() => 'StarChart';
 }
 
 class UnstarChart extends ChartContainerEvent {
-  final String chartName;
-
-  const UnstarChart(this.chartName);
+  const UnstarChart();
 
   @override
   String toString() => 'UnstarChart';
 }
+
+class AllowOptions extends ChartContainerEvent {}

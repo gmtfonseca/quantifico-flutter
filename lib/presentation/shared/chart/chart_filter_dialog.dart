@@ -23,7 +23,7 @@ class ChartFilterDialog extends StatelessWidget {
             child: Center(
               child: Text(
                 'Filtros',
-                style: Theme.of(context).textTheme.subtitle,
+                style: Theme.of(context).textTheme.subtitle2,
               ),
             ),
           ),

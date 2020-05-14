@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:quantifico/bloc/chart/chart.dart';
+import 'package:quantifico/bloc/chart/barrel.dart';
+import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
 import 'package:quantifico/data/model/chart/customer_sales_record.dart';
@@ -9,13 +9,8 @@ import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:quantifico/util/string_util.dart';
 
-class CustomerSalesBloc extends Bloc<ChartEvent, ChartState> {
-  final ChartRepository chartRepository;
-
-  CustomerSalesBloc({@required this.chartRepository});
-
-  @override
-  ChartState get initialState => SeriesLoading();
+class CustomerSalesBloc extends ChartBloc {
+  CustomerSalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
   @override
   Stream<ChartState> mapEventToState(ChartEvent event) async* {

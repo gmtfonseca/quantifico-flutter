@@ -1,57 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/chart/special/annual_sales_bloc.dart';
-import 'package:quantifico/bloc/chart/chart.dart';
-import 'package:quantifico/bloc/chart_container/chart_container.dart';
-import 'package:quantifico/data/model/chart/annual_sales_filter.dart';
-import 'package:quantifico/data/model/chart/chart.dart';
-import 'package:quantifico/presentation/shared/chart/chart_container.dart';
+import 'package:quantifico/bloc/chart/chart_bloc.dart';
+import 'package:quantifico/bloc/chart/barrel.dart';
+
 import 'package:intl/intl.dart';
+import 'package:quantifico/data/model/chart/annual_sales_filter.dart';
 import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
+import 'package:quantifico/presentation/shared/chart/chart.dart';
 
-class AnnualSalesChart extends StatelessWidget {
-  final AnnualSalesBloc bloc;
-  final ChartContainerBloc containerBloc;
-
+class AnnualSalesChart extends Chart {
   AnnualSalesChart({
     Key key,
-    @required this.bloc,
-    this.containerBloc,
-  }) : super(key: key);
+    @required ChartBloc bloc,
+  }) : super(key: key, bloc: bloc);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<AnnualSalesBloc, ChartState>(
-      bloc: bloc,
-      builder: (
-        BuildContext context,
-        ChartState state,
-      ) {
-        if (containerBloc != null) {
-          return ChartContainer(
-            bloc: containerBloc,
-            title: 'Faturamento Anual',
-            chart: Chart(
-              name: this.runtimeType.toString(),
-              state: state,
-              widget: _buildChart(state),
-            ),
-            filterDialog: _buildFilterDialog(state),
-          );
-        } else {
-          return SizedBox(
-            height: 350,
-            child: _buildChart(state),
-          );
-        }
-      },
+  Widget buildContent() {
+    final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
+      NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
+    );
+
+    return charts.BarChart(
+      (bloc.state as SeriesLoaded).series,
+      animate: true,
+      primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
     );
   }
 
-  Widget _buildFilterDialog(ChartState state) {
-    if (state is FilterableState) {
+  @override
+  Widget filterDialog() {
+    if (bloc.state is FilterableState) {
+      final state = bloc.state as FilterableState;
       return AnnualSalesFiltersDialog(
         startYear: (state.activeFilter as AnnualSalesFilter)?.startYear,
         endYear: (state.activeFilter as AnnualSalesFilter)?.endYear,
@@ -68,22 +48,6 @@ class AnnualSalesChart extends StatelessWidget {
       );
     } else {
       return null;
-    }
-  }
-
-  Widget _buildChart(ChartState state) {
-    if (state is SeriesLoaded) {
-      final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
-        NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
-      );
-
-      return charts.BarChart(
-        state.series,
-        animate: true,
-        primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
-      );
-    } else {
-      return SizedBox();
     }
   }
 }

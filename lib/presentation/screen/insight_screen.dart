@@ -1,101 +1,94 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/chart/chart.dart';
-import 'package:quantifico/bloc/chart/special/city_sales_bloc.dart';
-import 'package:quantifico/bloc/chart/special/monthly_sales_bloc.dart';
-import 'package:quantifico/bloc/chart/special/special.dart';
-import 'package:quantifico/bloc/chart_container/chart_container.dart';
-import 'package:quantifico/data/repository/chart_repository.dart';
-import 'package:quantifico/presentation/shared/chart/chart.dart';
+import 'package:quantifico/bloc/chart_container/chart_container_bloc.dart';
+import 'package:quantifico/bloc/insight_screen/barrel.dart';
 
-class InsightScreen extends StatefulWidget {
-  @override
-  _InsightScreenState createState() => _InsightScreenState();
-}
+import 'package:quantifico/data/repository/chart_container_repository.dart';
+import 'package:quantifico/presentation/shared/chart/barrel.dart';
+import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 
-class _InsightScreenState extends State<InsightScreen> {
-  MonthlySalesBloc _monthlySalesBloc;
-  AnnualSalesBloc _annualSalesBloc;
-  CustomerSalesBloc _customerSalesBloc;
-  CitySalesBloc _citySalesBloc;
-  List<Bloc> _charts = [];
+class InsightScreen extends StatelessWidget {
+  final InsightScreenBloc bloc;
 
-  @override
-  void didChangeDependencies() {
-    final chartRepository = RepositoryProvider.of<ChartRepository>(context);
-    _monthlySalesBloc = MonthlySalesBloc(chartRepository: chartRepository);
-    _charts.add(_monthlySalesBloc);
-    _annualSalesBloc = AnnualSalesBloc(chartRepository: chartRepository);
-    _charts.add(_annualSalesBloc);
-    _customerSalesBloc = CustomerSalesBloc(chartRepository: chartRepository);
-    _charts.add(_customerSalesBloc);
-    _citySalesBloc = CitySalesBloc(chartRepository: chartRepository);
-    _charts.add(_citySalesBloc);
-    _refreshCharts();
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    // must close explicitly, otherwise linter givers warning
-    _monthlySalesBloc?.close();
-    _annualSalesBloc?.close();
-    _customerSalesBloc?.close();
-    _citySalesBloc?.close();
-    super.dispose();
-  }
+  InsightScreen({@required this.bloc});
 
   @override
   Widget build(BuildContext context) {
-    final chartRepository = RepositoryProvider.of<ChartRepository>(context);
-    final verticalSpacing = SizedBox(height: 15);
     return RefreshIndicator(
       onRefresh: () async {
-        _refreshCharts();
+        bloc.add(RefreshInsightScreen());
       },
-      child: Container(
-        color: Color(0xffe0e0e0),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 4.0),
-          child: ListView(
-            children: [
-              AnnualSalesChart(
-                bloc: _annualSalesBloc,
-                containerBloc: ChartContainerBloc(chartRepository: chartRepository)
-                  ..add(LoadContainer('AnnualSalesChart')),
+      child: BlocBuilder<InsightScreenBloc, InsightScreenState>(
+          bloc: bloc,
+          builder: (context, state) {
+            return Container(
+              color: Color(0xffe0e0e0),
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 4.0),
+                child: _buildContent(context, state),
               ),
-              verticalSpacing,
-              MonthlySalesChart(
-                bloc: _monthlySalesBloc,
-                containerBloc: ChartContainerBloc(chartRepository: chartRepository)
-                  ..add(LoadContainer('MonthlySalesChart')),
-              ),
-              verticalSpacing,
-              CitySalesChart(
-                bloc: _citySalesBloc,
-                containerBloc: ChartContainerBloc(chartRepository: chartRepository)
-                  ..add(LoadContainer('CitySalesChart')),
-              ),
-              verticalSpacing,
-              CustomerSalesChart(
-                bloc: _customerSalesBloc,
-                containerBloc: ChartContainerBloc(chartRepository: chartRepository)
-                  ..add(LoadContainer('CustomerSalesChart')),
-              ),
-            ],
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 
-  void _refreshCharts() {
-    for (Bloc chart in _charts) {
-      if (chart.state is FilterableState) {
-        chart.add(UpdateFilter((chart.state as FilterableState).activeFilter));
-      } else {
-        chart.add(LoadSeries());
-      }
+  Widget _buildContent(BuildContext context, InsightScreenState state) {
+    final verticalSpacing = SizedBox(height: 15);
+    if (state is InsightScreenLoaded) {
+      final chartContainerRepository = RepositoryProvider.of<ChartContainerRepository>(context);
+      return ListView(
+        children: [
+          ChartContainer(
+            title: 'Faturamento Anual',
+            bloc: ChartContainerBloc(
+              chartName: 'AnnualSalesChart',
+              chartContainerRepository: chartContainerRepository,
+              chartBloc: state.annualSalesBloc,
+            ),
+            chart: AnnualSalesChart(
+              bloc: state.annualSalesBloc,
+            ),
+          ),
+          verticalSpacing,
+          ChartContainer(
+            title: 'Faturamento por Cliente',
+            bloc: ChartContainerBloc(
+              chartName: 'CustomerSalesChart',
+              chartContainerRepository: chartContainerRepository,
+              chartBloc: state.customerSalesBloc,
+            ),
+            chart: CustomerSalesChart(
+              bloc: state.customerSalesBloc,
+            ),
+          ),
+          verticalSpacing,
+          ChartContainer(
+            title: 'Faturamento por Cidade',
+            bloc: ChartContainerBloc(
+              chartName: 'CitySalesChart',
+              chartContainerRepository: chartContainerRepository,
+              chartBloc: state.citySalesBloc,
+            ),
+            chart: CitySalesChart(
+              bloc: state.citySalesBloc,
+            ),
+          ),
+          verticalSpacing,
+          ChartContainer(
+            title: 'Faturamento Mensal',
+            bloc: ChartContainerBloc(
+              chartName: 'MonthlySalesBloc',
+              chartContainerRepository: chartContainerRepository,
+              chartBloc: state.monthlySalesBloc,
+            ),
+            chart: CustomerSalesChart(
+              bloc: state.monthlySalesBloc,
+            ),
+          ),
+        ],
+      );
+    } else {
+      return SizedBox();
     }
   }
 }

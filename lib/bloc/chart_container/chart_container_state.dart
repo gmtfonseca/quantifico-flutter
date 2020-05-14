@@ -19,3 +19,5 @@ class ChartContainerLoaded extends ChartContainerState {
 }
 
 class ChartContainerNotLoaded extends ChartContainerState {}
+
+class ChartContainerEnabled extends ChartContainerState {}

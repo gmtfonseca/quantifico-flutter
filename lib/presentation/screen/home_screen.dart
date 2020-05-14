@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/chart/chart.dart';
-import 'package:quantifico/bloc/chart/special/special.dart';
-import 'package:quantifico/bloc/chart_container/chart_container.dart';
-import 'package:quantifico/bloc/home_screen/home_screen.dart';
+import 'package:quantifico/bloc/chart/barrel.dart';
+import 'package:quantifico/bloc/chart/special/barrel.dart';
+import 'package:quantifico/bloc/chart_container/barrel.dart';
+import 'package:quantifico/bloc/home_screen/barrel.dart';
+import 'package:quantifico/data/repository/chart_container_repository.dart';
+
 import 'package:quantifico/data/repository/chart_repository.dart';
-import 'package:quantifico/presentation/shared/chart/chart.dart';
+import 'package:quantifico/presentation/shared/chart/barrel.dart';
+import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -59,14 +62,25 @@ class HomeScreen extends StatelessWidget {
 
   Widget _chartFromName(BuildContext context, String chartName) {
     final chartRepository = RepositoryProvider.of<ChartRepository>(context);
+    final chartContainerRepository = RepositoryProvider.of<ChartContainerRepository>(context);
+    final onStarOrUnstar = () => bloc.add(LoadHomeScreen());
 
     switch (chartName) {
       case 'AnnualSalesChart':
-        return AnnualSalesChart(
-          bloc: AnnualSalesBloc(chartRepository: chartRepository)..add(LoadSeries()),
-          containerBloc: ChartContainerBloc(chartRepository: chartRepository, homeScreenBloc: bloc)
-            ..add(LoadContainer('AnnualSalesChart')),
+        final annualSalesBloc = AnnualSalesBloc(chartRepository: chartRepository)..add(LoadSeries());
+        return ChartContainer(
+          title: 'Faturamento Anual',
+          bloc: ChartContainerBloc(
+            chartName: 'AnnualSalesChart',
+            chartContainerRepository: chartContainerRepository,
+            chartBloc: annualSalesBloc,
+          ),
+          chart: AnnualSalesChart(
+            bloc: annualSalesBloc,
+          ),
+          onStarOrUnstar: onStarOrUnstar,
         );
+      /*
       case 'CitySalesChart':
         return CitySalesChart(
           bloc: CitySalesBloc(chartRepository: chartRepository)..add(LoadSeries()),
@@ -84,7 +98,7 @@ class HomeScreen extends StatelessWidget {
           bloc: CustomerSalesBloc(chartRepository: chartRepository)..add(LoadSeries()),
           containerBloc: ChartContainerBloc(chartRepository: chartRepository, homeScreenBloc: bloc)
             ..add(LoadContainer('CustomerSalesChart')),
-        );
+        );*/
       default:
         return SizedBox();
     }

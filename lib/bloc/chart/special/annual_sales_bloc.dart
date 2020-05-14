@@ -1,19 +1,14 @@
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:quantifico/bloc/chart/chart.dart';
+import 'package:quantifico/bloc/chart/barrel.dart';
+import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/data/model/chart/annual_sales_filter.dart';
 import 'package:quantifico/data/model/chart/annual_sales_record.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-class AnnualSalesBloc extends Bloc<ChartEvent, ChartState> {
-  final ChartRepository chartRepository;
-
-  AnnualSalesBloc({@required this.chartRepository});
-
-  @override
-  ChartState get initialState => SeriesLoading();
+class AnnualSalesBloc extends ChartBloc {
+  AnnualSalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
   @override
   Stream<ChartState> mapEventToState(ChartEvent event) async* {

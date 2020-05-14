@@ -1,59 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/chart/chart.dart';
-import 'package:quantifico/bloc/chart/special/customer_sales_bloc.dart';
-import 'package:quantifico/bloc/chart_container/chart_container.dart';
+import 'package:quantifico/bloc/chart/barrel.dart';
+import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/config.dart';
-import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
-import 'package:quantifico/data/repository/chart_repository.dart';
-import 'package:quantifico/presentation/shared/chart/chart_container.dart';
+import 'package:quantifico/presentation/shared/chart/chart.dart';
 import 'package:intl/intl.dart';
 
 import 'chart_filter_dialog.dart';
 
-class CustomerSalesChart extends StatelessWidget {
-  final CustomerSalesBloc bloc;
-  final ChartContainerBloc containerBloc;
-
+class CustomerSalesChart extends Chart {
   CustomerSalesChart({
     Key key,
-    @required this.bloc,
-    this.containerBloc,
-  }) : super(key: key);
+    @required ChartBloc bloc,
+  }) : super(key: key, bloc: bloc);
 
   @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CustomerSalesBloc, ChartState>(
-      bloc: bloc,
-      builder: (
-        BuildContext context,
-        ChartState state,
-      ) {
-        if (containerBloc != null) {
-          return ChartContainer(
-            bloc: containerBloc,
-            title: 'Faturamento por Cliente',
-            chart: Chart(
-              name: 'CustomerSalesChart',
-              state: state,
-              widget: _buildChart(state),
-            ),
-            filterDialog: _buildFilterDialog(state),
-          );
-        } else {
-          return SizedBox(
-            height: 350,
-            child: _buildChart(state),
-          );
-        }
-      },
+  Widget buildContent() {
+    final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
+      NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
+    );
+
+    return charts.BarChart(
+      (bloc.state as SeriesLoaded).series,
+      animate: true,
+      vertical: false,
+      barRendererDecorator: charts.BarLabelDecorator<String>(),
+      domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+      primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
     );
   }
 
-  Widget _buildFilterDialog(ChartState state) {
-    if (state is FilterableState) {
+  @override
+  Widget filterDialog() {
+    if (bloc.state is FilterableState) {
+      final state = bloc.state as FilterableState;
       return CustomerSalesFilterDialog(
         limit: (state.activeFilter as CustomerSalesFilter)?.limit,
         onApply: ({int limit}) {
@@ -66,25 +47,6 @@ class CustomerSalesChart extends StatelessWidget {
       );
     } else {
       return null;
-    }
-  }
-
-  Widget _buildChart(ChartState state) {
-    if (state is SeriesLoaded) {
-      final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
-        NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
-      );
-
-      return charts.BarChart(
-        state.series,
-        animate: true,
-        vertical: false,
-        barRendererDecorator: charts.BarLabelDecorator<String>(),
-        domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
-        primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
-      );
-    } else {
-      return SizedBox();
     }
   }
 }
