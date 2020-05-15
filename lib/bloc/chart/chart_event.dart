@@ -14,6 +14,13 @@ class LoadSeries extends ChartEvent {
   String toString() => 'LoadSeries';
 }
 
+class RefreshSeries extends ChartEvent {
+  const RefreshSeries();
+
+  @override
+  String toString() => 'RefreshSeries';
+}
+
 class UpdateFilter<T> extends ChartEvent {
   final T filter;
 

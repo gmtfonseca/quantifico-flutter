@@ -5,7 +5,7 @@ class CustomerSalesRecord extends Equatable {
   final String customer;
   final double sales;
 
-  CustomerSalesRecord({
+  const CustomerSalesRecord({
     @required this.customer,
     @required this.sales,
   });

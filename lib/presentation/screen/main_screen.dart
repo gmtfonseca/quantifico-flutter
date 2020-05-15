@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' hide Tab;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quantifico/bloc/chart/special/barrel.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
 import 'package:quantifico/bloc/insight_screen/barrel.dart';
 import 'package:quantifico/bloc/tab/tab.dart';
@@ -26,7 +27,8 @@ class _MainScreenState extends State<MainScreen> {
     final chartRepository = RepositoryProvider.of<ChartRepository>(context);
     final chartContainerRepository = RepositoryProvider.of<ChartContainerRepository>(context);
     _homeScreenBloc = HomeScreenBloc(chartContainerRepository: chartContainerRepository)..add(LoadHomeScreen());
-    _insightScreenBloc = InsightScreenBloc(chartRepository: chartRepository)..add(LoadInsightScreen());
+    final annualSalesBloc = BlocProvider.of<AnnualSalesBloc>(context);
+    _insightScreenBloc = InsightScreenBloc(annualSalesBloc: annualSalesBloc)..add(LoadInsightScreen());
     super.didChangeDependencies();
   }
 
@@ -54,7 +56,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget _buildBody(BuildContext context, Tab activeTab) {
     switch (activeTab) {
       case Tab.home:
-        _homeScreenBloc.add(LoadHomeScreen());
+        _homeScreenBloc.add(const LoadHomeScreen());
         return HomeScreen(bloc: _homeScreenBloc);
       case Tab.insight:
         return InsightScreen(bloc: _insightScreenBloc);

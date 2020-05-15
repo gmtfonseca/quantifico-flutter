@@ -5,7 +5,7 @@ class CitySalesRecord extends Equatable {
   final String city;
   final double sales;
 
-  CitySalesRecord({
+  const CitySalesRecord({
     @required this.city,
     @required this.sales,
   });

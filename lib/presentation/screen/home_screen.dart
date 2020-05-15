@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
 
     switch (chartName) {
       case 'AnnualSalesChart':
-        final annualSalesBloc = AnnualSalesBloc(chartRepository: chartRepository)..add(LoadSeries());
+        final annualSalesBloc = BlocProvider.of<AnnualSalesBloc>(context);
         return ChartContainer(
           title: 'Faturamento Anual',
           bloc: ChartContainerBloc(

@@ -11,15 +11,7 @@ class AnnualSalesBloc extends ChartBloc {
   AnnualSalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
   @override
-  Stream<ChartState> mapEventToState(ChartEvent event) async* {
-    if (event is LoadSeries) {
-      yield* _mapLoadSeriesToState();
-    } else if (event is UpdateFilter) {
-      yield* _mapUpdateFilterToState(event);
-    }
-  }
-
-  Stream<ChartState> _mapLoadSeriesToState() async* {
+  Stream<ChartState> mapLoadSeriesToState() async* {
     try {
       yield SeriesLoading();
       final annualSalesData = await chartRepository.getAnnualSalesData();
@@ -27,28 +19,30 @@ class AnnualSalesBloc extends ChartBloc {
         final series = _buildSeries(annualSalesData);
         yield SeriesLoaded<AnnualSalesRecord, String, AnnualSalesFilter>(series);
       } else {
-        yield SeriesLoadedEmpty();
+        yield const SeriesLoadedEmpty<AnnualSalesFilter>();
       }
     } catch (e) {
       yield SeriesNotLoaded();
     }
   }
 
-  Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
+  @override
+  Stream<ChartState> mapUpdateFilterToState(UpdateFilter event) async* {
     try {
       yield SeriesLoading();
+      final annualSalesFilter = event.filter as AnnualSalesFilter;
       final annualSalesData = await chartRepository.getAnnualSalesData(
-        startYear: (event.filter as AnnualSalesFilter)?.startYear,
-        endYear: (event.filter as AnnualSalesFilter)?.endYear,
+        startYear: annualSalesFilter?.startYear,
+        endYear: annualSalesFilter?.endYear,
       );
       if (annualSalesData.isNotEmpty) {
         final series = _buildSeries(annualSalesData);
         yield SeriesLoaded<AnnualSalesRecord, String, AnnualSalesFilter>(
           series,
-          activeFilter: event.filter,
+          activeFilter: annualSalesFilter,
         );
       } else {
-        yield SeriesLoadedEmpty<AnnualSalesFilter>(activeFilter: event.filter);
+        yield SeriesLoadedEmpty<AnnualSalesFilter>(activeFilter: annualSalesFilter);
       }
     } catch (e) {
       yield SeriesNotLoaded();

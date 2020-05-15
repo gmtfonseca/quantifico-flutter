@@ -19,11 +19,11 @@ class ChartWebProvider {
       params['anofinal'] = endYear.toString();
     }
 
-    final List body = await webClient.fetch(
+    final List<dynamic> body = await webClient.fetch(
       'nfs/plot/faturamento-anual',
       params: params.isNotEmpty ? params : null,
-    );
-    final data = body?.map((record) => AnnualSalesRecord.fromJson(record))?.toList();
+    ) as List<dynamic>;
+    final data = body?.map((dynamic record) => AnnualSalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
 
@@ -34,11 +34,11 @@ class ChartWebProvider {
       params['limit'] = limit.toString();
     }
 
-    final List body = await webClient.fetch(
+    final List<dynamic> body = await webClient.fetch(
       'nfs/plot/faturamento-cliente',
       params: params.isNotEmpty ? params : null,
-    );
-    final data = body?.map((record) => CustomerSalesRecord.fromJson(record))?.toList();
+    ) as List<dynamic>;
+    final data = body?.map((dynamic record) => CustomerSalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
 
@@ -49,11 +49,11 @@ class ChartWebProvider {
       params['limit'] = limit.toString();
     }
 
-    final List body = await webClient.fetch(
+    final List<dynamic> body = await webClient.fetch(
       'nfs/plot/faturamento-cidade',
       params: params.isNotEmpty ? params : null,
-    );
-    final data = body?.map((record) => CitySalesRecord.fromJson(record))?.toList();
+    ) as List<dynamic>;
+    final data = body?.map((dynamic record) => CitySalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
 
@@ -65,11 +65,11 @@ class ChartWebProvider {
     final Map<String, String> params = Map();
     params['anos'] = years.join(',');
 
-    final List body = await webClient.fetch(
+    final List<dynamic> body = await webClient.fetch(
       'nfs/plot/faturamento-mensal',
       params: params.isNotEmpty ? params : null,
-    );
-    final data = body?.map((record) => MonthlySalesRecord.fromJson(record))?.toList();
+    ) as List<dynamic>;
+    final data = body?.map((dynamic record) => MonthlySalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
 }

@@ -5,7 +5,7 @@ class AnnualSalesRecord extends Equatable {
   final String year;
   final double sales;
 
-  AnnualSalesRecord({
+  const AnnualSalesRecord({
     @required this.year,
     @required this.sales,
   });

@@ -13,15 +13,7 @@ class CustomerSalesBloc extends ChartBloc {
   CustomerSalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
   @override
-  Stream<ChartState> mapEventToState(ChartEvent event) async* {
-    if (event is LoadSeries) {
-      yield* _mapLoadSeriesToState();
-    } else if (event is UpdateFilter) {
-      yield* _mapUpdateFilterToState(event);
-    }
-  }
-
-  Stream<ChartState> _mapLoadSeriesToState() async* {
+  Stream<ChartState> mapLoadSeriesToState() async* {
     try {
       yield SeriesLoading();
       final customerSalesData = await chartRepository.getCustomerSalesData(
@@ -43,24 +35,25 @@ class CustomerSalesBloc extends ChartBloc {
     }
   }
 
-  Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
+  @override
+  Stream<ChartState> mapUpdateFilterToState(UpdateFilter event) async* {
     try {
       yield SeriesLoading();
+      final customerSalesFilter = event.filter as CustomerSalesFilter;
       final customerSalesData = await chartRepository.getCustomerSalesData(
-        limit: (event.filter as CustomerSalesFilter)?.limit,
+        limit: customerSalesFilter?.limit,
       );
       if (customerSalesData.isNotEmpty) {
         final series = _buildSeries(customerSalesData);
         yield SeriesLoaded<CustomerSalesRecord, String, CustomerSalesFilter>(
           series,
-          activeFilter: event.filter,
+          activeFilter: customerSalesFilter,
         );
       } else {
-        yield SeriesLoadedEmpty<CustomerSalesFilter>(activeFilter: event.filter);
+        yield SeriesLoadedEmpty<CustomerSalesFilter>(activeFilter: customerSalesFilter);
       }
     } catch (e) {
       yield SeriesNotLoaded();
-      throw e;
     }
   }
 

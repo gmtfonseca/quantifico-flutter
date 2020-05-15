@@ -13,15 +13,7 @@ class CitySalesBloc extends ChartBloc {
   CitySalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
   @override
-  Stream<ChartState> mapEventToState(ChartEvent event) async* {
-    if (event is LoadSeries) {
-      yield* _mapLoadSeriesToState();
-    } else if (event is UpdateFilter) {
-      yield* _mapUpdateFilterToState(event);
-    }
-  }
-
-  Stream<ChartState> _mapLoadSeriesToState() async* {
+  Stream<ChartState> mapLoadSeriesToState() async* {
     try {
       yield SeriesLoading();
       final citySalesData = await chartRepository.getCitySalesData(limit: ChartConfig.maxRecordLimit);
@@ -41,18 +33,20 @@ class CitySalesBloc extends ChartBloc {
     }
   }
 
-  Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
+  @override
+  Stream<ChartState> mapUpdateFilterToState(UpdateFilter event) async* {
     try {
       yield SeriesLoading();
+      final citySalesFilter = event.filter as CitySalesFilter;
       final citySalesData = await chartRepository.getCitySalesData(
-        limit: (event.filter as CitySalesFilter)?.limit,
+        limit: citySalesFilter?.limit,
       );
 
       if (citySalesData.isNotEmpty) {
         final series = _buildSeries(citySalesData);
-        yield SeriesLoaded<CitySalesRecord, String, CitySalesFilter>(series, activeFilter: event.filter);
+        yield SeriesLoaded<CitySalesRecord, String, CitySalesFilter>(series, activeFilter: citySalesFilter);
       } else {
-        yield SeriesLoadedEmpty<CitySalesFilter>(activeFilter: event.filter);
+        yield SeriesLoadedEmpty<CitySalesFilter>(activeFilter: citySalesFilter);
       }
     } catch (e) {
       yield SeriesNotLoaded();

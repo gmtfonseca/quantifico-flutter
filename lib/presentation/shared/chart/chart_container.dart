@@ -11,7 +11,7 @@ class ChartContainer extends StatelessWidget {
   final VoidCallback onStarOrUnstar;
   final double height;
 
-  ChartContainer({
+  const ChartContainer({
     Key key,
     @required this.bloc,
     @required this.chart,
@@ -29,7 +29,7 @@ class ChartContainer extends StatelessWidget {
         child: Column(
           children: [
             _buildHeader(context),
-            Divider(thickness: 1.5),
+            const Divider(thickness: 1.5),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -54,7 +54,7 @@ class ChartContainer extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 16.0),
+              padding: const EdgeInsets.only(left: 16.0),
               child: _buildTitle(),
             ),
             Row(
@@ -77,7 +77,7 @@ class ChartContainer extends StatelessWidget {
         ),
       );
     } else {
-      return SizedBox();
+      return const SizedBox();
     }
   }
 
@@ -97,12 +97,12 @@ class ChartContainer extends StatelessWidget {
         icon: Icon(state.isStarred ? Icons.star : Icons.star_border),
         onPressed: () {
           if (state.isStarred) {
-            bloc.add(UnstarChart());
+            bloc.add(const UnstarChart());
             if (onStarOrUnstar != null) {
               onStarOrUnstar();
             }
           } else {
-            bloc.add(StarChart());
+            bloc.add(const StarChart());
             if (onStarOrUnstar != null) {
               onStarOrUnstar();
             }
@@ -122,9 +122,9 @@ class ChartContainer extends StatelessWidget {
       return IconButton(
           icon: Icon(Icons.filter_list),
           onPressed: () {
-            showDialog(
+            showDialog<Widget>(
               context: context,
-              child: chart.filterDialog(),
+              builder: (BuildContext context) => chart.filterDialog(),
             );
           });
     } else {
@@ -145,7 +145,7 @@ class ChartContainer extends StatelessWidget {
   void _openFullScreenMode(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<FullScreenChart>(
         builder: (context) {
           return FullScreenChart(
             title: title,

@@ -25,29 +25,29 @@ class MonthlySalesChart extends Chart {
     final customTickFormatter = charts.BasicNumericTickFormatterSpec((num month) {
       switch (month.toInt()) {
         case 1:
-          return "Jan";
+          return 'Jan';
         case 2:
-          return "Fev";
+          return 'Fev';
         case 3:
-          return "Mar";
+          return 'Mar';
         case 4:
-          return "Abr";
+          return 'Abr';
         case 5:
-          return "Mai";
+          return 'Mai';
         case 6:
-          return "Jun";
+          return 'Jun';
         case 7:
-          return "Jul";
+          return 'Jul';
         case 8:
-          return "Ago";
+          return 'Ago';
         case 9:
-          return "Set";
+          return 'Set';
         case 10:
-          return "Out";
+          return 'Out';
         case 11:
-          return "Nov";
+          return 'Nov';
         case 12:
-          return "Dez";
+          return 'Dez';
         default:
           return '';
       }
@@ -60,7 +60,7 @@ class MonthlySalesChart extends Chart {
       behaviors: [charts.SeriesLegend()],
       primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
       domainAxis: charts.NumericAxisSpec(
-        tickProviderSpec: charts.BasicNumericTickProviderSpec(
+        tickProviderSpec: const charts.BasicNumericTickProviderSpec(
           desiredTickCount: MONTHS_IN_YEAR,
           zeroBound: false,
           dataIsInWholeNumbers: true,
@@ -70,6 +70,7 @@ class MonthlySalesChart extends Chart {
     );
   }
 
+  @override
   Widget filterDialog() {
     if (bloc.state is FilterableState) {
       final state = bloc.state as FilterableState;
@@ -93,18 +94,19 @@ class MonthlySalesFilterDialog extends StatefulWidget {
   final void Function({List<int> years}) onApply;
   final List<int> years;
 
-  MonthlySalesFilterDialog({
+  const MonthlySalesFilterDialog({
     this.onApply,
     this.years,
   });
 
+  @override
   _MonthlySalesFilterDialogState createState() => _MonthlySalesFilterDialogState();
 }
 
 class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
+  final TextEditingController _yearController = TextEditingController();
   List<int> _years;
   bool _addButtonEnabled;
-  TextEditingController _yearController = TextEditingController();
 
   @override
   void initState() {
@@ -115,7 +117,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
 
   @override
   Widget build(BuildContext context) {
-    Widget verticalSpacing = SizedBox(height: 15);
+    const verticalSpacing = SizedBox(height: 15);
     return ChartFilterDialog(
       onApply: () {
         widget.onApply(years: _years);
@@ -127,7 +129,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
           children: [
             Text(
               'Quais anos você deseja visualizar?',
-              style: Theme.of(context).textTheme.body1,
+              style: Theme.of(context).textTheme.bodyText1,
             ),
             verticalSpacing,
             Row(
@@ -157,7 +159,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
             _updateAddButtonAvailability();
           });
         },
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           labelText: 'Ano',
         ),
         keyboardType: TextInputType.number,
@@ -169,7 +171,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
 
   Widget _buildAddButton() {
     return FlatButton(
-      child: Text('ADICIONAR'),
+      child: const Text('ADICIONAR'),
       onPressed: _addButtonEnabled
           ? () {
               setState(() {

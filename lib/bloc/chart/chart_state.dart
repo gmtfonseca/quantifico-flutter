@@ -20,7 +20,7 @@ class FilterableState<F> extends ChartState {
   List<Object> get props => [activeFilter];
 }
 
-class SeriesLoadedEmpty<F> extends FilterableState {
+class SeriesLoadedEmpty<F> extends FilterableState<F> {
   const SeriesLoadedEmpty({F activeFilter}) : super(activeFilter: activeFilter);
 
   @override
@@ -29,7 +29,7 @@ class SeriesLoadedEmpty<F> extends FilterableState {
   }
 }
 
-class SeriesLoaded<T, D, F> extends FilterableState {
+class SeriesLoaded<T, D, F> extends FilterableState<F> {
   final List<charts.Series<T, D>> series;
 
   const SeriesLoaded(this.series, {F activeFilter}) : super(activeFilter: activeFilter);

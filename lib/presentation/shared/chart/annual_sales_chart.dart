@@ -3,9 +3,9 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/services.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
-
 import 'package:intl/intl.dart';
 import 'package:quantifico/data/model/chart/annual_sales_filter.dart';
+import 'package:quantifico/data/model/chart/annual_sales_record.dart';
 import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
 
@@ -21,8 +21,9 @@ class AnnualSalesChart extends Chart {
       NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
     );
 
+    final state = bloc.state as SeriesLoaded<AnnualSalesRecord, String, AnnualSalesFilter>;
     return charts.BarChart(
-      (bloc.state as SeriesLoaded).series,
+      state.series,
       animate: true,
       primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
     );
@@ -57,7 +58,7 @@ class AnnualSalesFiltersDialog extends StatefulWidget {
   final int startYear;
   final int endYear;
 
-  AnnualSalesFiltersDialog({
+  const AnnualSalesFiltersDialog({
     this.onApply,
     this.startYear,
     this.endYear,
@@ -68,8 +69,8 @@ class AnnualSalesFiltersDialog extends StatefulWidget {
 }
 
 class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
-  TextEditingController _startYearController = TextEditingController();
-  TextEditingController _endYearController = TextEditingController();
+  final TextEditingController _startYearController = TextEditingController();
+  final TextEditingController _endYearController = TextEditingController();
 
   @override
   void initState() {
@@ -101,7 +102,7 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             TextField(
               controller: _endYearController,
               maxLength: 4,

@@ -4,7 +4,7 @@ class ChartFilterDialog extends StatelessWidget {
   final Widget child;
   final VoidCallback onApply;
 
-  ChartFilterDialog({
+  const ChartFilterDialog({
     Key key,
     this.child,
     this.onApply,
@@ -35,14 +35,14 @@ class ChartFilterDialog extends StatelessWidget {
             alignment: MainAxisAlignment.spaceEvenly,
             children: [
               FlatButton(
-                child: Text('APLICAR'),
+                child: const Text('APLICAR'),
                 onPressed: () {
                   onApply();
                   Navigator.of(context).pop();
                 },
               ),
               FlatButton(
-                child: Text('CANCELAR'),
+                child: const Text('CANCELAR'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },

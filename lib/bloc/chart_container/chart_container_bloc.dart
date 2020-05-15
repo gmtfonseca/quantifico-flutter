@@ -20,7 +20,7 @@ class ChartContainerBloc extends Bloc<ChartContainerEvent, ChartContainerState> 
   }) {
     chartSubscription = chartBloc.listen((state) {
       if (state is SeriesLoaded) {
-        add(LoadContainer());
+        add(const LoadContainer());
       }
     });
   }

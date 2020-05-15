@@ -12,15 +12,7 @@ class MonthlySalesBloc extends ChartBloc {
   MonthlySalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
   @override
-  Stream<ChartState> mapEventToState(ChartEvent event) async* {
-    if (event is LoadSeries) {
-      yield* _mapLoadSeriesToState();
-    } else if (event is UpdateFilter) {
-      yield* _mapUpdateFilterToState(event);
-    }
-  }
-
-  Stream<ChartState> _mapLoadSeriesToState() async* {
+  Stream<ChartState> mapLoadSeriesToState() async* {
     try {
       yield SeriesLoading();
       final defaultFilter = MonthlySalesFilter(years: [DateTime.now().year]);
@@ -42,21 +34,23 @@ class MonthlySalesBloc extends ChartBloc {
     }
   }
 
-  Stream<ChartState> _mapUpdateFilterToState(UpdateFilter event) async* {
+  @override
+  Stream<ChartState> mapUpdateFilterToState(UpdateFilter event) async* {
     try {
       yield SeriesLoading();
+      final monthlySalesFilter = event.filter as MonthlySalesFilter;
       final monthlySalesData = await chartRepository.getMonthlySalesData(
-        years: (event.filter as MonthlySalesFilter)?.years,
+        years: monthlySalesFilter?.years,
       );
       if (monthlySalesData.isNotEmpty) {
         final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
         final seriesList = _buildSeries(monthlySalesMap);
         yield SeriesLoaded<MonthSales, int, MonthlySalesFilter>(
           seriesList,
-          activeFilter: event.filter,
+          activeFilter: monthlySalesFilter,
         );
       } else {
-        yield SeriesLoadedEmpty<MonthlySalesFilter>(activeFilter: event.filter);
+        yield SeriesLoadedEmpty<MonthlySalesFilter>(activeFilter: monthlySalesFilter);
       }
     } catch (e) {
       yield SeriesNotLoaded();
@@ -65,13 +59,15 @@ class MonthlySalesBloc extends ChartBloc {
 
   Map<String, Map<String, double>> _monthlySalesListToMap(List<MonthlySalesRecord> data) {
     final Map<String, Map<String, double>> years = Map();
-    data.forEach((MonthlySalesRecord record) {
+
+    for (final record in data) {
       if (!years.containsKey(record.year)) {
         years[record.year] = {};
       }
 
       years[record.year][record.month] = record.sales;
-    });
+    }
+
     return years;
   }
 
@@ -102,7 +98,7 @@ class MonthlySalesBloc extends ChartBloc {
     return seriesList;
   }
 
-  List _toFilledMonthSalesList(Map<String, double> year) {
+  List<MonthSales> _toFilledMonthSalesList(Map<String, double> year) {
     const MONTHS_IN_YEAR = 12;
     final List<MonthSales> data = [];
     for (var m = 1; m <= MONTHS_IN_YEAR; m++) {

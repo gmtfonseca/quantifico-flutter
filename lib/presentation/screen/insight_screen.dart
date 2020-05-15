@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quantifico/bloc/chart/special/barrel.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_bloc.dart';
 import 'package:quantifico/bloc/insight_screen/barrel.dart';
 
@@ -36,6 +37,7 @@ class InsightScreen extends StatelessWidget {
     final verticalSpacing = SizedBox(height: 15);
     if (state is InsightScreenLoaded) {
       final chartContainerRepository = RepositoryProvider.of<ChartContainerRepository>(context);
+      final annualSalesBloc = BlocProvider.of<AnnualSalesBloc>(context);
       return ListView(
         children: [
           ChartContainer(
@@ -43,14 +45,14 @@ class InsightScreen extends StatelessWidget {
             bloc: ChartContainerBloc(
               chartName: 'AnnualSalesChart',
               chartContainerRepository: chartContainerRepository,
-              chartBloc: state.annualSalesBloc,
+              chartBloc: annualSalesBloc,
             ),
             chart: AnnualSalesChart(
-              bloc: state.annualSalesBloc,
+              bloc: annualSalesBloc,
             ),
           ),
           verticalSpacing,
-          ChartContainer(
+          /*ChartContainer(
             title: 'Faturamento por Cliente',
             bloc: ChartContainerBloc(
               chartName: 'CustomerSalesChart',
@@ -84,7 +86,7 @@ class InsightScreen extends StatelessWidget {
             chart: CustomerSalesChart(
               bloc: state.monthlySalesBloc,
             ),
-          ),
+          ),*/
         ],
       );
     } else {

@@ -6,7 +6,7 @@ class MonthlySalesRecord extends Equatable {
   final String month;
   final double sales;
 
-  MonthlySalesRecord({
+  const MonthlySalesRecord({
     @required this.year,
     @required this.month,
     @required this.sales,
@@ -34,7 +34,7 @@ class MonthSales extends Equatable {
   final String month;
   final double sales;
 
-  MonthSales({
+  const MonthSales({
     @required this.month,
     @required this.sales,
   });
@@ -50,26 +50,3 @@ class MonthSales extends Equatable {
     return 'MonthSales{month: $month, sales $sales}';
   }
 }
-
-/*
-class MonthlySalesRecord extends Equatable {
-  final String year;
-  final List<MonthSales> months;
-
-  MonthlySalesRecord({
-    @required this.year,
-    @required this.months,
-  });
-
-  @override
-  List<Object> get props => [
-        year,
-        months,
-      ];
-
-  @override
-  String toString() {
-    return 'MonthlySalesRecord{year: $year, months: $months';
-  }
-}
-*/

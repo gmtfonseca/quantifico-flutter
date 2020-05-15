@@ -4,6 +4,7 @@ import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/city_sales_filter.dart';
+import 'package:quantifico/data/model/chart/city_sales_record.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
 import 'package:intl/intl.dart';
 
@@ -20,13 +21,13 @@ class CitySalesChart extends Chart {
     final simpleCurrencyFormatter = charts.BasicNumericTickFormatterSpec.fromNumberFormat(
       NumberFormat.compactSimpleCurrency(locale: 'pt-BR'),
     );
-
+    final state = bloc.state as SeriesLoaded<CitySalesRecord, String, CitySalesFilter>;
     return charts.BarChart(
-      (bloc.state as SeriesLoaded).series,
+      state.series,
       animate: true,
       vertical: false,
       barRendererDecorator: charts.BarLabelDecorator<String>(),
-      domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+      domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
     );
   }
@@ -55,11 +56,12 @@ class CitySalesFilterDialog extends StatefulWidget {
   final void Function({int limit}) onApply;
   final int limit;
 
-  CitySalesFilterDialog({
+  const CitySalesFilterDialog({
     this.onApply,
     this.limit,
   });
 
+  @override
   _CitySalesFilterDialogState createState() => _CitySalesFilterDialogState();
 }
 
@@ -82,7 +84,7 @@ class _CitySalesFilterDialogState extends State<CitySalesFilterDialog> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Limite'),
+          const Text('Limite'),
           Slider(
             label: '${_limit.round()}',
             value: _limit,
