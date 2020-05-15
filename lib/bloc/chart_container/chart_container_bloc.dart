@@ -7,17 +7,16 @@ import 'package:quantifico/bloc/chart_container/chart_container_event.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_state.dart';
 import 'package:quantifico/data/repository/chart_container_repository.dart';
 
-class ChartContainerBloc extends Bloc<ChartContainerEvent, ChartContainerState> {
+class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerState> {
   final String chartName;
   final ChartContainerRepository chartContainerRepository;
   final ChartBloc chartBloc;
   StreamSubscription chartSubscription;
 
   ChartContainerBloc({
-    @required this.chartName,
     @required this.chartContainerRepository,
     @required this.chartBloc,
-  }) {
+  }) : chartName = C.toString() {
     chartSubscription = chartBloc.listen((state) {
       if (state is SeriesLoaded) {
         add(const LoadContainer());

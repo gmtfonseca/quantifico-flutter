@@ -5,40 +5,14 @@ import 'package:quantifico/bloc/home_screen/barrel.dart';
 import 'package:quantifico/bloc/insight_screen/barrel.dart';
 import 'package:quantifico/bloc/tab/tab.dart';
 import 'package:quantifico/data/model/tab.dart';
-import 'package:quantifico/data/repository/chart_container_repository.dart';
-import 'package:quantifico/data/repository/chart_repository.dart';
+
 import 'package:quantifico/presentation/screen/home_screen.dart';
 import 'package:quantifico/presentation/screen/insight_screen.dart';
 import 'package:quantifico/presentation/screen/invoice_screen.dart';
 
 import 'package:quantifico/presentation/shared/tab_selector.dart';
 
-class MainScreen extends StatefulWidget {
-  @override
-  _MainScreenState createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  InsightScreenBloc _insightScreenBloc;
-  HomeScreenBloc _homeScreenBloc;
-
-  @override
-  void didChangeDependencies() {
-    final chartRepository = RepositoryProvider.of<ChartRepository>(context);
-    final chartContainerRepository = RepositoryProvider.of<ChartContainerRepository>(context);
-    _homeScreenBloc = HomeScreenBloc(chartContainerRepository: chartContainerRepository)..add(LoadHomeScreen());
-    final annualSalesBloc = BlocProvider.of<AnnualSalesBloc>(context);
-    _insightScreenBloc = InsightScreenBloc(annualSalesBloc: annualSalesBloc)..add(LoadInsightScreen());
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    _insightScreenBloc.close();
-    _homeScreenBloc.close();
-    super.dispose();
-  }
-
+class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -56,10 +30,11 @@ class _MainScreenState extends State<MainScreen> {
   Widget _buildBody(BuildContext context, Tab activeTab) {
     switch (activeTab) {
       case Tab.home:
-        _homeScreenBloc.add(const LoadHomeScreen());
-        return HomeScreen(bloc: _homeScreenBloc);
+        final homeScreenBloc = BlocProvider.of<HomeScreenBloc>(context);
+        homeScreenBloc.add(const LoadHomeScreen());
+        return const HomeScreen();
       case Tab.insight:
-        return InsightScreen(bloc: _insightScreenBloc);
+        return const InsightScreen();
       case Tab.invoice:
         return InvoiceScreen();
       default:
@@ -68,7 +43,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildNavBar(BuildContext context, Tab activeTab) {
-    // ignore: close_sinks
     final tabBloc = BlocProvider.of<TabBloc>(context);
     return TabSelector(
       activeTab: activeTab,

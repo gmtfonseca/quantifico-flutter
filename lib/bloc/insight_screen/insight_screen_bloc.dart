@@ -7,8 +7,16 @@ import 'package:quantifico/bloc/insight_screen/barrel.dart';
 
 class InsightScreenBloc extends Bloc<InsightScreenEvent, InsightScreenState> {
   final AnnualSalesBloc annualSalesBloc;
+  final CustomerSalesBloc customerSalesBloc;
+  final MonthlySalesBloc monthlySalesBloc;
+  final CitySalesBloc citySalesBloc;
 
-  InsightScreenBloc({this.annualSalesBloc});
+  InsightScreenBloc({
+    this.annualSalesBloc,
+    this.customerSalesBloc,
+    this.monthlySalesBloc,
+    this.citySalesBloc,
+  });
 
   @override
   InsightScreenState get initialState => InsightScreenLoading();
@@ -25,6 +33,9 @@ class InsightScreenBloc extends Bloc<InsightScreenEvent, InsightScreenState> {
   Stream<InsightScreenState> _mapLoadInsightScreenToState() async* {
     try {
       annualSalesBloc.add(const LoadSeries());
+      customerSalesBloc.add(const LoadSeries());
+      monthlySalesBloc.add(const LoadSeries());
+      citySalesBloc.add(const LoadSeries());
       yield const InsightScreenLoaded();
     } catch (e) {
       yield InsightScreenNotLoaded();
@@ -33,5 +44,8 @@ class InsightScreenBloc extends Bloc<InsightScreenEvent, InsightScreenState> {
 
   void _mapRefreshInsightScreenToState() {
     annualSalesBloc.add(const RefreshSeries());
+    customerSalesBloc.add(const RefreshSeries());
+    monthlySalesBloc.add(const RefreshSeries());
+    citySalesBloc.add(const RefreshSeries());
   }
 }

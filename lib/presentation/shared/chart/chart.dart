@@ -7,7 +7,7 @@ import 'package:quantifico/presentation/shared/loading_indicator.dart';
 abstract class Chart extends StatelessWidget {
   final ChartBloc bloc;
 
-  Chart({
+  const Chart({
     Key key,
     @required this.bloc,
   }) : super(key: key);
@@ -24,8 +24,8 @@ abstract class Chart extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Não foi possível carregar gráfico'),
-                SizedBox(width: 5),
+                const Text('Não foi possível carregar gráfico'),
+                const SizedBox(width: 5),
                 Icon(Icons.sentiment_dissatisfied),
               ],
             ),
@@ -35,8 +35,8 @@ abstract class Chart extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Sem dados para exibir'),
-                SizedBox(width: 5),
+                const Text('Sem dados para exibir'),
+                const SizedBox(width: 5),
                 Icon(Icons.sentiment_neutral),
               ],
             ),

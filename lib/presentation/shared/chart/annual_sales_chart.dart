@@ -10,7 +10,7 @@ import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
 
 class AnnualSalesChart extends Chart {
-  AnnualSalesChart({
+  const AnnualSalesChart({
     Key key,
     @required ChartBloc bloc,
   }) : super(key: key, bloc: bloc);

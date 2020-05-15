@@ -5,7 +5,7 @@ class FullScreenChart extends StatelessWidget {
   final String title;
   final Widget child;
 
-  FullScreenChart({
+  const FullScreenChart({
     Key key,
     this.title,
     this.child,

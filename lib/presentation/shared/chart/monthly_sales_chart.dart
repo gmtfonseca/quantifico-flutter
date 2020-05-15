@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
 
 class MonthlySalesChart extends Chart {
-  MonthlySalesChart({
+  const MonthlySalesChart({
     Key key,
     @required ChartBloc bloc,
   }) : super(key: key, bloc: bloc);
