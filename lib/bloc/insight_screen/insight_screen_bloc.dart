@@ -1,22 +1,14 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
+import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/bloc/chart/chart_event.dart';
-import 'package:quantifico/bloc/chart/special/barrel.dart';
 import 'package:quantifico/bloc/insight_screen/barrel.dart';
 
 class InsightScreenBloc extends Bloc<InsightScreenEvent, InsightScreenState> {
-  final AnnualSalesBloc annualSalesBloc;
-  final CustomerSalesBloc customerSalesBloc;
-  final MonthlySalesBloc monthlySalesBloc;
-  final CitySalesBloc citySalesBloc;
+  final List<ChartBloc> chartBlocs;
 
-  InsightScreenBloc({
-    this.annualSalesBloc,
-    this.customerSalesBloc,
-    this.monthlySalesBloc,
-    this.citySalesBloc,
-  });
+  InsightScreenBloc({this.chartBlocs});
 
   @override
   InsightScreenState get initialState => InsightScreenLoading();
@@ -32,10 +24,11 @@ class InsightScreenBloc extends Bloc<InsightScreenEvent, InsightScreenState> {
 
   Stream<InsightScreenState> _mapLoadInsightScreenToState() async* {
     try {
-      annualSalesBloc.add(const LoadSeries());
-      customerSalesBloc.add(const LoadSeries());
-      monthlySalesBloc.add(const LoadSeries());
-      citySalesBloc.add(const LoadSeries());
+      for (final chartBloc in chartBlocs) {
+        if (chartBloc.state is SeriesUninitialized) {
+          chartBloc.add(const LoadSeries());
+        }
+      }
       yield const InsightScreenLoaded();
     } catch (e) {
       yield InsightScreenNotLoaded();
@@ -43,9 +36,8 @@ class InsightScreenBloc extends Bloc<InsightScreenEvent, InsightScreenState> {
   }
 
   void _mapRefreshInsightScreenToState() {
-    annualSalesBloc.add(const RefreshSeries());
-    customerSalesBloc.add(const RefreshSeries());
-    monthlySalesBloc.add(const RefreshSeries());
-    citySalesBloc.add(const RefreshSeries());
+    for (final chartBloc in chartBlocs) {
+      chartBloc.add(const RefreshSeries());
+    }
   }
 }

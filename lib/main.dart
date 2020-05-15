@@ -72,14 +72,24 @@ class Quantifico extends StatelessWidget {
           return MultiBlocProvider(
             providers: [
               BlocProvider<HomeScreenBloc>(
-                create: (context) => HomeScreenBloc(chartContainerRepository: chartContainerRepository),
+                create: (context) => HomeScreenBloc(
+                  chartBlocs: {
+                    'AnnualSalesBloc': BlocProvider.of<AnnualSalesBloc>(context),
+                    'CustomerSalesBloc': BlocProvider.of<CustomerSalesBloc>(context),
+                    'CitySalesBloc': BlocProvider.of<CitySalesBloc>(context),
+                    'MonthlySalesBloc': BlocProvider.of<MonthlySalesBloc>(context),
+                  },
+                  chartContainerRepository: chartContainerRepository,
+                ),
               ),
               BlocProvider<InsightScreenBloc>(
                 create: (context) => InsightScreenBloc(
-                  annualSalesBloc: BlocProvider.of<AnnualSalesBloc>(context),
-                  customerSalesBloc: BlocProvider.of<CustomerSalesBloc>(context),
-                  citySalesBloc: BlocProvider.of<CitySalesBloc>(context),
-                  monthlySalesBloc: BlocProvider.of<MonthlySalesBloc>(context),
+                  chartBlocs: [
+                    BlocProvider.of<AnnualSalesBloc>(context),
+                    BlocProvider.of<CustomerSalesBloc>(context),
+                    BlocProvider.of<CitySalesBloc>(context),
+                    BlocProvider.of<MonthlySalesBloc>(context)
+                  ],
                 )..add(const LoadInsightScreen()),
               ),
               BlocProvider<ChartContainerBloc<AnnualSalesChart>>(
@@ -87,18 +97,18 @@ class Quantifico extends StatelessWidget {
                     chartBloc: BlocProvider.of<AnnualSalesBloc>(context),
                     chartContainerRepository: chartContainerRepository),
               ),
-              BlocProvider<ChartContainerBloc<CustomerSalesBloc>>(
-                create: (context) => ChartContainerBloc<CustomerSalesBloc>(
+              BlocProvider<ChartContainerBloc<CustomerSalesChart>>(
+                create: (context) => ChartContainerBloc<CustomerSalesChart>(
                     chartBloc: BlocProvider.of<CustomerSalesBloc>(context),
                     chartContainerRepository: chartContainerRepository),
               ),
-              BlocProvider<ChartContainerBloc<CitySalesBloc>>(
-                create: (context) => ChartContainerBloc<CitySalesBloc>(
+              BlocProvider<ChartContainerBloc<CitySalesChart>>(
+                create: (context) => ChartContainerBloc<CitySalesChart>(
                     chartBloc: BlocProvider.of<CitySalesBloc>(context),
                     chartContainerRepository: chartContainerRepository),
               ),
-              BlocProvider<ChartContainerBloc<MonthlySalesBloc>>(
-                create: (context) => ChartContainerBloc<MonthlySalesBloc>(
+              BlocProvider<ChartContainerBloc<MonthlySalesChart>>(
+                create: (context) => ChartContainerBloc<MonthlySalesChart>(
                     chartBloc: BlocProvider.of<MonthlySalesBloc>(context),
                     chartContainerRepository: chartContainerRepository),
               )

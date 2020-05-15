@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'chart_filter_dialog.dart';
 
 class CustomerSalesChart extends Chart {
-  CustomerSalesChart({
+  const CustomerSalesChart({
     Key key,
     @required ChartBloc bloc,
   }) : super(key: key, bloc: bloc);

@@ -10,7 +10,7 @@ abstract class ChartBloc extends Bloc<ChartEvent, ChartState> {
   ChartBloc({@required this.chartRepository});
 
   @override
-  ChartState get initialState => SeriesLoading();
+  ChartState get initialState => SeriesUninitialized();
 
   @override
   Stream<ChartState> mapEventToState(ChartEvent event) async* {

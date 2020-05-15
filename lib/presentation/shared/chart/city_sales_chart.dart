@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'chart_filter_dialog.dart';
 
 class CitySalesChart extends Chart {
-  CitySalesChart({
+  const CitySalesChart({
     Key key,
     @required ChartBloc bloc,
   }) : super(key: key, bloc: bloc);

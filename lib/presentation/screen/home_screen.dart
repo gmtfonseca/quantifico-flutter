@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/chart/barrel.dart';
-import 'package:quantifico/bloc/chart/chart_event.dart';
 import 'package:quantifico/bloc/chart/special/barrel.dart';
 import 'package:quantifico/bloc/chart_container/barrel.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
@@ -28,11 +26,10 @@ class HomeScreen extends StatelessWidget {
               if (state is HomeScreenLoaded) {
                 return ListView.separated(
                   separatorBuilder: (context, index) => const SizedBox(height: 15),
-                  shrinkWrap: true,
                   itemCount: state.starredCharts.length,
                   itemBuilder: (context, index) {
-                    final chart = state.starredCharts[index];
-                    return _chartFromName(context, chart);
+                    final chartName = state.starredCharts[index];
+                    return _buildChartFromName(context, chartName);
                   },
                 );
               } else if (state is HomeScreenLoading) {
@@ -56,7 +53,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _chartFromName(BuildContext context, String chartName) {
+  Widget _buildChartFromName(BuildContext context, String chartName) {
     final bloc = BlocProvider.of<HomeScreenBloc>(context);
     final onStarOrUnstar = () => bloc.add(const LoadHomeScreen());
 
@@ -64,9 +61,6 @@ class HomeScreen extends StatelessWidget {
       case 'AnnualSalesChart':
         final annualSalesContainerBloc = BlocProvider.of<ChartContainerBloc<AnnualSalesChart>>(context);
         final annualSalesBloc = BlocProvider.of<AnnualSalesBloc>(context);
-        if (annualSalesBloc.state is SeriesLoading) {
-          annualSalesBloc.add(const LoadSeries());
-        }
         return ChartContainer(
           title: 'Faturamento Anual',
           bloc: annualSalesContainerBloc,
@@ -76,11 +70,8 @@ class HomeScreen extends StatelessWidget {
           onStarOrUnstar: onStarOrUnstar,
         );
       case 'CitySalesChart':
-        final citySalesContainerBloc = BlocProvider.of<ChartContainerBloc<CitySalesBloc>>(context);
+        final citySalesContainerBloc = BlocProvider.of<ChartContainerBloc<CitySalesChart>>(context);
         final citySalesBloc = BlocProvider.of<CitySalesBloc>(context);
-        if (citySalesBloc.state is SeriesLoading) {
-          citySalesBloc.add(const LoadSeries());
-        }
         return ChartContainer(
           title: 'Faturamento por Cidade',
           bloc: citySalesContainerBloc,
@@ -90,11 +81,8 @@ class HomeScreen extends StatelessWidget {
           onStarOrUnstar: onStarOrUnstar,
         );
       case 'MonthlySalesChart':
-        final monthlySalesContainerBloc = BlocProvider.of<ChartContainerBloc<MonthlySalesBloc>>(context);
-        final monthlySalesBloc = BlocProvider.of<MonthlySalesBloc>(context)..add(const LoadSeries());
-        if (monthlySalesBloc.state is SeriesLoading) {
-          monthlySalesBloc.add(const LoadSeries());
-        }
+        final monthlySalesContainerBloc = BlocProvider.of<ChartContainerBloc<MonthlySalesChart>>(context);
+        final monthlySalesBloc = BlocProvider.of<MonthlySalesBloc>(context);
         return ChartContainer(
           title: 'Faturamento Mensal',
           bloc: monthlySalesContainerBloc,
@@ -104,11 +92,8 @@ class HomeScreen extends StatelessWidget {
           onStarOrUnstar: onStarOrUnstar,
         );
       case 'CustomerSalesChart':
-        final customerSalesContainerBloc = BlocProvider.of<ChartContainerBloc<CustomerSalesBloc>>(context);
-        final customerSalesBloc = BlocProvider.of<CustomerSalesBloc>(context)..add(const LoadSeries());
-        if (customerSalesBloc.state is SeriesLoading) {
-          customerSalesBloc.add(const LoadSeries());
-        }
+        final customerSalesContainerBloc = BlocProvider.of<ChartContainerBloc<CustomerSalesChart>>(context);
+        final customerSalesBloc = BlocProvider.of<CustomerSalesBloc>(context);
         return ChartContainer(
           title: 'Faturamento por Cliente',
           bloc: customerSalesContainerBloc,

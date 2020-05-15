@@ -129,7 +129,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
           children: [
             Text(
               'Quais anos você deseja visualizar?',
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyText2,
             ),
             verticalSpacing,
             Row(

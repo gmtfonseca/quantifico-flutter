@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart' hide Tab;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/chart/special/barrel.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
-import 'package:quantifico/bloc/insight_screen/barrel.dart';
 import 'package:quantifico/bloc/tab/tab.dart';
 import 'package:quantifico/data/model/tab.dart';
 

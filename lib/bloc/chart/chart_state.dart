@@ -8,6 +8,8 @@ abstract class ChartState extends Equatable {
   List<Object> get props => [];
 }
 
+class SeriesUninitialized extends ChartState {}
+
 class SeriesLoading extends ChartState {}
 
 class SeriesNotLoaded extends ChartState {}

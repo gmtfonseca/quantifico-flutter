@@ -17,8 +17,12 @@ abstract class Chart extends StatelessWidget {
     return BlocBuilder<ChartBloc, ChartState>(
       bloc: bloc,
       builder: (context, state) {
-        if (state is SeriesLoading) {
-          return LoadingIndicator();
+        if (state is SeriesUninitialized) {
+          return const Center(
+            child: Text('Gráfico não inicializado'),
+          );
+        } else if (state is SeriesLoading) {
+          return const LoadingIndicator();
         } else if (state is SeriesNotLoaded) {
           return Center(
             child: Row(

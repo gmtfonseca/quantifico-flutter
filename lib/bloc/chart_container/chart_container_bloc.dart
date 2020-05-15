@@ -18,7 +18,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
     @required this.chartBloc,
   }) : chartName = C.toString() {
     chartSubscription = chartBloc.listen((state) {
-      if (state is SeriesLoaded) {
+      if (state is SeriesLoaded || state is SeriesLoadedEmpty) {
         add(const LoadContainer());
       }
     });

@@ -56,9 +56,9 @@ class InsightScreen extends StatelessWidget {
     final citySalesBloc = BlocProvider.of<CitySalesBloc>(context);
 
     final annualSalesContainerBloc = BlocProvider.of<ChartContainerBloc<AnnualSalesChart>>(context);
-    final customerSalesContainerBloc = BlocProvider.of<ChartContainerBloc<CustomerSalesBloc>>(context);
-    final monthlySalesContainerBloc = BlocProvider.of<ChartContainerBloc<MonthlySalesBloc>>(context);
-    final citySalesContainerBloc = BlocProvider.of<ChartContainerBloc<CitySalesBloc>>(context);
+    final customerSalesContainerBloc = BlocProvider.of<ChartContainerBloc<CustomerSalesChart>>(context);
+    final monthlySalesContainerBloc = BlocProvider.of<ChartContainerBloc<MonthlySalesChart>>(context);
+    final citySalesContainerBloc = BlocProvider.of<ChartContainerBloc<CitySalesChart>>(context);
 
     return ListView(
       children: [
