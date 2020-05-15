@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/special/barrel.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_bloc.dart';
+import 'package:quantifico/bloc/home_screen/home_screen_bloc.dart';
+import 'package:quantifico/bloc/home_screen/home_screen_event.dart';
 import 'package:quantifico/bloc/insight_screen/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
@@ -60,6 +62,9 @@ class InsightScreen extends StatelessWidget {
     final monthlySalesContainerBloc = BlocProvider.of<ChartContainerBloc<MonthlySalesChart>>(context);
     final citySalesContainerBloc = BlocProvider.of<ChartContainerBloc<CitySalesChart>>(context);
 
+    final homeScreenBloc = BlocProvider.of<HomeScreenBloc>(context);
+    final onStarOrUnstar = () => homeScreenBloc.add(const LoadHomeScreen());
+
     return ListView(
       children: [
         ChartContainer(
@@ -68,6 +73,7 @@ class InsightScreen extends StatelessWidget {
           chart: AnnualSalesChart(
             bloc: annualSalesBloc,
           ),
+          onStarOrUnstar: onStarOrUnstar,
         ),
         verticalSpacing,
         ChartContainer(
@@ -76,6 +82,7 @@ class InsightScreen extends StatelessWidget {
           chart: CustomerSalesChart(
             bloc: customerSalesBloc,
           ),
+          onStarOrUnstar: onStarOrUnstar,
         ),
         verticalSpacing,
         ChartContainer(
@@ -84,6 +91,7 @@ class InsightScreen extends StatelessWidget {
           chart: MonthlySalesChart(
             bloc: monthlySalesBloc,
           ),
+          onStarOrUnstar: onStarOrUnstar,
         ),
         verticalSpacing,
         ChartContainer(
@@ -92,6 +100,7 @@ class InsightScreen extends StatelessWidget {
           chart: CitySalesChart(
             bloc: citySalesBloc,
           ),
+          onStarOrUnstar: onStarOrUnstar,
         ),
       ],
     );

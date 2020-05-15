@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide Tab;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quantifico/bloc/home_screen/barrel.dart';
 import 'package:quantifico/bloc/tab/tab.dart';
 import 'package:quantifico/data/model/tab.dart';
 
@@ -28,8 +27,6 @@ class MainScreen extends StatelessWidget {
   Widget _buildBody(BuildContext context, Tab activeTab) {
     switch (activeTab) {
       case Tab.home:
-        final homeScreenBloc = BlocProvider.of<HomeScreenBloc>(context);
-        homeScreenBloc.add(const LoadHomeScreen());
         return const HomeScreen();
       case Tab.insight:
         return const InsightScreen();

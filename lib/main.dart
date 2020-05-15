@@ -47,7 +47,6 @@ class Quantifico extends StatelessWidget {
     return MaterialApp(
       title: 'Quantifico',
       theme: ThemeData(
-        fontFamily: 'Roboto',
         primarySwatch: Colors.deepPurple,
       ),
       home: MultiBlocProvider(
@@ -74,13 +73,13 @@ class Quantifico extends StatelessWidget {
               BlocProvider<HomeScreenBloc>(
                 create: (context) => HomeScreenBloc(
                   chartBlocs: {
-                    'AnnualSalesBloc': BlocProvider.of<AnnualSalesBloc>(context),
-                    'CustomerSalesBloc': BlocProvider.of<CustomerSalesBloc>(context),
-                    'CitySalesBloc': BlocProvider.of<CitySalesBloc>(context),
-                    'MonthlySalesBloc': BlocProvider.of<MonthlySalesBloc>(context),
+                    'AnnualSalesChart': BlocProvider.of<AnnualSalesBloc>(context),
+                    'CustomerSalesChart': BlocProvider.of<CustomerSalesBloc>(context),
+                    'CitySalesChart': BlocProvider.of<CitySalesBloc>(context),
+                    'MonthlySalesChart': BlocProvider.of<MonthlySalesBloc>(context),
                   },
                   chartContainerRepository: chartContainerRepository,
-                ),
+                )..add(const LoadHomeScreen()),
               ),
               BlocProvider<InsightScreenBloc>(
                 create: (context) => InsightScreenBloc(
