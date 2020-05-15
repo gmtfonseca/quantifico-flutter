@@ -98,14 +98,11 @@ class ChartContainer extends StatelessWidget {
         onPressed: () {
           if (state.isStarred) {
             bloc.add(const UnstarChart());
-            if (onStarOrUnstar != null) {
-              onStarOrUnstar();
-            }
           } else {
             bloc.add(const StarChart());
-            if (onStarOrUnstar != null) {
-              onStarOrUnstar();
-            }
+          }
+          if (onStarOrUnstar != null) {
+            onStarOrUnstar();
           }
         },
       );
