@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/nf_screen/barrel.dart';
+import 'package:quantifico/data/model/nf/nf_screen_record.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
+import 'package:quantifico/util/date_util.dart';
+import 'package:quantifico/util/number_util.dart';
 
 class NfScreen extends StatelessWidget {
   @override
@@ -37,23 +40,61 @@ class NfScreen extends StatelessWidget {
       itemCount: state.nfScreenRecords.length,
       itemBuilder: (context, index) {
         final nfScreenRecord = state.nfScreenRecords[index];
-        return Container(
-          color: Colors.white,
-          child: ListTile(
-            isThreeLine: true,
-            leading: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: nfScreenRecord.color,
-                shape: BoxShape.circle,
+        return _buildNfTile(nfScreenRecord);
+      },
+    );
+  }
+
+  Widget _buildNfTile(NfScreenRecord nfScreenRecord) {
+    return Container(
+      color: Colors.white,
+      height: 100,
+      child: Row(
+        children: [
+          Container(
+            color: nfScreenRecord.color,
+            width: 60,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  nfScreenRecord.nf.series,
+                  style: const TextStyle(color: Colors.white),
+                ),
+                Text(
+                  nfScreenRecord.nf.number.toString(),
+                  style: const TextStyle(color: Colors.white),
+                )
+              ],
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(formatDate(nfScreenRecord.nf.date)),
+                      Text(formatCurrency(nfScreenRecord.nf.totalAmount)),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(child: Text(nfScreenRecord.nf.customer.name)),
+                    ],
+                  ),
+                ],
               ),
             ),
-            title: Text(nfScreenRecord.nf.number.toString()),
-            subtitle: Text(nfScreenRecord.nf.customer.name.toString()),
-          ),
-        );
-      },
+          )
+        ],
+      ),
     );
   }
 }

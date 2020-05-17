@@ -35,11 +35,11 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
 
   Color getColor() {
     final colors = [
-      Colors.cyan,
-      Colors.green,
       Colors.red,
+      Colors.green,
       Colors.blue,
-      Colors.yellow,
+      Colors.amber,
+      Colors.indigo,
       Colors.deepPurple,
     ];
 
