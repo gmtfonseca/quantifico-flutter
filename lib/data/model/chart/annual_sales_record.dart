@@ -12,7 +12,7 @@ class AnnualSalesRecord extends Equatable {
 
   AnnualSalesRecord.fromJson(Map json)
       : year = json['ano']?.toString(),
-        sales = double.parse(json['totalFaturado'].toString());
+        sales = double.tryParse(json['totalFaturado']?.toString());
 
   @override
   List<Object> get props => [

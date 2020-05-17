@@ -12,7 +12,7 @@ class CitySalesRecord extends Equatable {
 
   CitySalesRecord.fromJson(Map json)
       : city = json['descricaoMunicipio']?.toString(),
-        sales = double.parse(json['totalFaturado'].toString());
+        sales = double.tryParse(json['totalFaturado']?.toString());
 
   @override
   List<Object> get props => [
