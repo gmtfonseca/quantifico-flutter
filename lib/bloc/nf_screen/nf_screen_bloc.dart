@@ -26,6 +26,7 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
     try {
       yield NfScreenLoading();
       final nfs = await nfRepository.getNfs();
+      _colorIdx = 9;
       final nfScreenRecords = nfs.map((nf) => NfScreenRecord(color: getColor(), nf: nf)).toList();
       yield NfScreenLoaded(nfScreenRecords: nfScreenRecords);
     } catch (e) {
@@ -36,10 +37,10 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
   Color getColor() {
     final colors = [
       Colors.red,
+      Colors.indigo,
       Colors.green,
       Colors.blue,
       Colors.amber,
-      Colors.indigo,
       Colors.deepPurple,
     ];
 

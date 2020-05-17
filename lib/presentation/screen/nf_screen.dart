@@ -26,7 +26,16 @@ class NfScreen extends StatelessWidget {
             } else if (state is NfScreenLoading) {
               return const LoadingIndicator();
             } else {
-              return const Center(child: Text('Error'));
+              return Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Não foi possível carregar suas Notas Fiscais'),
+                    const SizedBox(width: 5),
+                    Icon(Icons.sentiment_dissatisfied),
+                  ],
+                ),
+              );
             }
           },
         ),
@@ -59,18 +68,25 @@ class NfScreen extends StatelessWidget {
               children: [
                 Text(
                   nfScreenRecord.nf.series,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
+                const SizedBox(height: 10),
                 Text(
                   nfScreenRecord.nf.number.toString(),
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
                 )
               ],
             ),
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,7 +102,12 @@ class NfScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(child: Text(nfScreenRecord.nf.customer.name)),
+                      Expanded(
+                        child: Text(
+                          nfScreenRecord.nf.customer.name,
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
                     ],
                   ),
                 ],
