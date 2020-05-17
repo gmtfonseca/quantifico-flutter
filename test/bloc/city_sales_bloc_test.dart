@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:quantifico/bloc/chart/chart.dart';
+import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/special/city_sales_bloc.dart';
 import 'package:quantifico/data/model/chart/chart.dart';
 import 'package:quantifico/data/model/chart/city_sales_filter.dart';

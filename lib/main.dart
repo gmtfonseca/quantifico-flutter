@@ -10,7 +10,6 @@ import 'package:quantifico/presentation/screen/main_screen.dart';
 import 'package:quantifico/util/web_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'bloc/chart/chart_event.dart';
 import 'bloc/chart/special/barrel.dart';
 import 'bloc/chart_container/chart_container_bloc.dart';
 import 'bloc/insight_screen/insight_screen_bloc.dart';

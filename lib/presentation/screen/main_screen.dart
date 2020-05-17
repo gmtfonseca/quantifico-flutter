@@ -5,7 +5,7 @@ import 'package:quantifico/data/model/tab.dart';
 
 import 'package:quantifico/presentation/screen/home_screen.dart';
 import 'package:quantifico/presentation/screen/insight_screen.dart';
-import 'package:quantifico/presentation/screen/invoice_screen.dart';
+import 'package:quantifico/presentation/screen/nf_screen.dart';
 
 import 'package:quantifico/presentation/shared/tab_selector.dart';
 
@@ -30,8 +30,8 @@ class MainScreen extends StatelessWidget {
         return const HomeScreen();
       case Tab.insight:
         return const InsightScreen();
-      case Tab.invoice:
-        return InvoiceScreen();
+      case Tab.nf:
+        return NfScreen();
       default:
         return Container();
     }

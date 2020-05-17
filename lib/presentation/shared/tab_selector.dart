@@ -5,7 +5,7 @@ class TabSelector extends StatelessWidget {
   final Tab activeTab;
   final Function(Tab) onTabSelected;
 
-  TabSelector({
+  const TabSelector({
     Key key,
     @required this.activeTab,
     @required this.onTabSelected,
@@ -24,15 +24,15 @@ class TabSelector extends StatelessWidget {
     return [
       BottomNavigationBarItem(
         icon: Icon(Icons.home),
-        title: Text('Home'),
+        title: const Text('Home'),
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.assessment),
-        title: Text('Insights'),
+        title: const Text('Insights'),
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.assignment),
-        title: Text('Notas Fiscais'),
+        title: const Text('Notas Fiscais'),
       ),
     ];
   }

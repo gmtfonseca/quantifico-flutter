@@ -1,1 +1,1 @@
-enum Tab { home, insight, invoice }
+enum Tab { home, insight, nf }
