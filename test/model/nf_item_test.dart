@@ -26,7 +26,7 @@ void main() {
           ),
           unitPrice: 2.0,
           totalAmount: 300.0,
-          quantity: 150,
+          quantity: 150.0,
         ),
       );
     });

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:quantifico/data/model/nf/customer.dart';
 import 'package:quantifico/data/model/nf/nf_item.dart';
 
 class Nf extends Equatable {
@@ -6,6 +7,7 @@ class Nf extends Equatable {
   final int number;
   final DateTime date;
   final double totalAmount;
+  final Customer customer;
   final List<NfItem> items;
 
   const Nf({
@@ -13,6 +15,7 @@ class Nf extends Equatable {
     this.number,
     this.date,
     this.totalAmount,
+    this.customer,
     this.items,
   });
 
@@ -21,6 +24,7 @@ class Nf extends Equatable {
         number = int.tryParse(json['numero']?.toString()),
         date = DateTime.tryParse(json['dataEmissao']?.toString()),
         totalAmount = double.tryParse(json['total']['nf']?.toString()),
+        customer = Customer.fromJson(json['cliente'] as Map),
         items = List.generate((json['saidas'] as Iterable).length, (i) {
           return NfItem.fromJson((json['saidas'] as List)[i] as Map);
         });

@@ -5,7 +5,9 @@ import 'package:quantifico/bloc/home_screen/barrel.dart';
 
 import 'package:quantifico/bloc/simple_bloc_delegate.dart';
 import 'package:quantifico/data/provider/chart_web_provider.dart';
+import 'package:quantifico/data/provider/nf_web_provider.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
+import 'package:quantifico/data/repository/nf_repository.dart';
 import 'package:quantifico/presentation/screen/main_screen.dart';
 import 'package:quantifico/util/web_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +16,7 @@ import 'bloc/chart/special/barrel.dart';
 import 'bloc/chart_container/chart_container_bloc.dart';
 import 'bloc/insight_screen/insight_screen_bloc.dart';
 import 'bloc/insight_screen/insight_screen_event.dart';
+import 'bloc/nf_screen/barrel.dart';
 import 'bloc/tab/tab.dart';
 import 'data/repository/chart_container_repository.dart';
 import 'presentation/shared/chart/barrel.dart';
@@ -26,19 +29,24 @@ Future<void> main() async {
   final chartRepository = ChartRepository(chartWebProvider: chartWebProvider);
   final sharedPreferences = await SharedPreferences.getInstance();
   final chartContainerRepository = ChartContainerRepository(sharedPreferences: sharedPreferences);
+  final nfWebProvider = NfWebProvider(webClient: webClient);
+  final nfRepository = NfRepository(nfWebProvider: nfWebProvider);
   runApp(Quantifico(
     chartRepository: chartRepository,
     chartContainerRepository: chartContainerRepository,
+    nfRepository: nfRepository,
   ));
 }
 
 class Quantifico extends StatelessWidget {
   final ChartRepository chartRepository;
   final ChartContainerRepository chartContainerRepository;
+  final NfRepository nfRepository;
 
   const Quantifico({
     this.chartRepository,
     this.chartContainerRepository,
+    this.nfRepository,
   });
 
   @override
@@ -89,6 +97,9 @@ class Quantifico extends StatelessWidget {
                     BlocProvider.of<MonthlySalesBloc>(context)
                   ],
                 )..add(const LoadInsightScreen()),
+              ),
+              BlocProvider<NfScreenBloc>(
+                create: (context) => NfScreenBloc(nfRepository: nfRepository)..add(const LoadNfScreen()),
               ),
               BlocProvider<ChartContainerBloc<AnnualSalesChart>>(
                 create: (context) => ChartContainerBloc<AnnualSalesChart>(

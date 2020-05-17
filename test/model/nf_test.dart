@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:quantifico/data/model/nf/customer.dart';
 import 'package:quantifico/data/model/nf/nf.dart';
 import 'package:quantifico/data/model/nf/nf_item.dart';
 import 'package:quantifico/data/model/nf/product.dart';
@@ -13,6 +14,7 @@ void main() {
         'total': {
           'nf': 150,
         },
+        'cliente': {'cnpj': '87395844000165', 'razaoSocial': 'RAKALO PRODUTOS DE BELEZA LTDA'},
         'saidas': [
           {
             'produto': {
@@ -46,24 +48,28 @@ void main() {
           number: 3429,
           date: DateTime.parse('2019-05-13T13:52:50.000Z'),
           totalAmount: 150,
-          items: [
-            const NfItem(
+          customer: const Customer(
+            cnpj: '87395844000165',
+            name: 'RAKALO PRODUTOS DE BELEZA LTDA',
+          ),
+          items: const [
+            NfItem(
               product: Product(
                 code: 'PG001051',
                 description: 'GALO DOIDO',
               ),
               unitPrice: 2.0,
               totalAmount: 300.0,
-              quantity: 150,
+              quantity: 150.0,
             ),
-            const NfItem(
+            NfItem(
               product: Product(
                 code: 'PG001052',
                 description: 'GALO MALUCO',
               ),
               unitPrice: 1.0,
               totalAmount: 150.0,
-              quantity: 150,
+              quantity: 150.0,
             ),
           ],
         ),

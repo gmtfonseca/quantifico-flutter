@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 
 class ChartWebProvider {
   final WebClient webClient;
-  ChartWebProvider({this.webClient});
+  ChartWebProvider({@required this.webClient});
 
   Future<List<AnnualSalesRecord>> fetchAnnualSalesData({
     int startYear,

@@ -5,7 +5,7 @@ class NfItem extends Equatable {
   final Product product;
   final double unitPrice;
   final double totalAmount;
-  final int quantity;
+  final double quantity;
 
   const NfItem({
     this.product,
@@ -18,7 +18,7 @@ class NfItem extends Equatable {
       : product = Product.fromJson(json['produto'] as Map),
         unitPrice = double.tryParse(json['valor']['unitario']?.toString()),
         totalAmount = double.tryParse(json['valor']['total']?.toString()),
-        quantity = int.tryParse(json['quantidade']?.toString());
+        quantity = double.tryParse(json['quantidade']?.toString());
 
   @override
   List<Object> get props => [

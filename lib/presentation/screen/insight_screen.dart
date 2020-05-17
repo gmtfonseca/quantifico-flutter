@@ -19,15 +19,17 @@ class InsightScreen extends StatelessWidget {
         final bloc = BlocProvider.of<InsightScreenBloc>(context);
         bloc.add(const RefreshInsightScreen());
       },
-      child: BlocBuilder<InsightScreenBloc, InsightScreenState>(builder: (context, state) {
-        return Container(
-          color: const Color(0xffe0e0e0),
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 4.0),
-            child: _buildContent(context, state),
-          ),
-        );
-      }),
+      child: BlocBuilder<InsightScreenBloc, InsightScreenState>(
+        builder: (context, state) {
+          return Container(
+            color: const Color(0xffe0e0e0),
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 4.0),
+              child: _buildContent(context, state),
+            ),
+          );
+        },
+      ),
     );
   }
 

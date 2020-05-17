@@ -10,8 +10,8 @@ class MockWebClient extends Mock implements WebClient {}
 
 void main() {
   group('Chart Web Provider', () {
-    MockWebClient webClient = MockWebClient();
-    ChartWebProvider chartWebProvider = ChartWebProvider(webClient: webClient);
+    final webClient = MockWebClient();
+    final chartWebProvider = ChartWebProvider(webClient: webClient);
 
     test('should fetch annual sales properly', () async {
       when(webClient.fetch('nfs/plot/faturamento-anual')).thenAnswer(
@@ -24,8 +24,8 @@ void main() {
       );
       final data = await chartWebProvider.fetchAnnualSalesData();
       expect(data, [
-        AnnualSalesRecord(year: '2010', sales: 300231.98),
-        AnnualSalesRecord(year: '2011', sales: 207123.65),
+        const AnnualSalesRecord(year: '2010', sales: 300231.98),
+        const AnnualSalesRecord(year: '2011', sales: 207123.65),
       ]);
     });
 
@@ -40,8 +40,8 @@ void main() {
       );
       final data = await chartWebProvider.fetchCustomerSalesData();
       expect(data, [
-        CustomerSalesRecord(customer: 'Foo', sales: 300231.98),
-        CustomerSalesRecord(customer: 'Bar', sales: 207123.65),
+        const CustomerSalesRecord(customer: 'Foo', sales: 300231.98),
+        const CustomerSalesRecord(customer: 'Bar', sales: 207123.65),
       ]);
     });
 
@@ -56,8 +56,8 @@ void main() {
       );
       final data = await chartWebProvider.fetchCitySalesData();
       expect(data, [
-        CitySalesRecord(city: 'Foo', sales: 300231.98),
-        CitySalesRecord(city: 'Bar', sales: 207123.65),
+        const CitySalesRecord(city: 'Foo', sales: 300231.98),
+        const CitySalesRecord(city: 'Bar', sales: 207123.65),
       ]);
     });
 
@@ -72,8 +72,8 @@ void main() {
       );
       final data = await chartWebProvider.fetchMonthlySalesData(years: [2010]);
       expect(data, [
-        MonthlySalesRecord(year: '2010', month: '1', sales: 300231.98),
-        MonthlySalesRecord(year: '2011', month: '2', sales: 207123.65),
+        const MonthlySalesRecord(year: '2010', month: '1', sales: 300231.98),
+        const MonthlySalesRecord(year: '2011', month: '2', sales: 207123.65),
       ]);
     });
   });
