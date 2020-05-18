@@ -44,7 +44,19 @@ class NfScreen extends StatelessWidget {
   }
 
   Widget _buildNfs(BuildContext context, NfScreenLoaded state) {
+    final scrollController = ScrollController();
+
+    scrollController.addListener(() {
+      if (scrollController.position.atEdge) {
+        if (scrollController.position.pixels != 0) {
+          final bloc = BlocProvider.of<NfScreenBloc>(context);
+          bloc.add(const LoadMoreNfScreen());
+        }
+      }
+    });
+
     return ListView.separated(
+      controller: scrollController,
       separatorBuilder: (context, index) => const SizedBox(height: 5),
       itemCount: state.nfScreenRecords.length,
       itemBuilder: (context, index) {

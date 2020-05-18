@@ -13,3 +13,10 @@ class LoadNfScreen extends NfScreenEvent {
   @override
   String toString() => 'LoadNfScreen';
 }
+
+class LoadMoreNfScreen extends NfScreenEvent {
+  const LoadMoreNfScreen();
+
+  @override
+  String toString() => 'LoadMoreNfScreen';
+}

@@ -35,11 +35,12 @@ class Nf extends Equatable {
         number,
         date,
         totalAmount,
+        customer,
         items,
       ];
 
   @override
   String toString() {
-    return 'Nf{series: $series, number: $number, date: $date, totalAmount: $totalAmount, items: $items}';
+    return 'Nf{series: $series, number: $number, date: $date, totalAmount: $totalAmount, customer: $customer, items: $items}';
   }
 }

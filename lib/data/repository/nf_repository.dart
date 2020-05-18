@@ -9,7 +9,7 @@ class NfRepository {
     @required this.nfWebProvider,
   });
 
-  Future<List<Nf>> getNfs() async {
-    return await nfWebProvider.fetchNfs();
+  Future<List<Nf>> getNfs({int page}) async {
+    return await nfWebProvider.fetchNfs(page: page);
   }
 }

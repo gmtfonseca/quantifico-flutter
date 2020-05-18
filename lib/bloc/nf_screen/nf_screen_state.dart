@@ -10,6 +10,8 @@ abstract class NfScreenState extends Equatable {
 
 class NfScreenLoading extends NfScreenState {}
 
+class NfScreenLoadingMore extends NfScreenState {}
+
 class NfScreenLoaded extends NfScreenState {
   final List<NfScreenRecord> nfScreenRecords;
 
