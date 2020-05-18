@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class ChartFilterDialog extends StatelessWidget {
+class FilterDialog extends StatelessWidget {
   final Widget child;
   final VoidCallback onApply;
 
-  const ChartFilterDialog({
+  const FilterDialog({
     Key key,
-    this.child,
-    this.onApply,
+    @required this.child,
+    @required this.onApply,
   }) : super(key: key);
 
   @override
@@ -35,18 +35,18 @@ class ChartFilterDialog extends StatelessWidget {
             alignment: MainAxisAlignment.spaceEvenly,
             children: [
               FlatButton(
+                child: const Text('CANCELAR'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              FlatButton(
                 child: const Text('APLICAR'),
                 onPressed: () {
                   onApply();
                   Navigator.of(context).pop();
                 },
               ),
-              FlatButton(
-                child: const Text('CANCELAR'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              )
             ],
           )
         ],

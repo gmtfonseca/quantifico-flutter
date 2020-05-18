@@ -7,7 +7,7 @@ import 'package:quantifico/data/model/chart/customer_sales_filter.dart';
 import 'package:quantifico/data/model/chart/customer_sales_record.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
 import 'package:intl/intl.dart';
-import 'chart_filter_dialog.dart';
+import 'package:quantifico/presentation/shared/filter_dialog.dart';
 
 class CustomerSalesChart extends Chart {
   const CustomerSalesChart({
@@ -33,7 +33,7 @@ class CustomerSalesChart extends Chart {
   }
 
   @override
-  Widget filterDialog() {
+  Widget buildFilterDialog() {
     if (bloc.state is FilterableState) {
       final state = bloc.state as FilterableState;
       return CustomerSalesFilterDialog(
@@ -76,7 +76,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return ChartFilterDialog(
+    return FilterDialog(
       onApply: () {
         widget.onApply(limit: _limit.round());
       },

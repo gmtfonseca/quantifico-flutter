@@ -121,7 +121,7 @@ class ChartContainer extends StatelessWidget {
           onPressed: () {
             showDialog<Widget>(
               context: context,
-              builder: (BuildContext context) => chart.filterDialog(),
+              builder: (BuildContext context) => chart.buildFilterDialog(),
             );
           });
     } else {

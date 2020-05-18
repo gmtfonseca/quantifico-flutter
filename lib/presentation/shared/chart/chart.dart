@@ -55,5 +55,5 @@ abstract class Chart extends StatelessWidget {
   @protected
   Widget buildContent();
 
-  Widget filterDialog();
+  Widget buildFilterDialog();
 }

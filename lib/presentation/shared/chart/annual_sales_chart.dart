@@ -6,8 +6,8 @@ import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:intl/intl.dart';
 import 'package:quantifico/data/model/chart/annual_sales_filter.dart';
 import 'package:quantifico/data/model/chart/annual_sales_record.dart';
-import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
+import 'package:quantifico/presentation/shared/filter_dialog.dart';
 
 class AnnualSalesChart extends Chart {
   const AnnualSalesChart({
@@ -30,7 +30,7 @@ class AnnualSalesChart extends Chart {
   }
 
   @override
-  Widget filterDialog() {
+  Widget buildFilterDialog() {
     if (bloc.state is FilterableState) {
       final state = bloc.state as FilterableState;
       return AnnualSalesFiltersDialog(
@@ -81,7 +81,7 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return ChartFilterDialog(
+    return FilterDialog(
       onApply: () {
         widget.onApply(
           startYear: _startYearController.text.isNotEmpty ? int.parse(_startYearController.text) : null,

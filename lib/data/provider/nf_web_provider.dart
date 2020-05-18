@@ -6,8 +6,25 @@ class NfWebProvider {
   final WebClient webClient;
   NfWebProvider({@required this.webClient});
 
-  Future<List<Nf>> fetchNfs({int page}) async {
+  Future<List<Nf>> fetchNfs({
+    DateTime initialDate,
+    DateTime endDate,
+    String customerName,
+    int page,
+  }) async {
     final Map<String, String> params = Map();
+
+    if (initialDate != null) {
+      params['data_ini'] = initialDate.toString();
+    }
+
+    if (endDate != null) {
+      params['data_fim'] = endDate.toString();
+    }
+
+    if (customerName != null) {
+      params['cliente'] = customerName.toString();
+    }
 
     if (page != null) {
       params['page'] = page.toString();

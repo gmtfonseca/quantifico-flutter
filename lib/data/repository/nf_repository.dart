@@ -9,7 +9,17 @@ class NfRepository {
     @required this.nfWebProvider,
   });
 
-  Future<List<Nf>> getNfs({int page}) async {
-    return await nfWebProvider.fetchNfs(page: page);
+  Future<List<Nf>> getNfs({
+    DateTime initialDate,
+    DateTime endDate,
+    String customerName,
+    int page,
+  }) async {
+    return await nfWebProvider.fetchNfs(
+      initialDate: initialDate,
+      endDate: endDate,
+      customerName: customerName,
+      page: page,
+    );
   }
 }

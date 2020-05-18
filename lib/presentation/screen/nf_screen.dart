@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/nf_screen/barrel.dart';
+import 'package:quantifico/data/model/nf/nf_screen_filter.dart';
 import 'package:quantifico/data/model/nf/nf_screen_record.dart';
+import 'package:quantifico/presentation/shared/filter_dialog.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
+import 'package:quantifico/presentation/shared/text_date_picker.dart';
 import 'package:quantifico/style.dart';
 import 'package:quantifico/util/date_util.dart';
 import 'package:quantifico/util/number_util.dart';
@@ -10,38 +13,60 @@ import 'package:quantifico/util/number_util.dart';
 class NfScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppStyle.backgroundColor,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 4.0),
-        child: BlocBuilder<NfScreenBloc, NfScreenState>(
-          builder: (context, state) {
-            if (state is NfScreenLoaded) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  final bloc = BlocProvider.of<NfScreenBloc>(context);
-                  bloc.add(const LoadNfScreen());
-                },
-                child: _buildNfs(context, state),
-              );
-            } else if (state is NfScreenLoading) {
-              return const LoadingIndicator();
-            } else {
-              return Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Não foi possível carregar suas Notas Fiscais'),
-                    const SizedBox(width: 5),
-                    Icon(Icons.sentiment_dissatisfied),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-      ),
+    return BlocBuilder<NfScreenBloc, NfScreenState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppStyle.backgroundColor,
+          body: Padding(
+            padding: const EdgeInsets.only(bottom: 4.0),
+            child: _buildBody(context, state),
+          ),
+          floatingActionButton: _buildFab(context, state),
+        );
+      },
     );
+  }
+
+  Widget _buildBody(BuildContext context, NfScreenState state) {
+    if (state is NfScreenLoaded) {
+      return RefreshIndicator(
+        onRefresh: () async {
+          final bloc = BlocProvider.of<NfScreenBloc>(context);
+          bloc.add(const LoadNfScreen());
+        },
+        child: _buildLoadedScreen(context, state),
+      );
+    } else if (state is NfScreenLoading) {
+      return const LoadingIndicator();
+    } else {
+      return Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Não foi possível carregar suas Notas Fiscais'),
+            const SizedBox(width: 5),
+            Icon(Icons.sentiment_dissatisfied),
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget _buildLoadedScreen(BuildContext context, NfScreenLoaded state) {
+    if (state.nfScreenRecords.isNotEmpty) {
+      return _buildNfs(context, state);
+    } else {
+      return Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Sem dados para exibir'),
+            const SizedBox(width: 5),
+            Icon(Icons.sentiment_neutral),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildNfs(BuildContext context, NfScreenLoaded state) {
@@ -136,6 +161,119 @@ class NfScreen extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget _buildFab(BuildContext context, NfScreenState state) {
+    if (state is NfScreenLoaded) {
+      return FloatingActionButton(
+        child: Icon(Icons.filter_list),
+        onPressed: () {
+          showDialog<Widget>(
+            context: context,
+            builder: (BuildContext _) => _buildFilterDialog(
+              context,
+              state,
+            ),
+          );
+        },
+      );
+    } else {
+      return null;
+    }
+  }
+
+  Widget _buildFilterDialog(
+    BuildContext context,
+    NfScreenLoaded state,
+  ) {
+    return NfScreenFilterDialog(
+      onApply: (initialDate, endDate, customerName) {
+        final bloc = BlocProvider.of<NfScreenBloc>(context);
+        final filter = NfScreenFilter(
+          initialDate: initialDate,
+          endDate: endDate,
+          customerName: customerName,
+        );
+        bloc.add(UpdateFilterNfScreen(filter));
+      },
+      initialDate: state.activeFilter?.initialDate,
+      endDate: state.activeFilter?.endDate,
+      customerName: state.activeFilter?.customerName,
+    );
+  }
+}
+
+class NfScreenFilterDialog extends StatefulWidget {
+  final void Function(DateTime initialDate, DateTime endDate, String customerName) onApply;
+  final DateTime initialDate;
+  final DateTime endDate;
+  final String customerName;
+
+  const NfScreenFilterDialog({
+    @required this.onApply,
+    this.initialDate,
+    this.endDate,
+    this.customerName,
+  });
+
+  @override
+  _NfScreenFilterDialogState createState() => _NfScreenFilterDialogState();
+}
+
+class _NfScreenFilterDialogState extends State<NfScreenFilterDialog> {
+  DateTime _initialDate;
+  DateTime _endDate;
+  TextEditingController customerNameController;
+
+  @override
+  void initState() {
+    _initialDate = widget.initialDate;
+    _endDate = widget.endDate;
+    customerNameController = TextEditingController(text: widget.customerName);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const verticalSpacing = SizedBox(height: 20);
+    return FilterDialog(
+      onApply: () => widget.onApply(
+        _initialDate,
+        _endDate,
+        customerNameController.text,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            TextDatePicker(
+              onChanged: (value) {
+                _initialDate = value;
+              },
+              labelText: 'Data inicial',
+              initialValue: _initialDate,
+            ),
+            verticalSpacing,
+            TextDatePicker(
+              onChanged: (value) {
+                _endDate = value;
+              },
+              labelText: 'Data final',
+              initialValue: _endDate,
+            ),
+            verticalSpacing,
+            TextField(
+              controller: customerNameController,
+              decoration: InputDecoration(
+                icon: Icon(Icons.person),
+                labelText: 'Cliente',
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

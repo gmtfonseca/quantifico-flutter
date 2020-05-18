@@ -8,7 +8,7 @@ import 'package:quantifico/data/model/chart/monthly_sales_filter.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
 
 import 'package:intl/intl.dart';
-import 'package:quantifico/presentation/shared/chart/chart_filter_dialog.dart';
+import 'package:quantifico/presentation/shared/filter_dialog.dart';
 
 class MonthlySalesChart extends Chart {
   const MonthlySalesChart({
@@ -71,7 +71,7 @@ class MonthlySalesChart extends Chart {
   }
 
   @override
-  Widget filterDialog() {
+  Widget buildFilterDialog() {
     if (bloc.state is FilterableState) {
       final state = bloc.state as FilterableState;
       return MonthlySalesFilterDialog(
@@ -118,7 +118,7 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
   @override
   Widget build(BuildContext context) {
     const verticalSpacing = SizedBox(height: 15);
-    return ChartFilterDialog(
+    return FilterDialog(
       onApply: () {
         widget.onApply(years: _years);
       },

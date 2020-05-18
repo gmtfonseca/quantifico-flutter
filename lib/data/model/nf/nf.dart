@@ -22,7 +22,7 @@ class Nf extends Equatable {
   Nf.fromJson(Map json)
       : series = json['serie']?.toString(),
         number = int.tryParse(json['numero']?.toString()),
-        date = DateTime.tryParse(json['dataEmissao']?.toString()),
+        date = json['dataEmissao'] != null ? DateTime.tryParse(json['dataEmissao']?.toString()) : null,
         totalAmount = double.tryParse(json['total']['nf']?.toString()),
         customer = Customer.fromJson(json['cliente'] as Map),
         items = List.generate((json['saidas'] as Iterable).length, (i) {
