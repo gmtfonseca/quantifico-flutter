@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/nf_screen/barrel.dart';
 import 'package:quantifico/data/model/nf/nf_screen_record.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
+import 'package:quantifico/style.dart';
 import 'package:quantifico/util/date_util.dart';
 import 'package:quantifico/util/number_util.dart';
 
@@ -10,7 +11,7 @@ class NfScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xffe0e0e0),
+      color: AppStyle.backgroundColor,
       child: Padding(
         padding: const EdgeInsets.only(bottom: 4.0),
         child: BlocBuilder<NfScreenBloc, NfScreenState>(
@@ -58,10 +59,18 @@ class NfScreen extends StatelessWidget {
     return ListView.separated(
       controller: scrollController,
       separatorBuilder: (context, index) => const SizedBox(height: 5),
-      itemCount: state.nfScreenRecords.length,
+      itemCount: state.nfScreenRecords.length + 1,
       itemBuilder: (context, index) {
-        final nfScreenRecord = state.nfScreenRecords[index];
-        return _buildNfTile(nfScreenRecord);
+        // TODO - O que fazer quando todos os dados forem buscados?
+        if (index == state.nfScreenRecords.length) {
+          return const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: LoadingIndicator(),
+          );
+        } else {
+          final nfScreenRecord = state.nfScreenRecords[index];
+          return _buildNfTile(nfScreenRecord);
+        }
       },
     );
   }

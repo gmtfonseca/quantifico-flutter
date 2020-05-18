@@ -40,7 +40,6 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
   Stream<NfScreenState> _mapLoadMoreNfScreenToState() async* {
     if (state is NfScreenLoaded) {
       try {
-        // yield NfScreenLoadingMore();
         _page += 1;
         final extendedNfScreenRecords = List<NfScreenRecord>.from((state as NfScreenLoaded).nfScreenRecords);
         final nfs = await nfRepository.getNfs(page: _page);

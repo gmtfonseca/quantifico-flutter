@@ -7,6 +7,7 @@ import 'package:quantifico/bloc/home_screen/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
+import 'package:quantifico/style.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen();
@@ -14,7 +15,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffe0e0e0),
+      backgroundColor: AppStyle.backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(bottom: 4.0),

@@ -8,6 +8,7 @@ import 'package:quantifico/bloc/insight_screen/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
+import 'package:quantifico/style.dart';
 
 class InsightScreen extends StatelessWidget {
   const InsightScreen();
@@ -22,7 +23,7 @@ class InsightScreen extends StatelessWidget {
       child: BlocBuilder<InsightScreenBloc, InsightScreenState>(
         builder: (context, state) {
           return Container(
-            color: const Color(0xffe0e0e0),
+            color: AppStyle.backgroundColor,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 4.0),
               child: _buildContent(context, state),
