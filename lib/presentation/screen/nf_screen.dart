@@ -88,10 +88,14 @@ class NfScreen extends StatelessWidget {
       itemBuilder: (context, index) {
         // TODO - O que fazer quando todos os dados forem buscados?
         if (index == state.nfScreenRecords.length) {
-          return const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: LoadingIndicator(),
-          );
+          if (state is NfScreenLoadingMore) {
+            return const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: LoadingIndicator(),
+            );
+          } else {
+            return null;
+          }
         } else {
           final nfScreenRecord = state.nfScreenRecords[index];
           return _buildNfTile(nfScreenRecord);

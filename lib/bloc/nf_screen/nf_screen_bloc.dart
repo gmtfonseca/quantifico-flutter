@@ -52,9 +52,14 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
 
   Stream<NfScreenState> _mapLoadMoreNfScreenToState() async* {
     if (state is NfScreenLoaded) {
+      final nfScreenLoadedState = state as NfScreenLoaded;
       try {
+        yield NfScreenLoadingMore(
+          nfScreenRecords: nfScreenLoadedState.nfScreenRecords,
+          activeFilter: _activeFilter,
+        );
         _page += 1;
-        final extendedNfScreenRecords = List<NfScreenRecord>.from((state as NfScreenLoaded).nfScreenRecords);
+        final extendedNfScreenRecords = List<NfScreenRecord>.from(nfScreenLoadedState.nfScreenRecords);
         final nfs = await nfRepository.getNfs(
           initialDate: _activeFilter?.initialDate,
           endDate: _activeFilter?.endDate,

@@ -24,4 +24,14 @@ class NfScreenLoaded extends NfScreenState {
   List<Object> get props => [nfScreenRecords, activeFilter];
 }
 
+class NfScreenLoadingMore extends NfScreenLoaded {
+  const NfScreenLoadingMore({
+    List<NfScreenRecord> nfScreenRecords,
+    NfScreenFilter activeFilter,
+  }) : super(
+          nfScreenRecords: nfScreenRecords,
+          activeFilter: activeFilter,
+        );
+}
+
 class NfScreenNotLoaded extends NfScreenState {}
