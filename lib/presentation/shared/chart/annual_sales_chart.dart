@@ -74,9 +74,9 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
 
   @override
   void initState() {
+    super.initState();
     _startYearController.text = widget.startYear?.toString();
     _endYearController.text = widget.endYear?.toString();
-    super.initState();
   }
 
   @override

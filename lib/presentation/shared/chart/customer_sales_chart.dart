@@ -70,8 +70,8 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
 
   @override
   void initState() {
-    _limit = widget.limit?.toDouble() ?? 1.0;
     super.initState();
+    _limit = widget.limit?.toDouble() ?? 1.0;
   }
 
   @override

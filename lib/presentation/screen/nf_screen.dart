@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/nf_screen/barrel.dart';
 import 'package:quantifico/data/model/nf/nf_screen_filter.dart';
 import 'package:quantifico/data/model/nf/nf_screen_record.dart';
+import 'package:quantifico/presentation/screen/nf_details_screen.dart';
 import 'package:quantifico/presentation/shared/filter_dialog.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 import 'package:quantifico/presentation/shared/text_date_picker.dart';
@@ -86,7 +87,6 @@ class NfScreen extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(height: 5),
       itemCount: state.nfScreenRecords.length + 1,
       itemBuilder: (context, index) {
-        // TODO - O que fazer quando todos os dados forem buscados?
         if (index == state.nfScreenRecords.length) {
           if (state is NfScreenLoadingMore) {
             return const Padding(
@@ -98,7 +98,19 @@ class NfScreen extends StatelessWidget {
           }
         } else {
           final nfScreenRecord = state.nfScreenRecords[index];
-          return _buildNfTile(nfScreenRecord);
+          return GestureDetector(
+            onTap: () {
+              Navigator.push<Widget>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return NfDetailsScreen(nf: nfScreenRecord.nf);
+                  },
+                ),
+              );
+            },
+            child: _buildNfTile(nfScreenRecord),
+          );
         }
       },
     );
@@ -117,18 +129,10 @@ class NfScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  nfScreenRecord.nf.series,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
                   nfScreenRecord.nf.number.toString(),
                   style: const TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0,
                   ),
                 )
               ],
@@ -233,10 +237,10 @@ class _NfScreenFilterDialogState extends State<NfScreenFilterDialog> {
 
   @override
   void initState() {
+    super.initState();
     _initialDate = widget.initialDate;
     _endDate = widget.endDate;
     customerNameController = TextEditingController(text: widget.customerName);
-    super.initState();
   }
 
   @override

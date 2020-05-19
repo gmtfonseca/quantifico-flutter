@@ -110,9 +110,9 @@ class _MonthlySalesFilterDialogState extends State<MonthlySalesFilterDialog> {
 
   @override
   void initState() {
+    super.initState();
     _years = List.from(widget.years);
     _updateAddButtonAvailability();
-    super.initState();
   }
 
   @override

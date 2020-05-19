@@ -7,7 +7,7 @@ const String _token =
 
 const String _baseUrl = '10.0.2.2:3000';
 //lt -h "http://serverless.social" -p 3000
-// const String _baseUrl = 'new-chipmunk-76.serverless.social';
+// const String _baseUrl = 'grumpy-panther-42.serverless.social';
 
 class UnauthorizedException implements Exception {}
 
