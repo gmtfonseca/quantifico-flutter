@@ -89,7 +89,7 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
         );
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
           children: [
             TextField(

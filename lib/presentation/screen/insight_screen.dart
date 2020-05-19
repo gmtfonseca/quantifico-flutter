@@ -54,7 +54,7 @@ class InsightScreen extends StatelessWidget {
   }
 
   Widget _buildCharts(BuildContext context) {
-    const verticalSpacing = SizedBox(height: 15);
+    const verticalSpacing = SizedBox(height: 10);
     final annualSalesBloc = BlocProvider.of<AnnualSalesBloc>(context);
     final customerSalesBloc = BlocProvider.of<CustomerSalesBloc>(context);
     final monthlySalesBloc = BlocProvider.of<MonthlySalesBloc>(context);

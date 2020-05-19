@@ -253,7 +253,7 @@ class _NfScreenFilterDialogState extends State<NfScreenFilterDialog> {
         customerNameController.text,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: ListView(
           shrinkWrap: true,
           children: [
