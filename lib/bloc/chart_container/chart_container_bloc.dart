@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
@@ -6,12 +7,14 @@ import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_event.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_state.dart';
 import 'package:quantifico/data/repository/chart_container_repository.dart';
+import 'package:quantifico/util/string_util.dart';
 
 class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerState> {
   final String chartName;
   final ChartContainerRepository chartContainerRepository;
   final ChartBloc chartBloc;
   StreamSubscription chartSubscription;
+  Color _color = Colors.deepPurpleAccent;
 
   ChartContainerBloc({
     @required this.chartContainerRepository,
@@ -19,6 +22,10 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
   }) : chartName = C.toString() {
     chartSubscription = chartBloc.listen((state) {
       if (state is SeriesLoaded || state is SeriesLoadedEmpty) {
+        if (state is SeriesLoaded) {
+          // sets color according to color of the first series
+          _color = hexToColor(state.series[0].colorFn(0).hexString);
+        }
         add(const LoadContainer());
       }
     });
@@ -41,7 +48,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
   Stream<ChartContainerState> _mapLoadContainerToState() async* {
     try {
       final isStarred = chartContainerRepository.isStarred(chartName);
-      yield ChartContainerLoaded(isStarred: isStarred);
+      yield ChartContainerLoaded(isStarred: isStarred, color: _color);
     } catch (e) {
       yield ChartContainerNotLoaded();
     }
@@ -51,7 +58,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
     try {
       chartContainerRepository.star(chartName);
       final isStarred = chartContainerRepository.isStarred(chartName);
-      yield ChartContainerLoaded(isStarred: isStarred);
+      yield ChartContainerLoaded(isStarred: isStarred, color: _color);
     } catch (e) {
       yield ChartContainerNotLoaded();
     }
@@ -61,7 +68,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
     try {
       chartContainerRepository.unstar(chartName);
       final isStarred = chartContainerRepository.isStarred(chartName);
-      yield ChartContainerLoaded(isStarred: isStarred);
+      yield ChartContainerLoaded(isStarred: isStarred, color: _color);
     } catch (e) {
       yield ChartContainerNotLoaded();
     }

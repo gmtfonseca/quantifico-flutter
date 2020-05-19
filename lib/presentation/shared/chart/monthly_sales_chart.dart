@@ -58,7 +58,15 @@ class MonthlySalesChart extends Chart {
       (bloc.state as SeriesLoaded).series,
       animate: true,
       behaviors: [charts.SeriesLegend()],
-      primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
+      primaryMeasureAxis: charts.NumericAxisSpec(
+        tickFormatterSpec: simpleCurrencyFormatter,
+        renderSpec: const charts.GridlineRendererSpec(
+          lineStyle: charts.LineStyleSpec(color: charts.Color.transparent),
+          labelStyle: charts.TextStyleSpec(
+            fontSize: 12,
+          ),
+        ),
+      ),
       domainAxis: charts.NumericAxisSpec(
         tickProviderSpec: const charts.BasicNumericTickProviderSpec(
           desiredTickCount: MONTHS_IN_YEAR,
@@ -66,6 +74,9 @@ class MonthlySalesChart extends Chart {
           dataIsInWholeNumbers: true,
         ),
         tickFormatterSpec: customTickFormatter,
+        renderSpec: const charts.SmallTickRendererSpec(
+          labelStyle: charts.TextStyleSpec(fontSize: 11),
+        ),
       ),
     );
   }

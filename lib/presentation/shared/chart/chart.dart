@@ -28,9 +28,15 @@ abstract class Chart extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Não foi possível carregar gráfico'),
+                const Text(
+                  'Não foi possível carregar gráfico',
+                  style: TextStyle(color: Colors.black45),
+                ),
                 const SizedBox(width: 5),
-                Icon(Icons.sentiment_dissatisfied),
+                Icon(
+                  Icons.sentiment_dissatisfied,
+                  color: Colors.black45,
+                )
               ],
             ),
           );

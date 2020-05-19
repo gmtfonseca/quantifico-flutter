@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             ) {
               if (state is HomeScreenLoaded) {
                 return ListView.separated(
-                  separatorBuilder: (context, index) => const SizedBox(height: 10),
+                  separatorBuilder: (context, index) => const SizedBox(height: 15),
                   itemCount: state.starredCharts.length,
                   itemBuilder: (context, index) {
                     final chartName = state.starredCharts[index];

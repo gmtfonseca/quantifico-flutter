@@ -73,8 +73,8 @@ class MonthlySalesBloc extends ChartBloc {
 
   List<charts.Series<MonthSales, int>> _buildSeries(Map<String, Map<String, double>> monthlySalesMap) {
     final colors = [
-      charts.MaterialPalette.red,
       charts.MaterialPalette.blue,
+      charts.MaterialPalette.red,
       charts.MaterialPalette.green,
       charts.MaterialPalette.yellow,
     ];

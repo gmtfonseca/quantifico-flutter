@@ -25,9 +25,20 @@ class CitySalesChart extends Chart {
       state.series,
       animate: true,
       vertical: false,
-      barRendererDecorator: charts.BarLabelDecorator<String>(),
+      barRendererDecorator: charts.BarLabelDecorator<String>(
+        insideLabelStyleSpec: charts.TextStyleSpec(color: charts.Color.white, fontSize: 11),
+        outsideLabelStyleSpec: const charts.TextStyleSpec(fontSize: 11),
+      ),
       domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
-      primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
+      primaryMeasureAxis: charts.NumericAxisSpec(
+        tickFormatterSpec: simpleCurrencyFormatter,
+        renderSpec: const charts.GridlineRendererSpec(
+          lineStyle: charts.LineStyleSpec(color: charts.Color.transparent),
+          labelStyle: charts.TextStyleSpec(
+            fontSize: 12,
+          ),
+        ),
+      ),
     );
   }
 

@@ -15,7 +15,7 @@ class ChartContainer extends StatelessWidget {
     Key key,
     @required this.bloc,
     @required this.chart,
-    this.title,
+    @required this.title,
     this.onStarOrUnstar,
     this.height = 450,
   }) : super(key: key);
@@ -29,7 +29,6 @@ class ChartContainer extends StatelessWidget {
         child: Column(
           children: [
             _buildHeader(context),
-            const Divider(thickness: 1.5),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -49,35 +48,47 @@ class ChartContainer extends StatelessWidget {
         BuildContext context,
         ChartContainerState state,
       ) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: _buildTitle(),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: _buildOptions(context, state),
-            ),
-          ],
+        return Container(
+          color: state is ChartContainerLoaded ? state.color : Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: _buildTitle(state),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: _buildOptions(context, state),
+              ),
+            ],
+          ),
         );
       },
     );
   }
 
-  Widget _buildTitle() {
-    if (title != null) {
+  Widget _buildTitle(ChartContainerState state) {
+    const fontSize = 16.0;
+    if (state is ChartContainerLoaded) {
       return Text(
         title,
         style: TextStyle(
-          fontSize: 18.0,
+          fontSize: fontSize,
           fontWeight: FontWeight.w400,
+          color: Colors.white,
         ),
       );
     } else {
-      return const SizedBox();
+      return Text(
+        title,
+        style: TextStyle(
+          fontSize: fontSize,
+          fontWeight: FontWeight.w400,
+          color: Colors.black45,
+        ),
+      );
     }
   }
 
@@ -94,7 +105,7 @@ class ChartContainer extends StatelessWidget {
   Widget _buildStarButton(ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-        icon: Icon(state.isStarred ? Icons.star : Icons.star_border),
+        icon: Icon(state.isStarred ? Icons.star : Icons.star_border, color: Colors.white),
         onPressed: () {
           if (state.isStarred) {
             bloc.add(const UnstarChart());
@@ -117,7 +128,7 @@ class ChartContainer extends StatelessWidget {
   Widget _buildFilterButton(BuildContext context, ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-          icon: Icon(Icons.filter_list),
+          icon: Icon(Icons.filter_list, color: Colors.white),
           onPressed: () {
             showDialog<Widget>(
               context: context,
@@ -134,18 +145,19 @@ class ChartContainer extends StatelessWidget {
 
   Widget _buildFullScreenButton(BuildContext context, ChartContainerState state) {
     return IconButton(
-      icon: Icon(Icons.fullscreen),
-      onPressed: state is ChartContainerLoaded ? () => _openFullScreenMode(context) : null,
+      icon: state is ChartContainerLoaded ? Icon(Icons.fullscreen, color: Colors.white) : Icon(Icons.fullscreen),
+      onPressed: state is ChartContainerLoaded ? () => _openFullScreenMode(context, state.color) : null,
     );
   }
 
-  void _openFullScreenMode(BuildContext context) {
+  void _openFullScreenMode(BuildContext context, Color appBarColor) {
     Navigator.push(
       context,
       MaterialPageRoute<FullScreenChart>(
         builder: (context) {
           return FullScreenChart(
             title: title,
+            appBarColor: appBarColor,
             child: chart,
           );
         },

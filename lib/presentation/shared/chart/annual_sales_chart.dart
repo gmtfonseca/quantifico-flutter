@@ -25,7 +25,20 @@ class AnnualSalesChart extends Chart {
     return charts.BarChart(
       state.series,
       animate: true,
-      primaryMeasureAxis: charts.NumericAxisSpec(tickFormatterSpec: simpleCurrencyFormatter),
+      domainAxis: const charts.OrdinalAxisSpec(
+        renderSpec: charts.SmallTickRendererSpec(
+          labelStyle: charts.TextStyleSpec(fontSize: 12),
+        ),
+      ),
+      primaryMeasureAxis: charts.NumericAxisSpec(
+        tickFormatterSpec: simpleCurrencyFormatter,
+        renderSpec: const charts.GridlineRendererSpec(
+          lineStyle: charts.LineStyleSpec(color: charts.Color.transparent),
+          labelStyle: charts.TextStyleSpec(
+            fontSize: 12,
+          ),
+        ),
+      ),
     );
   }
 
