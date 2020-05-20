@@ -134,22 +134,8 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextDatePicker(
-              onChanged: (value) {
-                _startDate = value;
-              },
-              labelText: 'Data inicial',
-              initialValue: _startDate,
-            ),
-            const SizedBox(height: 20),
-            TextDatePicker(
-              onChanged: (value) {
-                _endDate = value;
-              },
-              labelText: 'Data final',
-              initialValue: _endDate,
-            ),
-            const SizedBox(height: 20),
+            _buildDateFields(),
+            const SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -179,7 +165,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             const Text(
               'Ordem',
               style: TextStyle(color: Colors.black54),
@@ -212,5 +198,41 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
         ),
       ),
     );
+  }
+
+  Widget _buildDateFields() {
+    final startDateField = TextDatePicker(
+      onChanged: (value) {
+        _startDate = value;
+      },
+      labelText: 'Data inicial',
+      initialValue: _startDate,
+    );
+
+    final endDateField = TextDatePicker(
+      onChanged: (value) {
+        _endDate = value;
+      },
+      labelText: 'Data final',
+      initialValue: _endDate,
+    );
+
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      return Column(
+        children: [
+          startDateField,
+          const SizedBox(height: 20),
+          endDateField,
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          Flexible(child: startDateField),
+          const SizedBox(width: 20),
+          Flexible(child: endDateField),
+        ],
+      );
+    }
   }
 }
