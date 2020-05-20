@@ -57,14 +57,20 @@ class NfScreen extends StatelessWidget {
     if (state.nfScreenRecords.isNotEmpty) {
       return _buildNfs(context, state);
     } else {
-      return Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Sem dados para exibir'),
-            const SizedBox(width: 5),
-            Icon(Icons.sentiment_neutral),
-          ],
+      return SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Center(
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Sem dados para exibir'),
+                const SizedBox(width: 5),
+                Icon(Icons.sentiment_neutral),
+              ],
+            ),
+          ),
         ),
       );
     }
