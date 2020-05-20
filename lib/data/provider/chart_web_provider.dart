@@ -54,9 +54,20 @@ class ChartWebProvider {
     return data;
   }
 
-  Future<List<CitySalesRecord>> fetchCitySalesData({int limit}) async {
+  Future<List<CitySalesRecord>> fetchCitySalesData({
+    DateTime startDate,
+    DateTime endDate,
+    int limit,
+  }) async {
     final Map<String, String> params = Map();
 
+    if (startDate != null) {
+      params['datainicial'] = startDate.toString();
+    }
+
+    if (endDate != null) {
+      params['datafinal'] = endDate.toString();
+    }
     if (limit != null) {
       params['limit'] = limit.toString();
     }

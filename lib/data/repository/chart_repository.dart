@@ -31,8 +31,16 @@ class ChartRepository {
     );
   }
 
-  Future<List<CitySalesRecord>> getCitySalesData({int limit}) async {
-    return await chartWebProvider.fetchCitySalesData(limit: limit);
+  Future<List<CitySalesRecord>> getCitySalesData({
+    DateTime startDate,
+    DateTime endDate,
+    int limit,
+  }) async {
+    return await chartWebProvider.fetchCitySalesData(
+      startDate: startDate,
+      endDate: endDate,
+      limit: limit,
+    );
   }
 
   Future<List<MonthlySalesRecord>> getMonthlySalesData({List<int> years}) async {
