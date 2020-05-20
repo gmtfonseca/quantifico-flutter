@@ -10,6 +10,8 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:quantifico/util/string_util.dart';
 
 class CustomerSalesBloc extends ChartBloc {
+  CustomerSalesFilter _activeFilter = CustomerSalesFilter(limit: ChartConfig.maxRecordLimit);
+
   CustomerSalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
   @override
@@ -17,17 +19,19 @@ class CustomerSalesBloc extends ChartBloc {
     try {
       yield SeriesLoading();
       final customerSalesData = await chartRepository.getCustomerSalesData(
-        limit: ChartConfig.maxRecordLimit,
+        startDate: _activeFilter?.startDate,
+        endDate: _activeFilter?.endDate,
+        limit: _activeFilter.limit,
       );
       if (customerSalesData.isNotEmpty) {
         final series = _buildSeries(customerSalesData);
         yield SeriesLoaded<CustomerSalesRecord, String, CustomerSalesFilter>(
           series,
-          activeFilter: CustomerSalesFilter(limit: ChartConfig.maxRecordLimit),
+          activeFilter: _activeFilter,
         );
       } else {
         yield SeriesLoadedEmpty<CustomerSalesFilter>(
-          activeFilter: CustomerSalesFilter(limit: ChartConfig.maxRecordLimit),
+          activeFilter: _activeFilter,
         );
       }
     } catch (e) {
@@ -38,20 +42,8 @@ class CustomerSalesBloc extends ChartBloc {
   @override
   Stream<ChartState> mapUpdateFilterToState(UpdateFilter event) async* {
     try {
-      yield SeriesLoading();
-      final customerSalesFilter = event.filter as CustomerSalesFilter;
-      final customerSalesData = await chartRepository.getCustomerSalesData(
-        limit: customerSalesFilter?.limit,
-      );
-      if (customerSalesData.isNotEmpty) {
-        final series = _buildSeries(customerSalesData);
-        yield SeriesLoaded<CustomerSalesRecord, String, CustomerSalesFilter>(
-          series,
-          activeFilter: customerSalesFilter,
-        );
-      } else {
-        yield SeriesLoadedEmpty<CustomerSalesFilter>(activeFilter: customerSalesFilter);
-      }
+      _activeFilter = event.filter as CustomerSalesFilter;
+      yield* mapLoadSeriesToState();
     } catch (e) {
       yield SeriesNotLoaded();
     }

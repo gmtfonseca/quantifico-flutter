@@ -97,7 +97,7 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
       Colors.indigo,
       Colors.green,
       Colors.blue,
-      Colors.amber,
+      Colors.orange,
       Colors.deepPurple,
     ];
 

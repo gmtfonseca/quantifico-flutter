@@ -27,7 +27,7 @@ class AnnualSalesChart extends Chart {
       animate: true,
       domainAxis: const charts.OrdinalAxisSpec(
         renderSpec: charts.SmallTickRendererSpec(
-          labelStyle: charts.TextStyleSpec(fontSize: 12),
+          labelStyle: charts.TextStyleSpec(fontSize: 11),
         ),
       ),
       primaryMeasureAxis: charts.NumericAxisSpec(
@@ -39,6 +39,7 @@ class AnnualSalesChart extends Chart {
           ),
         ),
       ),
+      barRendererDecorator: charts.BarLabelDecorator<String>(),
     );
   }
 
@@ -84,29 +85,47 @@ class AnnualSalesFiltersDialog extends StatefulWidget {
 class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
   final TextEditingController _startYearController = TextEditingController();
   final TextEditingController _endYearController = TextEditingController();
+  bool _isValidFilter;
 
   @override
   void initState() {
     super.initState();
+    _isValidFilter = true;
     _startYearController.text = widget.startYear?.toString();
     _endYearController.text = widget.endYear?.toString();
+  }
+
+  void _validateFilter() {
+    setState(() {
+      const MAX_YEAR_INTERVAL = 4;
+      if (_startYearController.text.isEmpty || _endYearController.text.isEmpty) {
+        _isValidFilter = false;
+      }
+
+      final startYear = int.parse(_startYearController.text);
+      final endYear = int.parse(_endYearController.text);
+
+      _isValidFilter = (startYear - endYear).abs() <= MAX_YEAR_INTERVAL;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return FilterDialog(
-      onApply: () {
-        widget.onApply(
-          startYear: _startYearController.text.isNotEmpty ? int.parse(_startYearController.text) : null,
-          endYear: _endYearController.text.isNotEmpty ? int.parse(_endYearController.text) : null,
-        );
-      },
+      onApply: _isValidFilter
+          ? () => widget.onApply(
+                startYear: _startYearController.text.isNotEmpty ? int.parse(_startYearController.text) : null,
+                endYear: _endYearController.text.isNotEmpty ? int.parse(_endYearController.text) : null,
+              )
+          : null,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             TextField(
               controller: _startYearController,
+              onChanged: (_) => _validateFilter(),
               maxLength: 4,
               decoration: InputDecoration(
                 icon: Icon(Icons.calendar_today),
@@ -115,9 +134,10 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 15),
             TextField(
               controller: _endYearController,
+              onChanged: (_) => _validateFilter(),
               maxLength: 4,
               decoration: InputDecoration(
                 icon: Icon(Icons.calendar_today),
@@ -125,6 +145,11 @@ class _AnnualSalesFiltersDialogState extends State<AnnualSalesFiltersDialog> {
               ),
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[WhitelistingTextInputFormatter.digitsOnly],
+            ),
+            const SizedBox(height: 15),
+            const Text(
+              'Intervalo máximo de 4 anos',
+              style: TextStyle(fontSize: 12, color: Colors.grey),
             ),
           ],
         ),

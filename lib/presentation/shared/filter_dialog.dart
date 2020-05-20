@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 class FilterDialog extends StatelessWidget {
   final Widget child;
   final VoidCallback onApply;
+  final VoidCallback onClear;
 
   const FilterDialog({
     Key key,
     @required this.child,
     @required this.onApply,
+    this.onClear,
   }) : super(key: key);
 
   @override
@@ -33,24 +35,40 @@ class FilterDialog extends StatelessWidget {
           ),
           ButtonBar(
             alignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              FlatButton(
-                child: const Text('CANCELAR'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              FlatButton(
-                child: const Text('APLICAR'),
-                onPressed: () {
-                  onApply();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
+            children: _buildButtons(context),
           )
         ],
       ),
     );
+  }
+
+  List<Widget> _buildButtons(BuildContext context) {
+    final List<Widget> buttons = [
+      FlatButton(
+        child: const Text('CANCELAR'),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      FlatButton(
+        child: const Text('APLICAR'),
+        onPressed: onApply != null
+            ? () {
+                onApply();
+                Navigator.of(context).pop();
+              }
+            : null,
+      ),
+    ];
+
+    if (onClear != null) {
+      buttons.insert(
+          1,
+          FlatButton(
+            child: const Text('LIMPAR'),
+            onPressed: () => onClear(),
+          ));
+    }
+    return buttons;
   }
 }

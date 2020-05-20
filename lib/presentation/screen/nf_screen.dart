@@ -252,6 +252,13 @@ class _NfScreenFilterDialogState extends State<NfScreenFilterDialog> {
         _endDate,
         customerNameController.text,
       ),
+      onClear: () {
+        setState(() {
+          _initialDate = null;
+          _endDate = null;
+          customerNameController.clear();
+        });
+      },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView(

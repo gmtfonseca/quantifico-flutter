@@ -8,6 +8,7 @@ import 'package:quantifico/data/model/chart/customer_sales_record.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
 import 'package:intl/intl.dart';
 import 'package:quantifico/presentation/shared/filter_dialog.dart';
+import 'package:quantifico/presentation/shared/text_date_picker.dart';
 
 class CustomerSalesChart extends Chart {
   const CustomerSalesChart({
@@ -46,13 +47,20 @@ class CustomerSalesChart extends Chart {
   @override
   Widget buildFilterDialog() {
     if (bloc.state is FilterableState) {
-      final state = bloc.state as FilterableState;
+      final activeFilter = (bloc.state as FilterableState).activeFilter as CustomerSalesFilter;
+
       return CustomerSalesFilterDialog(
-        limit: (state.activeFilter as CustomerSalesFilter)?.limit,
-        onApply: ({int limit}) {
+        startDate: activeFilter?.startDate,
+        endDate: activeFilter?.endDate,
+        limit: activeFilter?.limit,
+        onApply: (startDate, endDate, limit) {
           bloc.add(
             UpdateFilter(
-              CustomerSalesFilter(limit: limit),
+              CustomerSalesFilter(
+                startDate: startDate,
+                endDate: endDate,
+                limit: limit,
+              ),
             ),
           );
         },
@@ -64,11 +72,19 @@ class CustomerSalesChart extends Chart {
 }
 
 class CustomerSalesFilterDialog extends StatefulWidget {
-  final void Function({int limit}) onApply;
+  final void Function(
+    DateTime startDate,
+    DateTime endDate,
+    int limit,
+  ) onApply;
+  final DateTime startDate;
+  final DateTime endDate;
   final int limit;
 
   const CustomerSalesFilterDialog({
     this.onApply,
+    this.startDate,
+    this.endDate,
     this.limit,
   });
 
@@ -77,11 +93,15 @@ class CustomerSalesFilterDialog extends StatefulWidget {
 }
 
 class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
+  DateTime _startDate;
+  DateTime _endDate;
   double _limit;
 
   @override
   void initState() {
     super.initState();
+    _startDate = widget.startDate;
+    _endDate = widget.endDate;
     _limit = widget.limit?.toDouble() ?? 1.0;
   }
 
@@ -89,26 +109,70 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
   Widget build(BuildContext context) {
     return FilterDialog(
       onApply: () {
-        widget.onApply(limit: _limit.round());
+        widget.onApply(
+          _startDate,
+          _endDate,
+          _limit.round(),
+        );
       },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text('Limite'),
-          Slider(
-            label: '${_limit.round()}',
-            value: _limit,
-            onChanged: (value) {
-              setState(() {
-                _limit = value;
-              });
-            },
-            min: 1.0,
-            max: ChartConfig.maxRecordLimit.toDouble(),
-            divisions: ChartConfig.maxRecordLimit,
-          ),
-        ],
+      onClear: () {
+        setState(() {
+          _startDate = null;
+          _endDate = null;
+        });
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextDatePicker(
+              onChanged: (value) {
+                _startDate = value;
+              },
+              labelText: 'Data inicial',
+              initialValue: _startDate,
+            ),
+            const SizedBox(height: 20),
+            TextDatePicker(
+              onChanged: (value) {
+                _endDate = value;
+              },
+              labelText: 'Data final',
+              initialValue: _endDate,
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text(
+                  'Limite',
+                  style: TextStyle(color: Colors.black54),
+                ),
+                Expanded(
+                  child: Slider(
+                    label: '${_limit.round()}',
+                    value: _limit,
+                    onChanged: (value) {
+                      setState(() {
+                        _limit = value;
+                      });
+                    },
+                    min: 1.0,
+                    max: ChartConfig.maxRecordLimit.toDouble(),
+                    divisions: ChartConfig.maxRecordLimit,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  '${_limit.round()}',
+                  style: const TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
