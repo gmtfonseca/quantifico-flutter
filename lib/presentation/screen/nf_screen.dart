@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/nf_screen/barrel.dart';
+import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/nf/nf_screen_filter.dart';
 import 'package:quantifico/data/model/nf/nf_screen_record.dart';
 import 'package:quantifico/presentation/screen/nf_details_screen.dart';
@@ -14,6 +15,7 @@ import 'package:quantifico/util/number_util.dart';
 class NfScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return BlocBuilder<NfScreenBloc, NfScreenState>(
       builder: (context, state) {
         return Scaffold(
@@ -61,7 +63,7 @@ class NfScreen extends StatelessWidget {
         physics: const AlwaysScrollableScrollPhysics(),
         child: Center(
           child: Container(
-            height: MediaQuery.of(context).size.height,
+            height: SizeConfig.screenHeight - 85.0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
