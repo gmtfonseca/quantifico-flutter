@@ -23,11 +23,13 @@ class ChartRepository {
     DateTime startDate,
     DateTime endDate,
     int limit,
+    int sort,
   }) async {
     return await chartWebProvider.fetchCustomerSalesData(
       startDate: startDate,
       endDate: endDate,
       limit: limit,
+      sort: sort,
     );
   }
 
@@ -35,11 +37,13 @@ class ChartRepository {
     DateTime startDate,
     DateTime endDate,
     int limit,
+    int sort,
   }) async {
     return await chartWebProvider.fetchCitySalesData(
       startDate: startDate,
       endDate: endDate,
       limit: limit,
+      sort: sort,
     );
   }
 

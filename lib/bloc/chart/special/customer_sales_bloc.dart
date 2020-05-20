@@ -10,7 +10,10 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:quantifico/util/string_util.dart';
 
 class CustomerSalesBloc extends ChartBloc {
-  CustomerSalesFilter _activeFilter = CustomerSalesFilter(limit: ChartConfig.maxRecordLimit);
+  CustomerSalesFilter _activeFilter = CustomerSalesFilter(
+    limit: ChartConfig.maxRecordLimit,
+    sort: -1,
+  );
 
   CustomerSalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
@@ -22,6 +25,7 @@ class CustomerSalesBloc extends ChartBloc {
         startDate: _activeFilter?.startDate,
         endDate: _activeFilter?.endDate,
         limit: _activeFilter.limit,
+        sort: _activeFilter.sort,
       );
       if (customerSalesData.isNotEmpty) {
         final series = _buildSeries(customerSalesData);

@@ -9,25 +9,26 @@ import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class MonthlySalesBloc extends ChartBloc {
+  MonthlySalesFilter _activeFilter = MonthlySalesFilter(years: [DateTime.now().year]);
+
   MonthlySalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
 
   @override
   Stream<ChartState> mapLoadSeriesToState() async* {
     try {
       yield SeriesLoading();
-      final defaultFilter = MonthlySalesFilter(years: [DateTime.now().year]);
       final monthlySalesData = await chartRepository.getMonthlySalesData(
-        years: defaultFilter.years,
+        years: _activeFilter.years,
       );
       if (monthlySalesData.isNotEmpty) {
         final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
         final seriesList = _buildSeries(monthlySalesMap);
         yield SeriesLoaded<MonthSales, int, MonthlySalesFilter>(
           seriesList,
-          activeFilter: defaultFilter,
+          activeFilter: _activeFilter,
         );
       } else {
-        yield SeriesLoadedEmpty(activeFilter: defaultFilter);
+        yield SeriesLoadedEmpty<MonthlySalesFilter>(activeFilter: _activeFilter);
       }
     } catch (e) {
       yield SeriesNotLoaded();
@@ -37,21 +38,8 @@ class MonthlySalesBloc extends ChartBloc {
   @override
   Stream<ChartState> mapUpdateFilterToState(UpdateFilter event) async* {
     try {
-      yield SeriesLoading();
-      final monthlySalesFilter = event.filter as MonthlySalesFilter;
-      final monthlySalesData = await chartRepository.getMonthlySalesData(
-        years: monthlySalesFilter?.years,
-      );
-      if (monthlySalesData.isNotEmpty) {
-        final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
-        final seriesList = _buildSeries(monthlySalesMap);
-        yield SeriesLoaded<MonthSales, int, MonthlySalesFilter>(
-          seriesList,
-          activeFilter: monthlySalesFilter,
-        );
-      } else {
-        yield SeriesLoadedEmpty<MonthlySalesFilter>(activeFilter: monthlySalesFilter);
-      }
+      _activeFilter = event.filter as MonthlySalesFilter;
+      yield* mapLoadSeriesToState();
     } catch (e) {
       yield SeriesNotLoaded();
     }

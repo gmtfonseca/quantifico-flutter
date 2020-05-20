@@ -31,6 +31,7 @@ class ChartWebProvider {
     DateTime startDate,
     DateTime endDate,
     int limit,
+    int sort,
   }) async {
     final Map<String, String> params = Map();
 
@@ -44,6 +45,10 @@ class ChartWebProvider {
 
     if (limit != null) {
       params['limit'] = limit.toString();
+    }
+
+    if (sort != null) {
+      params['sort'] = sort.toString();
     }
 
     final List<dynamic> body = await webClient.fetch(
@@ -58,6 +63,7 @@ class ChartWebProvider {
     DateTime startDate,
     DateTime endDate,
     int limit,
+    int sort,
   }) async {
     final Map<String, String> params = Map();
 
@@ -70,6 +76,10 @@ class ChartWebProvider {
     }
     if (limit != null) {
       params['limit'] = limit.toString();
+    }
+
+    if (sort != null) {
+      params['sort'] = sort.toString();
     }
 
     final List<dynamic> body = await webClient.fetch(

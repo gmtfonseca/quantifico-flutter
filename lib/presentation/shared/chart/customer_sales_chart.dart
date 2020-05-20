@@ -53,13 +53,15 @@ class CustomerSalesChart extends Chart {
         startDate: activeFilter?.startDate,
         endDate: activeFilter?.endDate,
         limit: activeFilter?.limit,
-        onApply: (startDate, endDate, limit) {
+        sort: activeFilter?.sort,
+        onApply: (startDate, endDate, limit, sort) {
           bloc.add(
             UpdateFilter(
               CustomerSalesFilter(
                 startDate: startDate,
                 endDate: endDate,
                 limit: limit,
+                sort: sort,
               ),
             ),
           );
@@ -76,16 +78,19 @@ class CustomerSalesFilterDialog extends StatefulWidget {
     DateTime startDate,
     DateTime endDate,
     int limit,
+    int sort,
   ) onApply;
   final DateTime startDate;
   final DateTime endDate;
   final int limit;
+  final int sort;
 
   const CustomerSalesFilterDialog({
     this.onApply,
     this.startDate,
     this.endDate,
     this.limit,
+    this.sort,
   });
 
   @override
@@ -96,6 +101,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
   DateTime _startDate;
   DateTime _endDate;
   double _limit;
+  int _sort;
 
   @override
   void initState() {
@@ -103,6 +109,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
     _startDate = widget.startDate;
     _endDate = widget.endDate;
     _limit = widget.limit?.toDouble() ?? 1.0;
+    _sort = widget.sort;
   }
 
   @override
@@ -113,6 +120,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
           _startDate,
           _endDate,
           _limit.round(),
+          _sort,
         );
       },
       onClear: () {
@@ -141,7 +149,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
               labelText: 'Data final',
               initialValue: _endDate,
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,6 +176,35 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
                 Text(
                   '${_limit.round()}',
                   style: const TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              'Ordem',
+              style: TextStyle(color: Colors.black54),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                FilterChip(
+                  label: const Text('Ascendente'),
+                  selected: _sort == 1,
+                  onSelected: (value) {
+                    setState(() {
+                      _sort = 1;
+                    });
+                  },
+                ),
+                const SizedBox(width: 10),
+                FilterChip(
+                  label: const Text('Decrescente'),
+                  selected: _sort == -1,
+                  onSelected: (value) {
+                    setState(() {
+                      _sort = -1;
+                    });
+                  },
                 ),
               ],
             ),

@@ -61,17 +61,15 @@ class NfScreen extends StatelessWidget {
     } else {
       return SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
-        child: Center(
-          child: Container(
-            height: SizeConfig.screenHeight - 85.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Sem dados para exibir'),
-                const SizedBox(width: 5),
-                Icon(Icons.sentiment_neutral),
-              ],
-            ),
+        child: Container(
+          height: SizeConfig.screenHeight - 85.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Sem dados para exibir'),
+              const SizedBox(width: 5),
+              Icon(Icons.sentiment_neutral),
+            ],
           ),
         ),
       );

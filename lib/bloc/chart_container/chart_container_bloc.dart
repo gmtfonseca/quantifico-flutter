@@ -23,8 +23,9 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
     chartSubscription = chartBloc.listen((state) {
       if (state is SeriesLoaded || state is SeriesLoadedEmpty) {
         if (state is SeriesLoaded) {
-          // sets color according to color of the first series
-          _color = hexToColor(state.series[0].colorFn(0).hexString);
+          final multiSeries = state.series.length > 1;
+          final seriesColor = hexToColor(state.series[0].colorFn(0).hexString);
+          _color = multiSeries ? Colors.deepPurpleAccent : seriesColor;
         }
         add(const LoadContainer());
       }
