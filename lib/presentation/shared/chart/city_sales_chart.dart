@@ -173,7 +173,7 @@ class _CitySalesFilterDialogState extends State<CitySalesFilterDialog> {
             Row(
               children: [
                 FilterChip(
-                  label: const Text('Ascendente'),
+                  label: const Text('Crescente'),
                   selected: _sort == 1,
                   onSelected: (value) {
                     setState(() {

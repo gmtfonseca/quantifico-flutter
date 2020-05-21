@@ -28,6 +28,8 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       yield* _mapLoadHomeScreenToState();
     } else if (event is RefreshHomeScreen) {
       yield* _mapRefreshHomeScreenToState();
+    } else if (event is UpdateStarredCharts) {
+      yield* _mapUpdateStarredCharts();
     }
   }
 
@@ -62,6 +64,22 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       );
     } catch (e) {
       yield HomeScreenNotLoaded();
+    }
+  }
+
+  Stream<HomeScreenState> _mapUpdateStarredCharts() async* {
+    if (state is HomeScreenLoaded) {
+      final currState = state as HomeScreenLoaded;
+      try {
+        final starredCharts = chartContainerRepository.getStarred();
+        starredCharts.sort();
+        yield HomeScreenLoaded(
+          stats: currState.stats,
+          starredCharts: starredCharts,
+        );
+      } catch (e) {
+        yield HomeScreenNotLoaded();
+      }
     }
   }
 

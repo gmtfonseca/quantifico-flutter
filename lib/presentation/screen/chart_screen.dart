@@ -62,7 +62,7 @@ class ChartScreen extends StatelessWidget {
     final citySalesContainerBloc = BlocProvider.of<ChartContainerBloc<CitySalesChart>>(context);
 
     final homeScreenBloc = BlocProvider.of<HomeScreenBloc>(context);
-    final onStarOrUnstar = () => homeScreenBloc.add(const LoadHomeScreen());
+    final onStarOrUnstar = () => homeScreenBloc.add(const UpdateStarredCharts());
 
     const chartVerticalSpacing = SizedBox(height: 20);
     const contextVerticalSpacing = SizedBox(height: 30);

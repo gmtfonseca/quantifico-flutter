@@ -14,6 +14,13 @@ class RefreshHomeScreen extends HomeScreenEvent {
   String toString() => 'RefreshHomeScreen';
 }
 
+class UpdateStarredCharts extends HomeScreenEvent {
+  const UpdateStarredCharts();
+
+  @override
+  String toString() => 'UpdateStarredCharts';
+}
+
 class LoadHomeScreen extends HomeScreenEvent {
   const LoadHomeScreen();
 

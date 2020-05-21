@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quantifico/config.dart';
 
 class FilterDialog extends StatelessWidget {
   final Widget child;
@@ -14,6 +15,7 @@ class FilterDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
       backgroundColor: Colors.white,

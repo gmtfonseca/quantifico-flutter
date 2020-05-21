@@ -188,7 +188,7 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildChartFromName(BuildContext context, String chartName) {
     final bloc = BlocProvider.of<HomeScreenBloc>(context);
-    final onStarOrUnstar = () => bloc.add(const LoadHomeScreen());
+    final onStarOrUnstar = () => bloc.add(const UpdateStarredCharts());
 
     switch (chartName) {
       case 'AnnualSalesChart':

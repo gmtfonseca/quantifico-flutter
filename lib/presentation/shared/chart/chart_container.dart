@@ -63,7 +63,7 @@ class ChartContainer extends StatelessWidget {
       ) {
         return Container(
           decoration: BoxDecoration(
-            color: state is ChartContainerLoaded ? state.color : Colors.transparent,
+            color: state is ChartContainerLoaded ? state.color : Colors.white,
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),

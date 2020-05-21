@@ -174,7 +174,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
             Row(
               children: [
                 FilterChip(
-                  label: const Text('Ascendente'),
+                  label: const Text('Crescente'),
                   selected: _sort == 1,
                   onSelected: (value) {
                     setState(() {
@@ -182,7 +182,7 @@ class _CustomerSalesFilterDialogState extends State<CustomerSalesFilterDialog> {
                     });
                   },
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 5),
                 FilterChip(
                   label: const Text('Decrescente'),
                   selected: _sort == -1,
