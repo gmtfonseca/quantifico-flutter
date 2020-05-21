@@ -22,10 +22,23 @@ class ChartContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final borderRadius = BorderRadius.circular(11);
     return Container(
       height: height,
-      color: Theme.of(context).scaffoldBackgroundColor,
+      decoration: BoxDecoration(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: borderRadius,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 2,
+          ),
+        ],
+      ),
       child: Material(
+        borderRadius: borderRadius,
+        clipBehavior: Clip.hardEdge,
         child: Column(
           children: [
             _buildHeader(context),
@@ -49,7 +62,16 @@ class ChartContainer extends StatelessWidget {
         ChartContainerState state,
       ) {
         return Container(
-          color: state is ChartContainerLoaded ? state.color : Colors.transparent,
+          decoration: BoxDecoration(
+            color: state is ChartContainerLoaded ? state.color : Colors.transparent,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 3,
+                blurRadius: 5,
+              ),
+            ],
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,

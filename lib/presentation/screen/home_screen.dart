@@ -53,14 +53,10 @@ class HomeScreen extends StatelessWidget {
       color: Colors.black54,
     );
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 12.0,
-        right: 12.0,
-        top: 20.0,
-        bottom: 8.0,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: ListView(
         children: [
+          const SizedBox(height: 15),
           const Text(
             'Resumo do mês',
             style: titleStyle,
@@ -74,6 +70,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 15),
           _buildCharts(context, state),
+          const SizedBox(height: 15),
         ],
       ),
     );

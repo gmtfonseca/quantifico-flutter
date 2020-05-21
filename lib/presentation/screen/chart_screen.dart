@@ -68,14 +68,10 @@ class ChartScreen extends StatelessWidget {
     const contextVerticalSpacing = SizedBox(height: 30);
 
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 12.0,
-        right: 12.0,
-        top: 20.0,
-        bottom: 4.0,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: ListView(
         children: [
+          chartVerticalSpacing,
           _buildTitle('Periódicos'),
           chartVerticalSpacing,
           ChartContainer(
@@ -117,6 +113,7 @@ class ChartScreen extends StatelessWidget {
             ),
             onStarOrUnstar: onStarOrUnstar,
           ),
+          chartVerticalSpacing,
         ],
       ),
     );
