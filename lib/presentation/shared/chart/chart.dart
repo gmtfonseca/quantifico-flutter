@@ -45,9 +45,17 @@ abstract class Chart extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Sem dados para exibir'),
+                const Text(
+                  'Sem dados para exibir',
+                  style: TextStyle(
+                    color: Colors.black54,
+                  ),
+                ),
                 const SizedBox(width: 5),
-                Icon(Icons.sentiment_neutral),
+                Icon(
+                  Icons.sentiment_neutral,
+                  color: Colors.black54,
+                ),
               ],
             ),
           );

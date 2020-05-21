@@ -16,10 +16,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    const titleStyle = TextStyle(
-      fontSize: 18,
-      color: Colors.black54,
-    );
+
     return Scaffold(
       backgroundColor: AppStyle.backgroundColor,
       body: SafeArea(
@@ -29,31 +26,7 @@ class HomeScreen extends StatelessWidget {
             HomeScreenState state,
           ) {
             if (state is HomeScreenLoaded) {
-              return Padding(
-                padding: const EdgeInsets.only(
-                  left: 12.0,
-                  right: 12.0,
-                  top: 20.0,
-                  bottom: 8.0,
-                ),
-                child: ListView(
-                  children: [
-                    const Text(
-                      'Resumo do mês',
-                      style: titleStyle,
-                    ),
-                    const SizedBox(height: 15),
-                    _buildInsights(),
-                    const SizedBox(height: 25),
-                    const Text(
-                      'Gráficos em destaque',
-                      style: titleStyle,
-                    ),
-                    const SizedBox(height: 15),
-                    _buildCharts(context, state),
-                  ],
-                ),
-              );
+              return _buildLoadedScreen(context, state);
             } else if (state is HomeScreenLoading) {
               return const LoadingIndicator();
             } else {
@@ -70,6 +43,38 @@ class HomeScreen extends StatelessWidget {
             }
           },
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoadedScreen(BuildContext context, HomeScreenLoaded state) {
+    const titleStyle = TextStyle(
+      fontSize: 18,
+      color: Colors.black54,
+    );
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 12.0,
+        right: 12.0,
+        top: 20.0,
+        bottom: 8.0,
+      ),
+      child: ListView(
+        children: [
+          const Text(
+            'Resumo do mês',
+            style: titleStyle,
+          ),
+          const SizedBox(height: 15),
+          _buildInsights(),
+          const SizedBox(height: 25),
+          const Text(
+            'Gráficos em destaque',
+            style: titleStyle,
+          ),
+          const SizedBox(height: 15),
+          _buildCharts(context, state),
+        ],
       ),
     );
   }
@@ -170,7 +175,6 @@ class HomeScreen extends StatelessWidget {
   Widget _buildChartFromName(BuildContext context, String chartName) {
     final bloc = BlocProvider.of<HomeScreenBloc>(context);
     final onStarOrUnstar = () => bloc.add(const LoadHomeScreen());
-    const containerHeight = 380.0;
 
     switch (chartName) {
       case 'AnnualSalesChart':
@@ -179,7 +183,6 @@ class HomeScreen extends StatelessWidget {
         return ChartContainer(
           title: 'Faturamento Anual',
           bloc: annualSalesContainerBloc,
-          height: containerHeight,
           chart: AnnualSalesChart(
             bloc: annualSalesBloc,
           ),
@@ -191,7 +194,6 @@ class HomeScreen extends StatelessWidget {
         return ChartContainer(
           title: 'Faturamento por Cidade',
           bloc: citySalesContainerBloc,
-          height: containerHeight,
           chart: CitySalesChart(
             bloc: citySalesBloc,
           ),
@@ -203,7 +205,6 @@ class HomeScreen extends StatelessWidget {
         return ChartContainer(
           title: 'Faturamento Mensal',
           bloc: monthlySalesContainerBloc,
-          height: containerHeight,
           chart: MonthlySalesChart(
             bloc: monthlySalesBloc,
           ),
@@ -215,7 +216,6 @@ class HomeScreen extends StatelessWidget {
         return ChartContainer(
           title: 'Faturamento por Cliente',
           bloc: customerSalesContainerBloc,
-          height: containerHeight,
           chart: CustomerSalesChart(
             bloc: customerSalesBloc,
           ),

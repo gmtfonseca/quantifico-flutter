@@ -4,7 +4,7 @@ import 'package:quantifico/bloc/chart/special/barrel.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_bloc.dart';
 import 'package:quantifico/bloc/home_screen/home_screen_bloc.dart';
 import 'package:quantifico/bloc/home_screen/home_screen_event.dart';
-import 'package:quantifico/bloc/insight_screen/barrel.dart';
+import 'package:quantifico/bloc/chart_screen/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
@@ -17,34 +17,31 @@ class ChartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        final bloc = BlocProvider.of<InsightScreenBloc>(context);
-        bloc.add(const RefreshInsightScreen());
+        final bloc = BlocProvider.of<ChartScreenBloc>(context);
+        bloc.add(const RefreshChartScreen());
       },
-      child: BlocBuilder<InsightScreenBloc, InsightScreenState>(
+      child: BlocBuilder<ChartScreenBloc, ChartScreenState>(
         builder: (context, state) {
           return Container(
             color: AppStyle.backgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 4.0),
-              child: _buildContent(context, state),
-            ),
+            child: _buildContent(context, state),
           );
         },
       ),
     );
   }
 
-  Widget _buildContent(BuildContext context, InsightScreenState state) {
-    if (state is InsightScreenLoaded) {
+  Widget _buildContent(BuildContext context, ChartScreenState state) {
+    if (state is ChartScreenLoaded) {
       return _buildCharts(context);
-    } else if (state is InsightScreenLoading) {
+    } else if (state is ChartScreenLoading) {
       return const LoadingIndicator();
     } else {
       return Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Não foi possível carregar seus insights'),
+            const Text('Erro ao carregar gráficos'),
             const SizedBox(width: 5),
             Icon(Icons.sentiment_dissatisfied),
           ],
@@ -54,7 +51,6 @@ class ChartScreen extends StatelessWidget {
   }
 
   Widget _buildCharts(BuildContext context) {
-    const verticalSpacing = SizedBox(height: 15);
     final annualSalesBloc = BlocProvider.of<AnnualSalesBloc>(context);
     final customerSalesBloc = BlocProvider.of<CustomerSalesBloc>(context);
     final monthlySalesBloc = BlocProvider.of<MonthlySalesBloc>(context);
@@ -68,44 +64,71 @@ class ChartScreen extends StatelessWidget {
     final homeScreenBloc = BlocProvider.of<HomeScreenBloc>(context);
     final onStarOrUnstar = () => homeScreenBloc.add(const LoadHomeScreen());
 
-    return ListView(
-      children: [
-        ChartContainer(
-          title: 'Faturamento Anual',
-          bloc: annualSalesContainerBloc,
-          chart: AnnualSalesChart(
-            bloc: annualSalesBloc,
+    const chartVerticalSpacing = SizedBox(height: 20);
+    const contextVerticalSpacing = SizedBox(height: 30);
+
+    return Padding(
+      padding: const EdgeInsets.only(
+        left: 12.0,
+        right: 12.0,
+        top: 20.0,
+        bottom: 4.0,
+      ),
+      child: ListView(
+        children: [
+          _buildTitle('Periódicos'),
+          chartVerticalSpacing,
+          ChartContainer(
+            title: 'Faturamento Anual',
+            bloc: annualSalesContainerBloc,
+            chart: AnnualSalesChart(
+              bloc: annualSalesBloc,
+            ),
+            onStarOrUnstar: onStarOrUnstar,
           ),
-          onStarOrUnstar: onStarOrUnstar,
-        ),
-        verticalSpacing,
-        ChartContainer(
-          title: 'Faturamento por Cliente',
-          bloc: customerSalesContainerBloc,
-          chart: CustomerSalesChart(
-            bloc: customerSalesBloc,
+          chartVerticalSpacing,
+          ChartContainer(
+            title: 'Faturamento Mensal',
+            bloc: monthlySalesContainerBloc,
+            chart: MonthlySalesChart(
+              bloc: monthlySalesBloc,
+            ),
+            onStarOrUnstar: onStarOrUnstar,
           ),
-          onStarOrUnstar: onStarOrUnstar,
-        ),
-        verticalSpacing,
-        ChartContainer(
-          title: 'Faturamento Mensal',
-          bloc: monthlySalesContainerBloc,
-          chart: MonthlySalesChart(
-            bloc: monthlySalesBloc,
+          contextVerticalSpacing,
+          _buildTitle('Clientes'),
+          chartVerticalSpacing,
+          ChartContainer(
+            title: 'Faturamento por Cliente',
+            bloc: customerSalesContainerBloc,
+            chart: CustomerSalesChart(
+              bloc: customerSalesBloc,
+            ),
+            onStarOrUnstar: onStarOrUnstar,
           ),
-          onStarOrUnstar: onStarOrUnstar,
-        ),
-        verticalSpacing,
-        ChartContainer(
-          title: 'Faturamento por Cidade',
-          bloc: citySalesContainerBloc,
-          chart: CitySalesChart(
-            bloc: citySalesBloc,
+          contextVerticalSpacing,
+          _buildTitle('Geográficos'),
+          chartVerticalSpacing,
+          ChartContainer(
+            title: 'Faturamento por Cidade',
+            bloc: citySalesContainerBloc,
+            chart: CitySalesChart(
+              bloc: citySalesBloc,
+            ),
+            onStarOrUnstar: onStarOrUnstar,
           ),
-          onStarOrUnstar: onStarOrUnstar,
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTitle(String label) {
+    return Text(
+      label,
+      style: TextStyle(
+        fontSize: 20,
+        color: Colors.black54,
+      ),
     );
   }
 }

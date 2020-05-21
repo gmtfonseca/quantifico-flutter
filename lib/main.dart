@@ -14,8 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'bloc/chart/special/barrel.dart';
 import 'bloc/chart_container/chart_container_bloc.dart';
-import 'bloc/insight_screen/insight_screen_bloc.dart';
-import 'bloc/insight_screen/insight_screen_event.dart';
+import 'bloc/chart_screen/barrel.dart';
 import 'bloc/nf_screen/barrel.dart';
 import 'bloc/tab/tab.dart';
 import 'data/repository/chart_container_repository.dart';
@@ -88,15 +87,15 @@ class Quantifico extends StatelessWidget {
                   chartContainerRepository: chartContainerRepository,
                 )..add(const LoadHomeScreen()),
               ),
-              BlocProvider<InsightScreenBloc>(
-                create: (context) => InsightScreenBloc(
+              BlocProvider<ChartScreenBloc>(
+                create: (context) => ChartScreenBloc(
                   chartBlocs: [
                     BlocProvider.of<AnnualSalesBloc>(context),
                     BlocProvider.of<CustomerSalesBloc>(context),
                     BlocProvider.of<CitySalesBloc>(context),
                     BlocProvider.of<MonthlySalesBloc>(context)
                   ],
-                )..add(const LoadInsightScreen()),
+                )..add(const LoadChartScreen()),
               ),
               BlocProvider<NfScreenBloc>(
                 create: (context) => NfScreenBloc(nfRepository: nfRepository)..add(const LoadNfScreen()),

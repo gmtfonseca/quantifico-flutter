@@ -1,22 +1,22 @@
 import 'package:equatable/equatable.dart';
 import 'package:quantifico/bloc/chart/special/barrel.dart';
 
-abstract class InsightScreenState extends Equatable {
-  const InsightScreenState();
+abstract class ChartScreenState extends Equatable {
+  const ChartScreenState();
 
   @override
   List<Object> get props => [];
 }
 
-class InsightScreenLoading extends InsightScreenState {}
+class ChartScreenLoading extends ChartScreenState {}
 
-class InsightScreenLoaded extends InsightScreenState {
+class ChartScreenLoaded extends ChartScreenState {
   final AnnualSalesBloc annualSalesBloc;
   final CustomerSalesBloc customerSalesBloc;
   final CitySalesBloc citySalesBloc;
   final MonthlySalesBloc monthlySalesBloc;
 
-  const InsightScreenLoaded({
+  const ChartScreenLoaded({
     this.annualSalesBloc,
     this.customerSalesBloc,
     this.citySalesBloc,
@@ -27,4 +27,4 @@ class InsightScreenLoaded extends InsightScreenState {
   List<Object> get props => [annualSalesBloc, customerSalesBloc];
 }
 
-class InsightScreenNotLoaded extends InsightScreenState {}
+class ChartScreenNotLoaded extends ChartScreenState {}
