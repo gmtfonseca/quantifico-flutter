@@ -28,7 +28,7 @@ class TabSelector extends StatelessWidget {
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.assessment),
-        title: const Text('Insights'),
+        title: const Text('Gráficos'),
       ),
       BottomNavigationBarItem(
         icon: Icon(Icons.assignment),

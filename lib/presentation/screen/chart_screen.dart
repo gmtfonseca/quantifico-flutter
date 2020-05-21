@@ -10,8 +10,8 @@ import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 import 'package:quantifico/style.dart';
 
-class InsightScreen extends StatelessWidget {
-  const InsightScreen();
+class ChartScreen extends StatelessWidget {
+  const ChartScreen();
 
   @override
   Widget build(BuildContext context) {
