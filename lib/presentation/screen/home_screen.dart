@@ -9,6 +9,7 @@ import 'package:quantifico/presentation/shared/chart/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 import 'package:quantifico/style.dart';
+import 'package:quantifico/util/number_util.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen();
@@ -52,37 +53,46 @@ class HomeScreen extends StatelessWidget {
       fontSize: 18,
       color: Colors.black54,
     );
+    const verticalSpacing = SizedBox(height: 15);
+    const contextVerticalSpacing = SizedBox(height: 25);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: ListView(
-        children: [
-          const SizedBox(height: 15),
-          const Text(
-            'Resumo do mês',
-            style: titleStyle,
-          ),
-          const SizedBox(height: 15),
-          _buildInsights(),
-          const SizedBox(height: 25),
-          const Text(
-            'Gráficos em destaque',
-            style: titleStyle,
-          ),
-          const SizedBox(height: 15),
-          _buildCharts(context, state),
-          const SizedBox(height: 15),
-        ],
+      child: RefreshIndicator(
+        onRefresh: () async {
+          final bloc = BlocProvider.of<HomeScreenBloc>(context);
+          bloc.add(const RefreshHomeScreen());
+        },
+        child: ListView(
+          children: [
+            verticalSpacing,
+            const Text(
+              'Resumo do mês',
+              style: titleStyle,
+            ),
+            verticalSpacing,
+            _buildInsights(state),
+            contextVerticalSpacing,
+            const Text(
+              'Gráficos em destaque',
+              style: titleStyle,
+            ),
+            verticalSpacing,
+            _buildCharts(context, state),
+            verticalSpacing,
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildInsights() {
+  Widget _buildInsights(HomeScreenLoaded state) {
     return Row(
       children: [
         Expanded(
           child: _buildInsightCard(
             'Total Faturado',
-            'R\$ 3.525,76',
+            formatCurrency(state.stats.totalSales),
             Colors.deepPurple,
           ),
         ),
@@ -90,7 +100,7 @@ class HomeScreen extends StatelessWidget {
         Expanded(
           child: _buildInsightCard(
             'N° Notas Fiscais',
-            '76',
+            state.stats.nfCount.toString(),
             Colors.deepOrange,
           ),
         ),

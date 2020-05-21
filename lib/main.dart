@@ -78,13 +78,14 @@ class Quantifico extends StatelessWidget {
             providers: [
               BlocProvider<HomeScreenBloc>(
                 create: (context) => HomeScreenBloc(
+                  chartContainerRepository: chartContainerRepository,
+                  nfRepository: nfRepository,
                   chartBlocs: {
                     'AnnualSalesChart': BlocProvider.of<AnnualSalesBloc>(context),
                     'CustomerSalesChart': BlocProvider.of<CustomerSalesBloc>(context),
                     'CitySalesChart': BlocProvider.of<CitySalesBloc>(context),
                     'MonthlySalesChart': BlocProvider.of<MonthlySalesBloc>(context),
                   },
-                  chartContainerRepository: chartContainerRepository,
                 )..add(const LoadHomeScreen()),
               ),
               BlocProvider<ChartScreenBloc>(
