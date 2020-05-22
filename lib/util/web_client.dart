@@ -6,8 +6,7 @@ const String _token =
     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTkwMTUwMTQ2LCJleHAiOjE1OTAyMzY1NDZ9.tG5U0lDUrjO1WZhUX7p1xuQJJLx_gLpV7cLqGweTRDA';
 
 const String _baseUrl = '10.0.2.2:3000';
-//lt -h "http://serverless.social" -p 3000
-// const String _baseUrl = '15f97d54.ngrok.io';
+// const String _baseUrl = '5fd8ee9c.ngrok.io';
 
 class UnauthorizedException implements Exception {}
 

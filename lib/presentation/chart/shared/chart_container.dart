@@ -104,21 +104,32 @@ class ChartContainer extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildOptions(BuildContext context, ChartContainerState state) {
+  List<Widget> _buildOptions(
+    BuildContext context,
+    ChartContainerState state,
+  ) {
+    final iconSize = SizeConfig.safeBlockHorizontal * 4.5;
     final options = [
-      _buildStarButton(state),
-      _buildRefreshButton(state),
-      _buildFilterButton(context, state),
-      _buildFullScreenButton(context, state),
+      _buildStarButton(state, iconSize),
+      _buildRefreshButton(state, iconSize),
+      _buildFilterButton(context, state, iconSize),
+      _buildFullScreenButton(context, state, iconSize),
     ];
 
     return options;
   }
 
-  Widget _buildStarButton(ChartContainerState state) {
+  Widget _buildStarButton(
+    ChartContainerState state,
+    double iconSize,
+  ) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-        icon: Icon(state.isStarred ? Icons.star : Icons.star_border, color: Colors.white),
+        icon: Icon(
+          state.isStarred ? Icons.star : Icons.star_border,
+          color: Colors.white,
+          size: iconSize,
+        ),
         onPressed: () {
           if (state.isStarred) {
             bloc.add(const UnstarChart());
@@ -132,31 +143,53 @@ class ChartContainer extends StatelessWidget {
       );
     } else {
       return IconButton(
-        icon: Icon(Icons.star_border),
+        icon: Icon(
+          Icons.star_border,
+          size: iconSize,
+        ),
         onPressed: null,
       );
     }
   }
 
-  Widget _buildRefreshButton(ChartContainerState state) {
+  Widget _buildRefreshButton(
+    ChartContainerState state,
+    double iconSize,
+  ) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-          icon: Icon(Icons.refresh, color: Colors.white),
+          icon: Icon(
+            Icons.refresh,
+            color: Colors.white,
+            size: iconSize,
+          ),
           onPressed: () {
             bloc.add(const RefreshChart());
           });
     } else {
       return IconButton(
-        icon: Icon(Icons.refresh, color: Colors.black45),
+        icon: Icon(
+          Icons.refresh,
+          color: Colors.black45,
+          size: iconSize,
+        ),
         onPressed: null,
       );
     }
   }
 
-  Widget _buildFilterButton(BuildContext context, ChartContainerState state) {
+  Widget _buildFilterButton(
+    BuildContext context,
+    ChartContainerState state,
+    double iconSize,
+  ) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-          icon: Icon(Icons.filter_list, color: Colors.white),
+          icon: Icon(
+            Icons.filter_list,
+            color: Colors.white,
+            size: iconSize,
+          ),
           onPressed: () {
             showDialog<Widget>(
               context: context,
@@ -165,21 +198,35 @@ class ChartContainer extends StatelessWidget {
           });
     } else {
       return IconButton(
-        icon: Icon(Icons.filter_list),
+        icon: Icon(
+          Icons.filter_list,
+          size: iconSize,
+        ),
         onPressed: null,
       );
     }
   }
 
-  Widget _buildFullScreenButton(BuildContext context, ChartContainerState state) {
+  Widget _buildFullScreenButton(
+    BuildContext context,
+    ChartContainerState state,
+    double iconSize,
+  ) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-        icon: Icon(Icons.fullscreen, color: Colors.white),
+        icon: Icon(
+          Icons.fullscreen,
+          color: Colors.white,
+          size: iconSize,
+        ),
         onPressed: () => _openFullScreenMode(context, state.color),
       );
     } else {
       return IconButton(
-        icon: Icon(Icons.fullscreen),
+        icon: Icon(
+          Icons.fullscreen,
+          size: iconSize,
+        ),
         onPressed: null,
       );
     }
