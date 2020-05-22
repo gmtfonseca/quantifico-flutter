@@ -6,7 +6,7 @@ import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:intl/intl.dart';
 import 'package:quantifico/data/model/chart/filter/annual_sales_filter.dart';
 import 'package:quantifico/data/model/chart/record/annual_sales_record.dart';
-import 'package:quantifico/presentation/shared/chart/chart.dart';
+import 'package:quantifico/presentation/chart/shared/chart.dart';
 import 'package:quantifico/presentation/shared/filter_dialog.dart';
 
 class AnnualSalesChart extends Chart {

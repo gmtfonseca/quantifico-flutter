@@ -5,8 +5,8 @@ import 'package:quantifico/bloc/chart_container/chart_container_bloc.dart';
 import 'package:quantifico/bloc/home_screen/home_screen_bloc.dart';
 import 'package:quantifico/bloc/home_screen/home_screen_event.dart';
 import 'package:quantifico/bloc/chart_screen/barrel.dart';
-import 'package:quantifico/presentation/shared/chart/barrel.dart';
-import 'package:quantifico/presentation/shared/chart/chart_container.dart';
+import 'package:quantifico/presentation/chart/barrel.dart';
+import 'package:quantifico/presentation/chart/shared/chart_container.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 import 'package:quantifico/style.dart';
 

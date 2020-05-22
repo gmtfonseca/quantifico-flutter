@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/data/model/chart/filter/monthly_sales_filter.dart';
-import 'package:quantifico/presentation/shared/chart/chart.dart';
+import 'package:quantifico/presentation/chart/shared/chart.dart';
 import 'package:quantifico/presentation/shared/filter_dialog.dart';
 
 class MonthlySalesChart extends Chart {

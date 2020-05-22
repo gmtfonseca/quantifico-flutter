@@ -18,7 +18,7 @@ import 'bloc/chart_screen/barrel.dart';
 import 'bloc/nf_screen/barrel.dart';
 import 'bloc/tab/tab.dart';
 import 'data/repository/chart_container_repository.dart';
-import 'presentation/shared/chart/barrel.dart';
+import 'presentation/chart/barrel.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

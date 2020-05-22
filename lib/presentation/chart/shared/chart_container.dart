@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart_container/barrel.dart';
 import 'package:quantifico/config.dart';
-import 'package:quantifico/presentation/shared/chart/chart.dart';
-import 'package:quantifico/presentation/shared/chart/full_screen_chart.dart';
+import 'package:quantifico/presentation/chart/shared/chart.dart';
+import 'package:quantifico/presentation/chart/shared/full_screen_chart.dart';
 
 class ChartContainer extends StatelessWidget {
   final String title;

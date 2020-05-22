@@ -5,7 +5,7 @@ import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/filter/city_sales_filter.dart';
 import 'package:quantifico/data/model/chart/record/city_sales_record.dart';
-import 'package:quantifico/presentation/shared/chart/chart.dart';
+import 'package:quantifico/presentation/chart/shared/chart.dart';
 import 'package:intl/intl.dart';
 import 'package:quantifico/presentation/shared/filter_dialog.dart';
 import 'package:quantifico/presentation/shared/text_date_picker.dart';
