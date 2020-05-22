@@ -57,7 +57,6 @@ class _TextDatePickerState extends State<TextDatePicker> {
       controller: widget.controller,
       decoration: InputDecoration(
         labelText: widget.labelText,
-        // filled: true,
         icon: Icon(Icons.date_range),
         errorText: widget.formFieldState?.errorText,
       ),
