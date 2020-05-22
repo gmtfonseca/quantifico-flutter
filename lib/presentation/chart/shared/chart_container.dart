@@ -46,7 +46,7 @@ class ChartContainer extends StatelessWidget {
             _buildHeader(context),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.all(16.0),
                 child: chart,
               ),
             )
@@ -233,17 +233,26 @@ class ChartContainer extends StatelessWidget {
   }
 
   void _openFullScreenMode(BuildContext context, Color appBarColor) {
-    Navigator.push(
-      context,
-      MaterialPageRoute<FullScreenChart>(
-        builder: (context) {
-          return FullScreenChart(
-            title: title,
-            appBarColor: appBarColor,
-            child: chart,
-          );
-        },
+    final fullScreenRoute = PageRouteBuilder<FullScreenChart>(
+      pageBuilder: (context, animation, secondaryAnimation) => FullScreenChart(
+        title: title,
+        appBarColor: appBarColor,
+        child: chart,
       ),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      },
     );
+
+    Navigator.of(context).push(fullScreenRoute);
   }
 }

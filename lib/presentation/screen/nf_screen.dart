@@ -127,7 +127,16 @@ class NfScreen extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            color: nfScreenRecord.color,
+            decoration: BoxDecoration(
+              color: nfScreenRecord.color,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 5,
+                ),
+              ],
+            ),
             width: 60,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
