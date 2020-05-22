@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:quantifico/data/model/chart/record/barrel.dart';
+import 'package:quantifico/data/model/chart/record/product_sales_record.dart';
 import 'package:quantifico/data/provider/chart_web_provider.dart';
 
 class ChartRepository {
@@ -49,5 +50,19 @@ class ChartRepository {
 
   Future<List<MonthlySalesRecord>> getMonthlySalesData({List<int> years}) async {
     return await chartWebProvider.fetchMonthlySalesData(years: years);
+  }
+
+  Future<List<ProductSalesRecord>> getProductSalesData({
+    DateTime startDate,
+    DateTime endDate,
+    int limit,
+    int sort,
+  }) async {
+    return await chartWebProvider.fetchProductSalesData(
+      startDate: startDate,
+      endDate: endDate,
+      limit: limit,
+      sort: sort,
+    );
   }
 }

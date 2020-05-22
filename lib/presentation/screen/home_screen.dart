@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/special/barrel.dart';
+import 'package:quantifico/bloc/chart/special/product_sales_bloc.dart';
 import 'package:quantifico/bloc/chart_container/barrel.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
 import 'package:quantifico/config.dart';
 
 import 'package:quantifico/presentation/chart/barrel.dart';
+import 'package:quantifico/presentation/chart/product_sales_chart.dart';
 import 'package:quantifico/presentation/chart/shared/chart_container.dart';
 import 'package:quantifico/presentation/shared/error_indicator.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
@@ -230,6 +232,17 @@ class HomeScreen extends StatelessWidget {
           bloc: customerSalesContainerBloc,
           chart: CustomerSalesChart(
             bloc: customerSalesBloc,
+          ),
+          onStarOrUnstar: onStarOrUnstar,
+        );
+      case 'ProductSalesChart':
+        final productSalesContainerBloc = BlocProvider.of<ChartContainerBloc<ProductSalesChart>>(context);
+        final productSalesBloc = BlocProvider.of<ProductSalesBloc>(context);
+        return ChartContainer(
+          title: 'Faturamento por Produto',
+          bloc: productSalesContainerBloc,
+          chart: ProductSalesChart(
+            bloc: productSalesBloc,
           ),
           onStarOrUnstar: onStarOrUnstar,
         );

@@ -14,5 +14,10 @@ class CustomerSalesFilter extends Equatable {
   });
 
   @override
-  List<Object> get props => [limit];
+  List<Object> get props => [
+        startDate,
+        endDate,
+        limit,
+        sort,
+      ];
 }

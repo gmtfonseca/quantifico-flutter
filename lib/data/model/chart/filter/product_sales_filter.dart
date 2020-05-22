@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-class CitySalesFilter extends Equatable {
+class ProductSalesFilter extends Equatable {
   final DateTime startDate;
   final DateTime endDate;
   final int limit;
   final int sort;
 
-  const CitySalesFilter({
+  const ProductSalesFilter({
     this.startDate,
     this.endDate,
     this.limit,

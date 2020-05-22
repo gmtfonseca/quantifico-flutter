@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/special/annual_sales_bloc.dart';
+import 'package:quantifico/bloc/chart/special/product_sales_bloc.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
 
 import 'package:quantifico/bloc/simple_bloc_delegate.dart';
@@ -8,6 +9,7 @@ import 'package:quantifico/data/provider/chart_web_provider.dart';
 import 'package:quantifico/data/provider/nf_web_provider.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:quantifico/data/repository/nf_repository.dart';
+import 'package:quantifico/presentation/chart/product_sales_chart.dart';
 import 'package:quantifico/presentation/screen/main_screen.dart';
 import 'package:quantifico/util/web_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -71,7 +73,10 @@ class Quantifico extends StatelessWidget {
           ),
           BlocProvider<MonthlySalesBloc>(
             create: (context) => MonthlySalesBloc(chartRepository: chartRepository),
-          )
+          ),
+          BlocProvider<ProductSalesBloc>(
+            create: (context) => ProductSalesBloc(chartRepository: chartRepository),
+          ),
         ],
         child: Builder(builder: (context) {
           return MultiBlocProvider(
@@ -85,6 +90,7 @@ class Quantifico extends StatelessWidget {
                     'CustomerSalesChart': BlocProvider.of<CustomerSalesBloc>(context),
                     'CitySalesChart': BlocProvider.of<CitySalesBloc>(context),
                     'MonthlySalesChart': BlocProvider.of<MonthlySalesBloc>(context),
+                    'ProductSalesChart': BlocProvider.of<ProductSalesBloc>(context),
                   },
                 )..add(const LoadHomeScreen()),
               ),
@@ -94,7 +100,8 @@ class Quantifico extends StatelessWidget {
                     BlocProvider.of<AnnualSalesBloc>(context),
                     BlocProvider.of<CustomerSalesBloc>(context),
                     BlocProvider.of<CitySalesBloc>(context),
-                    BlocProvider.of<MonthlySalesBloc>(context)
+                    BlocProvider.of<MonthlySalesBloc>(context),
+                    BlocProvider.of<ProductSalesBloc>(context),
                   ],
                 )..add(const LoadChartScreen()),
               ),
@@ -109,6 +116,11 @@ class Quantifico extends StatelessWidget {
               BlocProvider<ChartContainerBloc<CustomerSalesChart>>(
                 create: (context) => ChartContainerBloc<CustomerSalesChart>(
                     chartBloc: BlocProvider.of<CustomerSalesBloc>(context),
+                    chartContainerRepository: chartContainerRepository),
+              ),
+              BlocProvider<ChartContainerBloc<ProductSalesChart>>(
+                create: (context) => ChartContainerBloc<ProductSalesChart>(
+                    chartBloc: BlocProvider.of<ProductSalesBloc>(context),
                     chartContainerRepository: chartContainerRepository),
               ),
               BlocProvider<ChartContainerBloc<CitySalesChart>>(

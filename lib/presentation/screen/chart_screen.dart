@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/special/barrel.dart';
+import 'package:quantifico/bloc/chart/special/product_sales_bloc.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_bloc.dart';
 import 'package:quantifico/bloc/home_screen/home_screen_bloc.dart';
 import 'package:quantifico/bloc/home_screen/home_screen_event.dart';
 import 'package:quantifico/bloc/chart_screen/barrel.dart';
 import 'package:quantifico/presentation/chart/barrel.dart';
+import 'package:quantifico/presentation/chart/product_sales_chart.dart';
 import 'package:quantifico/presentation/chart/shared/chart_container.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 import 'package:quantifico/style.dart';
@@ -53,11 +55,13 @@ class ChartScreen extends StatelessWidget {
   Widget _buildCharts(BuildContext context) {
     final annualSalesBloc = BlocProvider.of<AnnualSalesBloc>(context);
     final customerSalesBloc = BlocProvider.of<CustomerSalesBloc>(context);
+    final productSalesBloc = BlocProvider.of<ProductSalesBloc>(context);
     final monthlySalesBloc = BlocProvider.of<MonthlySalesBloc>(context);
     final citySalesBloc = BlocProvider.of<CitySalesBloc>(context);
 
     final annualSalesContainerBloc = BlocProvider.of<ChartContainerBloc<AnnualSalesChart>>(context);
     final customerSalesContainerBloc = BlocProvider.of<ChartContainerBloc<CustomerSalesChart>>(context);
+    final productSalesContainerBloc = BlocProvider.of<ChartContainerBloc<ProductSalesChart>>(context);
     final monthlySalesContainerBloc = BlocProvider.of<ChartContainerBloc<MonthlySalesChart>>(context);
     final citySalesContainerBloc = BlocProvider.of<ChartContainerBloc<CitySalesChart>>(context);
 
@@ -72,6 +76,26 @@ class ChartScreen extends StatelessWidget {
       child: ListView(
         children: [
           chartVerticalSpacing,
+          _buildTitle('Geral'),
+          chartVerticalSpacing,
+          ChartContainer(
+            title: 'Faturamento por Cliente',
+            bloc: customerSalesContainerBloc,
+            chart: CustomerSalesChart(
+              bloc: customerSalesBloc,
+            ),
+            onStarOrUnstar: onStarOrUnstar,
+          ),
+          chartVerticalSpacing,
+          ChartContainer(
+            title: 'Faturamento por Produto',
+            bloc: productSalesContainerBloc,
+            chart: ProductSalesChart(
+              bloc: productSalesBloc,
+            ),
+            onStarOrUnstar: onStarOrUnstar,
+          ),
+          contextVerticalSpacing,
           _buildTitle('Periódicos'),
           chartVerticalSpacing,
           ChartContainer(
@@ -88,17 +112,6 @@ class ChartScreen extends StatelessWidget {
             bloc: monthlySalesContainerBloc,
             chart: MonthlySalesChart(
               bloc: monthlySalesBloc,
-            ),
-            onStarOrUnstar: onStarOrUnstar,
-          ),
-          contextVerticalSpacing,
-          _buildTitle('Clientes'),
-          chartVerticalSpacing,
-          ChartContainer(
-            title: 'Faturamento por Cliente',
-            bloc: customerSalesContainerBloc,
-            chart: CustomerSalesChart(
-              bloc: customerSalesBloc,
             ),
             onStarOrUnstar: onStarOrUnstar,
           ),

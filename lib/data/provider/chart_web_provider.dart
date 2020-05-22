@@ -1,4 +1,5 @@
 import 'package:quantifico/data/model/chart/record/barrel.dart';
+import 'package:quantifico/data/model/chart/record/product_sales_record.dart';
 import 'package:quantifico/util/web_client.dart';
 import 'package:meta/meta.dart';
 
@@ -103,6 +104,38 @@ class ChartWebProvider {
       params: params.isNotEmpty ? params : null,
     ) as List<dynamic>;
     final data = body?.map((dynamic record) => MonthlySalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
+    return data;
+  }
+
+  Future<List<ProductSalesRecord>> fetchProductSalesData({
+    DateTime startDate,
+    DateTime endDate,
+    int limit,
+    int sort,
+  }) async {
+    final Map<String, String> params = Map();
+
+    if (startDate != null) {
+      params['datainicial'] = startDate.toString();
+    }
+
+    if (endDate != null) {
+      params['datafinal'] = endDate.toString();
+    }
+
+    if (limit != null) {
+      params['limit'] = limit.toString();
+    }
+
+    if (sort != null) {
+      params['sort'] = sort.toString();
+    }
+
+    final List<dynamic> body = await webClient.fetch(
+      'nfs/plot/faturamento-produto',
+      params: params.isNotEmpty ? params : null,
+    ) as List<dynamic>;
+    final data = body?.map((dynamic record) => ProductSalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
 }
