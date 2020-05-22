@@ -108,7 +108,10 @@ class NfScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return NfDetailsScreen(nf: nfScreenRecord.nf);
+                    return NfDetailsScreen(
+                      nf: nfScreenRecord.nf,
+                      headerBackgroundColor: nfScreenRecord.color,
+                    );
                   },
                 ),
               );
@@ -141,11 +144,17 @@ class NfScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  nfScreenRecord.nf.number.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
+                Hero(
+                  tag: nfScreenRecord.nf.number,
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Text(
+                      nfScreenRecord.nf.number.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                      ),
+                    ),
                   ),
                 )
               ],

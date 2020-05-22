@@ -9,8 +9,12 @@ import 'package:quantifico/util/string_util.dart';
 
 class NfDetailsScreen extends StatefulWidget {
   final Nf nf;
+  final Color headerBackgroundColor;
 
-  const NfDetailsScreen({this.nf});
+  const NfDetailsScreen({
+    this.nf,
+    this.headerBackgroundColor,
+  });
 
   @override
   _NfDetailsScreenState createState() => _NfDetailsScreenState();
@@ -18,8 +22,8 @@ class NfDetailsScreen extends StatefulWidget {
 
 class _NfDetailsScreenState extends State<NfDetailsScreen> with SingleTickerProviderStateMixin {
   final List<Tab> tabs = const [
-    Tab(text: 'Itens', icon: Icon(Icons.shopping_basket)),
-    Tab(text: 'Detalhes', icon: Icon(Icons.assignment)),
+    Tab(text: 'Itens'),
+    Tab(text: 'Detalhes'),
   ];
   TabController _tabController;
 
@@ -43,9 +47,12 @@ class _NfDetailsScreenState extends State<NfDetailsScreen> with SingleTickerProv
     SizeConfig().init(context);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: widget.headerBackgroundColor ?? Theme.of(context).primaryColor,
         bottom: NfDetailsScreenHeader(
+          backgroundColor: widget.headerBackgroundColor ?? Theme.of(context).primaryColor,
           nf: widget.nf,
           tabs: TabBar(
+            indicatorColor: Colors.white,
             controller: _tabController,
             tabs: tabs,
           ),
@@ -191,10 +198,12 @@ class _NfDetailsScreenState extends State<NfDetailsScreen> with SingleTickerProv
 class NfDetailsScreenHeader extends StatelessWidget implements PreferredSizeWidget {
   final PreferredSizeWidget tabs;
   final Nf nf;
+  final Color backgroundColor;
 
   const NfDetailsScreenHeader({
     @required this.tabs,
     @required this.nf,
+    @required this.backgroundColor,
   });
 
   @override
@@ -206,7 +215,7 @@ class NfDetailsScreenHeader extends StatelessWidget implements PreferredSizeWidg
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Container(
-      color: Theme.of(context).primaryColor,
+      color: backgroundColor,
       child: Column(
         children: [
           _buildNfInfo(),
@@ -234,9 +243,15 @@ class NfDetailsScreenHeader extends StatelessWidget implements PreferredSizeWidg
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            nf.number.toString(),
-            style: primaryInfoTextStyle,
+          Hero(
+            tag: nf.number,
+            child: Material(
+              color: Colors.transparent,
+              child: Text(
+                nf.number.toString(),
+                style: primaryInfoTextStyle,
+              ),
+            ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

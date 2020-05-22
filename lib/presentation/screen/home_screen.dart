@@ -93,7 +93,7 @@ class HomeScreen extends StatelessWidget {
           child: _buildInsightCard(
             'Total Faturado',
             formatCurrency(state.stats.totalSales),
-            Colors.deepPurple,
+            Colors.redAccent,
           ),
         ),
         const SizedBox(width: 20),
@@ -101,7 +101,7 @@ class HomeScreen extends StatelessWidget {
           child: _buildInsightCard(
             'N° Notas Fiscais',
             state.stats.nfCount.toString(),
-            Colors.deepOrange,
+            Colors.blueAccent,
           ),
         ),
       ],
