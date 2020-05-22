@@ -43,6 +43,8 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
       yield* _mapStarToState();
     } else if (event is UnstarChart) {
       yield* _mapUnstarToState();
+    } else if (event is RefreshChart) {
+      yield* _mapRefreshChartToState();
     }
   }
 
@@ -73,6 +75,10 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
     } catch (e) {
       yield ChartContainerNotLoaded();
     }
+  }
+
+  Stream<ChartContainerState> _mapRefreshChartToState() async* {
+    chartBloc.add(const RefreshSeries());
   }
 
   @override

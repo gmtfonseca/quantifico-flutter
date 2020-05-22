@@ -5,6 +5,7 @@ import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/nf/nf_screen_filter.dart';
 import 'package:quantifico/data/model/nf/nf_screen_record.dart';
 import 'package:quantifico/presentation/screen/nf_details_screen.dart';
+import 'package:quantifico/presentation/shared/error_indicator.dart';
 import 'package:quantifico/presentation/shared/filter_dialog.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 import 'package:quantifico/presentation/shared/text_date_picker.dart';
@@ -42,15 +43,12 @@ class NfScreen extends StatelessWidget {
     } else if (state is NfScreenLoading) {
       return const LoadingIndicator();
     } else {
-      return Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Não foi possível carregar suas Notas Fiscais'),
-            const SizedBox(width: 5),
-            Icon(Icons.sentiment_dissatisfied),
-          ],
-        ),
+      return ErrorIndicator(
+        text: 'Não foi possível carregar suas Notas Fiscais',
+        onRetry: () {
+          final bloc = BlocProvider.of<NfScreenBloc>(context);
+          bloc.add(const LoadNfScreen());
+        },
       );
     }
   }

@@ -7,6 +7,7 @@ import 'package:quantifico/config.dart';
 
 import 'package:quantifico/presentation/shared/chart/barrel.dart';
 import 'package:quantifico/presentation/shared/chart/chart_container.dart';
+import 'package:quantifico/presentation/shared/error_indicator.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 import 'package:quantifico/style.dart';
 import 'package:quantifico/util/number_util.dart';
@@ -31,15 +32,12 @@ class HomeScreen extends StatelessWidget {
             } else if (state is HomeScreenLoading) {
               return const LoadingIndicator();
             } else {
-              return Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Não foi possível carregar seu home'),
-                    const SizedBox(width: 5),
-                    Icon(Icons.sentiment_dissatisfied),
-                  ],
-                ),
+              return ErrorIndicator(
+                text: 'Não foi possível carregar seu home',
+                onRetry: () {
+                  final bloc = BlocProvider.of<HomeScreenBloc>(context);
+                  bloc.add(const LoadHomeScreen());
+                },
               );
             }
           },

@@ -3,6 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:quantifico/data/model/nf/customer.dart';
 import 'package:quantifico/data/model/nf/nf.dart';
 import 'package:quantifico/data/model/nf/nf_item.dart';
+import 'package:quantifico/data/model/nf/nf_stats.dart';
 import 'package:quantifico/data/model/nf/product.dart';
 import 'package:quantifico/data/provider/nf_web_provider.dart';
 import 'package:quantifico/util/web_client.dart';
@@ -177,6 +178,19 @@ void main() {
         nf1,
         nf2,
       ]);
+    });
+
+    test('should fetch monthly sales properly', () async {
+      when(webClient.fetch('nfs/stats')).thenAnswer(
+        (_) => Future<dynamic>.value(
+          {'totalNf': '100', 'totalFaturado': 3000.50},
+        ),
+      );
+      final data = await nfWebProvider.fetchStats();
+      expect(
+        data,
+        const NfStats(nfCount: 100, totalSales: 3000.50),
+      );
     });
   });
 }

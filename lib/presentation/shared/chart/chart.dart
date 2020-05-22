@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
+import 'package:quantifico/bloc/chart/chart_event.dart';
 import 'package:quantifico/bloc/chart/chart_state.dart';
+import 'package:quantifico/presentation/shared/error_indicator.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 
 abstract class Chart extends StatelessWidget {
@@ -24,21 +26,11 @@ abstract class Chart extends StatelessWidget {
         } else if (state is SeriesLoading) {
           return const LoadingIndicator();
         } else if (state is SeriesNotLoaded) {
-          return Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Não foi possível carregar gráfico',
-                  style: TextStyle(color: Colors.black45),
-                ),
-                const SizedBox(width: 5),
-                Icon(
-                  Icons.sentiment_dissatisfied,
-                  color: Colors.black45,
-                )
-              ],
-            ),
+          return ErrorIndicator(
+            text: 'Erro ao carregar gráfico',
+            onRetry: () {
+              bloc.add(const LoadSeries());
+            },
           );
         } else if (state is SeriesLoadedEmpty) {
           return Center(

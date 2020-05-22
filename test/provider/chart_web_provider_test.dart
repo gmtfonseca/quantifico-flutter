@@ -61,7 +61,7 @@ void main() {
       ]);
     });
 
-    test('should monthly sales properly', () async {
+    test('should fetch monthly sales properly', () async {
       when(webClient.fetch('nfs/plot/faturamento-mensal', params: anyNamed('params'))).thenAnswer(
         (_) => Future<dynamic>.value(
           [

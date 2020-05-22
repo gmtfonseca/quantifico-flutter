@@ -14,6 +14,13 @@ class LoadContainer extends ChartContainerEvent {
   String toString() => 'LoadContainer';
 }
 
+class RefreshChart extends ChartContainerEvent {
+  const RefreshChart();
+
+  @override
+  String toString() => 'RefreshChart';
+}
+
 class StarChart extends ChartContainerEvent {
   const StarChart();
 
