@@ -1,8 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-
-import 'package:quantifico/data/model/chart/chart.dart';
-
+import 'package:quantifico/data/model/chart/record/barrel.dart';
 import 'package:quantifico/data/provider/chart_web_provider.dart';
 import 'package:quantifico/util/web_client.dart';
 

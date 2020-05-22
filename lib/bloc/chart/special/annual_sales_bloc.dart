@@ -3,8 +3,8 @@ import 'package:meta/meta.dart';
 import 'package:intl/intl.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
-import 'package:quantifico/data/model/chart/annual_sales_filter.dart';
-import 'package:quantifico/data/model/chart/annual_sales_record.dart';
+import 'package:quantifico/data/model/chart/filter/annual_sales_filter.dart';
+import 'package:quantifico/data/model/chart/record/annual_sales_record.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 

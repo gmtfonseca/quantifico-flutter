@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
-import 'package:quantifico/data/model/chart/monthly_sales_filter.dart';
-import 'package:quantifico/data/model/chart/monthly_sales_record.dart';
+import 'package:quantifico/data/model/chart/filter/monthly_sales_filter.dart';
+import 'package:quantifico/data/model/chart/record/monthly_sales_record.dart';
 
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:charts_flutter/flutter.dart' as charts;

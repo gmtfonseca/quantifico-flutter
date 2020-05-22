@@ -1,13 +1,11 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/services.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
-
-import 'package:quantifico/data/model/chart/monthly_sales_filter.dart';
+import 'package:quantifico/data/model/chart/filter/monthly_sales_filter.dart';
 import 'package:quantifico/presentation/shared/chart/chart.dart';
-
-import 'package:intl/intl.dart';
 import 'package:quantifico/presentation/shared/filter_dialog.dart';
 
 class MonthlySalesChart extends Chart {

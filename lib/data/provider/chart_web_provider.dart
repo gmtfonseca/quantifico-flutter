@@ -1,4 +1,4 @@
-import 'package:quantifico/data/model/chart/chart.dart';
+import 'package:quantifico/data/model/chart/record/barrel.dart';
 import 'package:quantifico/util/web_client.dart';
 import 'package:meta/meta.dart';
 
