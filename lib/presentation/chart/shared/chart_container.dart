@@ -27,30 +27,36 @@ class ChartContainer extends StatelessWidget {
     final borderRadius = BorderRadius.circular(11);
     return Container(
       height: height,
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: borderRadius,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 2,
-          ),
-        ],
-      ),
-      child: Material(
-        borderRadius: borderRadius,
-        clipBehavior: Clip.hardEdge,
-        child: Column(
-          children: [
-            _buildHeader(context),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: chart,
+      color: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: borderRadius,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.3),
+                spreadRadius: 1,
+                blurRadius: 1,
               ),
-            )
-          ],
+            ],
+          ),
+          child: Material(
+            borderRadius: borderRadius,
+            clipBehavior: Clip.hardEdge,
+            child: Column(
+              children: [
+                _buildHeader(context),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: chart,
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -69,8 +75,8 @@ class ChartContainer extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 3,
-                blurRadius: 5,
+                spreadRadius: 1,
+                blurRadius: 1,
               ),
             ],
           ),

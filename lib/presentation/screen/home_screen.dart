@@ -49,15 +49,11 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildLoadedScreen(BuildContext context, HomeScreenLoaded state) {
-    const titleStyle = TextStyle(
-      fontSize: 18,
-      color: Colors.black54,
-    );
     const verticalSpacing = SizedBox(height: 15);
     const contextVerticalSpacing = SizedBox(height: 25);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: RefreshIndicator(
         onRefresh: () async {
           final bloc = BlocProvider.of<HomeScreenBloc>(context);
@@ -66,17 +62,11 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           children: [
             verticalSpacing,
-            const Text(
-              'Resumo do mês',
-              style: titleStyle,
-            ),
+            _buildContextTitle('Resumo do mês'),
             verticalSpacing,
             _buildInsights(state),
             contextVerticalSpacing,
-            const Text(
-              'Gráficos em destaque',
-              style: titleStyle,
-            ),
+            _buildContextTitle('Gráficos em destaque'),
             verticalSpacing,
             _buildCharts(context, state),
             verticalSpacing,
@@ -86,25 +76,43 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildContextTitle(String title) {
+    const titleStyle = TextStyle(
+      fontSize: 18,
+      color: Colors.black54,
+    );
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 4.0),
+      child: Text(
+        title,
+        style: titleStyle,
+      ),
+    );
+  }
+
   Widget _buildInsights(HomeScreenLoaded state) {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildInsightCard(
-            'Total Faturado',
-            formatCurrency(state.stats.totalSales),
-            Colors.redAccent,
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: _buildInsightCard(
+              'Total Faturado',
+              formatCurrency(state.stats.totalSales),
+              Colors.redAccent,
+            ),
           ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          child: _buildInsightCard(
-            'N° Notas Fiscais',
-            state.stats.nfCount.toString(),
-            Colors.blueAccent,
+          const SizedBox(width: 20),
+          Expanded(
+            child: _buildInsightCard(
+              'N° Notas Fiscais',
+              state.stats.nfCount.toString(),
+              Colors.blueAccent,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

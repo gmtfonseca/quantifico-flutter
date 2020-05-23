@@ -72,7 +72,7 @@ class ChartScreen extends StatelessWidget {
     const contextVerticalSpacing = SizedBox(height: 30);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: ListView(
         children: [
           chartVerticalSpacing,
@@ -133,11 +133,14 @@ class ChartScreen extends StatelessWidget {
   }
 
   Widget _buildTitle(String label) {
-    return Text(
-      label,
-      style: TextStyle(
-        fontSize: 20,
-        color: Colors.black54,
+    return Padding(
+      padding: const EdgeInsets.only(left: 4.0),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.black54,
+        ),
       ),
     );
   }

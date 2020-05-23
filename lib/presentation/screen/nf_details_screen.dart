@@ -189,8 +189,15 @@ class _NfDetailsScreenState extends State<NfDetailsScreen> with SingleTickerProv
   }
 
   Widget _buildDetailsTab() {
-    return const Center(
-      child: Text('Detalhes'),
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: const [],
+        ),
+      ),
     );
   }
 }
