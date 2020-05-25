@@ -1,11 +1,19 @@
+import 'dart:io';
+
 import 'package:quantifico/data/model/nf/nf.dart';
 import 'package:quantifico/data/model/nf/nf_stats.dart';
+import 'package:quantifico/data/provider/token_local_provider.dart';
 import 'package:quantifico/util/web_client.dart';
 import 'package:meta/meta.dart';
 
 class NfWebProvider {
   final WebClient webClient;
-  NfWebProvider({@required this.webClient});
+  final TokenLocalProvider tokenLocalProvider;
+
+  NfWebProvider({
+    @required this.webClient,
+    @required this.tokenLocalProvider,
+  });
 
   Future<List<Nf>> fetchNfs({
     DateTime initialDate,
@@ -13,6 +21,7 @@ class NfWebProvider {
     String customerName,
     int page,
   }) async {
+    final headers = await _buildHeaders();
     final Map<String, String> params = Map();
 
     if (initialDate != null) {
@@ -34,6 +43,7 @@ class NfWebProvider {
     final body = await webClient.fetch(
       'nfs',
       params: params.isNotEmpty ? params : null,
+      headers: headers,
     ) as Map<dynamic, dynamic>;
     final docs = body['docs'] as List<dynamic>;
     final data = docs?.map((dynamic record) => Nf.fromJson(record as Map<dynamic, dynamic>))?.toList();
@@ -44,6 +54,7 @@ class NfWebProvider {
     int month,
     int year,
   }) async {
+    final headers = await _buildHeaders();
     final Map<String, String> params = Map();
 
     if (month != null) {
@@ -57,9 +68,17 @@ class NfWebProvider {
     final body = await webClient.fetch(
       'nfs/stats',
       params: params.isNotEmpty ? params : null,
+      headers: headers,
     ) as Map<dynamic, dynamic>;
 
     final data = NfStats.fromJson(body);
     return data;
+  }
+
+  Future<Map<String, String>> _buildHeaders() async {
+    final token = await tokenLocalProvider.getToken();
+    return {
+      HttpHeaders.authorizationHeader: token,
+    };
   }
 }

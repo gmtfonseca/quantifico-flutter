@@ -1,38 +1,81 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-
-const String _token =
-    'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVkZTZmMjUwZjI3OTI2M2I0OGJhNWYyYiIsIm9yZ2FuaXphY2FvIjoiNWRlNmYyNDFmMjc5MjYzYjQ4YmE1ZjJhIiwiaWF0IjoxNTkwMjUyNDQ1LCJleHAiOjE1OTAzMzg4NDV9.ZnyCYAVWQwjkZimgJW_0PYK51GcRulbP6LCUpHcKbFo';
+import 'package:quantifico/data/model/network_exception.dart';
 
 const String _baseUrl = '10.0.2.2:3000';
 // const String _baseUrl = '5fd8ee9c.ngrok.io';
 
-class UnauthorizedException implements Exception {}
-
-class BadRequestException implements Exception {}
-
 class WebClient {
   final String baseUrl;
-  final Map<String, String> headers;
+  Map<String, String> _headers;
 
-  WebClient([this.baseUrl = _baseUrl]) : headers = {HttpHeaders.authorizationHeader: _token};
+  WebClient([this.baseUrl = _baseUrl]) {
+    _headers = {
+      HttpHeaders.contentTypeHeader: 'application/json',
+    };
+  }
 
-  Future<dynamic> fetch(String endpoint, {Map<String, String> params}) async {
-    final uri = Uri.http(baseUrl, endpoint, params);
-    final response = await http.get(
-      uri,
-      headers: headers,
-    );
+  Future<dynamic> fetch(
+    String endpoint, {
+    Map<String, String> params,
+    Map<String, String> headers,
+  }) async {
+    try {
+      final uri = Uri.http(
+        baseUrl,
+        endpoint,
+        params,
+      );
+      final response = await http.get(
+        uri,
+        headers: {}..addAll(_headers)..addAll(headers ?? {}),
+      );
+
+      return _handleResponse(response);
+    } on SocketException catch (_) {
+      throw NoConnectionException();
+    }
+  }
+
+  Future<dynamic> post(
+    String endpoint, {
+    Map<String, String> body,
+    Map<String, String> params,
+    Map<String, String> headers,
+  }) async {
+    try {
+      final uri = Uri.http(
+        baseUrl,
+        endpoint,
+        params,
+      );
+      final response = await http.post(
+        uri,
+        body: jsonEncode(body),
+        headers: {}..addAll(_headers)..addAll(headers ?? {}),
+      );
+
+      return _handleResponse(response);
+    } on SocketException catch (_) {
+      throw NoConnectionException();
+    }
+  }
+
+  dynamic _handleResponse(http.Response response) {
+    Map<dynamic, dynamic> body;
+    if (response.body != null) {
+      body = jsonDecode(response.body) as Map<dynamic, dynamic>;
+    }
     switch (response.statusCode) {
-      case 200:
-        return json.decode(response.body);
-      case 400:
-        throw BadRequestException();
-      case 401:
-        throw UnauthorizedException();
+      case HttpStatus.ok:
+        return body;
+      case HttpStatus.badRequest:
+        throw BadRequestException(response.statusCode, body);
+      case HttpStatus.unauthorized:
+        throw UnauthorizedRequestException(response.statusCode, body);
       default:
-        throw Exception('Exception: status code ${response.statusCode}');
+        throw HttpException(response.statusCode);
     }
   }
 }

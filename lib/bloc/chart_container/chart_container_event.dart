@@ -34,5 +34,3 @@ class UnstarChart extends ChartContainerEvent {
   @override
   String toString() => 'UnstarChart';
 }
-
-class AllowOptions extends ChartContainerEvent {}

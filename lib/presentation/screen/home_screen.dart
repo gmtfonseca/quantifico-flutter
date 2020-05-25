@@ -62,6 +62,10 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           children: [
             verticalSpacing,
+            _buildUserTile(),
+            verticalSpacing,
+            const Divider(),
+            verticalSpacing,
             _buildContextTitle('Resumo do mês'),
             verticalSpacing,
             _buildInsights(state),
@@ -72,6 +76,29 @@ class HomeScreen extends StatelessWidget {
             verticalSpacing,
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildUserTile() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          const Text('Olá, Gustavo Fonseca',
+              style: TextStyle(
+                fontSize: 24.0,
+                color: Colors.black54,
+              )),
+          CircleAvatar(
+            radius: 25.0,
+            backgroundImage: const NetworkImage(
+                'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTpn3Bhs-gOlfSs70SLjIyBlR5A7XF2cVl2OjruOzZ5ptO3P5UE&usqp=CAU'),
+            backgroundColor: Colors.transparent,
+          )
+        ],
       ),
     );
   }
