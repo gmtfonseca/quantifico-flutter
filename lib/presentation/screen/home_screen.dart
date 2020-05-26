@@ -13,6 +13,7 @@ import 'package:quantifico/presentation/shared/error_indicator.dart';
 import 'package:quantifico/presentation/shared/loading_indicator.dart';
 import 'package:quantifico/style.dart';
 import 'package:quantifico/util/number_util.dart';
+import 'package:quantifico/util/date_util.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen();
@@ -96,7 +97,7 @@ class HomeScreen extends StatelessWidget {
               );
             },
             child: CircleAvatar(
-              radius: 25.0,
+              radius: 30.0,
               backgroundImage: const AssetImage('assets/profile.jpeg'),
               backgroundColor: Colors.transparent,
             ),
@@ -137,12 +138,25 @@ class HomeScreen extends StatelessWidget {
 
   Widget _buildUserIntroduction(BuildContext context, HomeScreenLoaded state) {
     final userName = state.user.name;
-    return Text(
-      'Olá, $userName',
-      style: const TextStyle(
-        fontSize: 24.0,
-        color: Colors.black54,
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          formatDate(state.currDate),
+          style: const TextStyle(
+            fontSize: 14.0,
+            color: Colors.black54,
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Olá, $userName',
+          style: const TextStyle(
+            fontSize: 24.0,
+            color: Colors.black54,
+          ),
+        ),
+      ],
     );
   }
 

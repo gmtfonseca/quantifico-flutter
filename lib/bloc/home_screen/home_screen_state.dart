@@ -13,11 +13,13 @@ class HomeScreenLoading extends HomeScreenState {}
 
 class HomeScreenLoaded extends HomeScreenState {
   final User user;
+  final DateTime currDate;
   final NfStats stats;
   final List<String> starredCharts;
 
   const HomeScreenLoaded({
     this.user,
+    this.currDate,
     this.stats,
     this.starredCharts,
   });

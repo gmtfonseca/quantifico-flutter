@@ -48,6 +48,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       final stats = await nfRepository.getStats(year: 2019, month: 5);
       yield HomeScreenLoaded(
         user: user,
+        currDate: DateTime.now(),
         stats: stats,
         starredCharts: starredCharts,
       );
