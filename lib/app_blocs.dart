@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quantifico/bloc/auth/auth_bloc.dart';
 import 'package:quantifico/bloc/tab/tab.dart';
 import 'package:quantifico/bloc/nf_screen/barrel.dart';
 import 'package:quantifico/bloc/tab/tab_bloc.dart';
-import 'package:quantifico/data/repository/auth_repository.dart';
 import 'package:quantifico/data/repository/chart_container_repository.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:quantifico/data/repository/nf_repository.dart';
@@ -22,14 +22,12 @@ import 'package:quantifico/bloc/chart_screen/barrel.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
 
 class AppBlocs extends StatelessWidget {
-  final AuthRepository authRepository;
   final ChartRepository chartRepository;
   final ChartContainerRepository chartContainerRepository;
   final NfRepository nfRepository;
   final Widget child;
 
   const AppBlocs({
-    @required this.authRepository,
     @required this.chartRepository,
     @required this.chartContainerRepository,
     @required this.nfRepository,
@@ -38,25 +36,41 @@ class AppBlocs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider<TabBloc>(
           create: (context) => TabBloc(),
         ),
         BlocProvider<AnnualSalesBloc>(
-          create: (context) => AnnualSalesBloc(chartRepository: chartRepository),
+          create: (context) => AnnualSalesBloc(
+            authBloc: authBloc,
+            chartRepository: chartRepository,
+          ),
         ),
         BlocProvider<CustomerSalesBloc>(
-          create: (context) => CustomerSalesBloc(chartRepository: chartRepository),
+          create: (context) => CustomerSalesBloc(
+            authBloc: authBloc,
+            chartRepository: chartRepository,
+          ),
         ),
         BlocProvider<CitySalesBloc>(
-          create: (context) => CitySalesBloc(chartRepository: chartRepository),
+          create: (context) => CitySalesBloc(
+            authBloc: authBloc,
+            chartRepository: chartRepository,
+          ),
         ),
         BlocProvider<MonthlySalesBloc>(
-          create: (context) => MonthlySalesBloc(chartRepository: chartRepository),
+          create: (context) => MonthlySalesBloc(
+            authBloc: authBloc,
+            chartRepository: chartRepository,
+          ),
         ),
         BlocProvider<ProductSalesBloc>(
-          create: (context) => ProductSalesBloc(chartRepository: chartRepository),
+          create: (context) => ProductSalesBloc(
+            authBloc: authBloc,
+            chartRepository: chartRepository,
+          ),
         ),
       ],
       child: Builder(
@@ -65,6 +79,7 @@ class AppBlocs extends StatelessWidget {
             providers: [
               BlocProvider<HomeScreenBloc>(
                 create: (context) => HomeScreenBloc(
+                  authBloc: authBloc,
                   chartContainerRepository: chartContainerRepository,
                   nfRepository: nfRepository,
                   chartBlocs: {
@@ -88,7 +103,10 @@ class AppBlocs extends StatelessWidget {
                 )..add(const LoadChartScreen()),
               ),
               BlocProvider<NfScreenBloc>(
-                create: (context) => NfScreenBloc(nfRepository: nfRepository)..add(const LoadNfScreen()),
+                create: (context) => NfScreenBloc(
+                  authBloc: authBloc,
+                  nfRepository: nfRepository,
+                )..add(const LoadNfScreen()),
               ),
               BlocProvider<ChartContainerBloc<AnnualSalesChart>>(
                 create: (context) => ChartContainerBloc<AnnualSalesChart>(

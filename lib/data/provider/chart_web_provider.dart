@@ -1,11 +1,19 @@
+import 'dart:io';
+
 import 'package:quantifico/data/model/chart/record/barrel.dart';
 import 'package:quantifico/data/model/chart/record/product_sales_record.dart';
+import 'package:quantifico/data/provider/token_local_provider.dart';
 import 'package:quantifico/util/web_client.dart';
 import 'package:meta/meta.dart';
 
 class ChartWebProvider {
   final WebClient webClient;
-  ChartWebProvider({@required this.webClient});
+  final TokenLocalProvider tokenLocalProvider;
+
+  ChartWebProvider({
+    @required this.webClient,
+    @required this.tokenLocalProvider,
+  });
 
   Future<List<AnnualSalesRecord>> fetchAnnualSalesData({
     int startYear,
@@ -20,10 +28,7 @@ class ChartWebProvider {
       params['anofinal'] = endYear.toString();
     }
 
-    final List<dynamic> body = await webClient.fetch(
-      'nfs/plot/faturamento-anual',
-      params: params.isNotEmpty ? params : null,
-    ) as List<dynamic>;
+    final body = await _fetchChartData('nfs/plot/faturamento-anual', params);
     final data = body?.map((dynamic record) => AnnualSalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
@@ -52,10 +57,7 @@ class ChartWebProvider {
       params['sort'] = sort.toString();
     }
 
-    final List<dynamic> body = await webClient.fetch(
-      'nfs/plot/faturamento-cliente',
-      params: params.isNotEmpty ? params : null,
-    ) as List<dynamic>;
+    final body = await _fetchChartData('nfs/plot/faturamento-cliente', params);
     final data = body?.map((dynamic record) => CustomerSalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
@@ -83,10 +85,7 @@ class ChartWebProvider {
       params['sort'] = sort.toString();
     }
 
-    final List<dynamic> body = await webClient.fetch(
-      'nfs/plot/faturamento-cidade',
-      params: params.isNotEmpty ? params : null,
-    ) as List<dynamic>;
+    final body = await _fetchChartData('nfs/plot/faturamento-cidade', params);
     final data = body?.map((dynamic record) => CitySalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
@@ -99,10 +98,7 @@ class ChartWebProvider {
     final Map<String, String> params = Map();
     params['anos'] = years.join(',');
 
-    final List<dynamic> body = await webClient.fetch(
-      'nfs/plot/faturamento-mensal',
-      params: params.isNotEmpty ? params : null,
-    ) as List<dynamic>;
+    final body = await _fetchChartData('nfs/plot/faturamento-mensal', params);
     final data = body?.map((dynamic record) => MonthlySalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
   }
@@ -131,11 +127,26 @@ class ChartWebProvider {
       params['sort'] = sort.toString();
     }
 
-    final List<dynamic> body = await webClient.fetch(
-      'nfs/plot/faturamento-produto',
-      params: params.isNotEmpty ? params : null,
-    ) as List<dynamic>;
+    final body = await _fetchChartData('nfs/plot/faturamento-produto', params);
     final data = body?.map((dynamic record) => ProductSalesRecord.fromJson(record as Map<dynamic, dynamic>))?.toList();
     return data;
+  }
+
+  Future<List<dynamic>> _fetchChartData(String endpoint, Map<String, String> params) async {
+    final headers = await _getHeaders();
+    final body = await webClient.fetch(
+      endpoint,
+      params: params.isNotEmpty ? params : null,
+      headers: headers,
+    ) as List<dynamic>;
+
+    return body;
+  }
+
+  Future<Map<String, String>> _getHeaders() async {
+    final token = await tokenLocalProvider.getToken();
+    return {
+      HttpHeaders.authorizationHeader: token,
+    };
   }
 }

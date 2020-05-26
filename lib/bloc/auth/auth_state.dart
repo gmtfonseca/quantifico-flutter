@@ -8,6 +8,8 @@ abstract class AuthState extends Equatable {
   List<Object> get props => [];
 }
 
+class Authenticating extends AuthState {}
+
 class Authenticated extends AuthState {
   final Session session;
 

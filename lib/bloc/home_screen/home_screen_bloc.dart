@@ -1,19 +1,23 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:quantifico/bloc/auth/barrel.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/bloc/chart/chart_event.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
+import 'package:quantifico/data/model/network_exception.dart';
 import 'package:quantifico/data/repository/chart_container_repository.dart';
 import 'package:quantifico/data/repository/nf_repository.dart';
 
 class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
+  final AuthBloc authBloc;
   final ChartContainerRepository chartContainerRepository;
   final NfRepository nfRepository;
   final Map<String, ChartBloc> chartBlocs;
 
   HomeScreenBloc({
+    @required this.authBloc,
     @required this.chartContainerRepository,
     @required this.nfRepository,
     @required this.chartBlocs,
@@ -24,12 +28,16 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   @override
   Stream<HomeScreenState> mapEventToState(HomeScreenEvent event) async* {
-    if (event is LoadHomeScreen) {
-      yield* _mapLoadHomeScreenToState();
-    } else if (event is RefreshHomeScreen) {
-      yield* _mapRefreshHomeScreenToState();
-    } else if (event is UpdateStarredCharts) {
-      yield* _mapUpdateStarredCharts();
+    try {
+      if (event is LoadHomeScreen) {
+        yield* _mapLoadHomeScreenToState();
+      } else if (event is RefreshHomeScreen) {
+        yield* _mapRefreshHomeScreenToState();
+      } else if (event is UpdateStarredCharts) {
+        yield* _mapUpdateStarredCharts();
+      }
+    } on UnauthorizedRequestException {
+      authBloc.add(const CheckAuthentication());
     }
   }
 

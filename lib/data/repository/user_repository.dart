@@ -9,11 +9,11 @@ class InvalidCredentialsException implements Exception {
   const InvalidCredentialsException(this.msg);
 }
 
-class AuthRepository {
+class UserRepository {
   final WebClient webClient;
   final TokenLocalProvider tokenLocalProvider;
 
-  AuthRepository({
+  UserRepository({
     @required this.webClient,
     @required this.tokenLocalProvider,
   });

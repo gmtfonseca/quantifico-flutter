@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
+import 'package:quantifico/bloc/auth/auth_bloc.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/config.dart';
@@ -15,7 +16,10 @@ class CustomerSalesBloc extends ChartBloc {
     sort: -1,
   );
 
-  CustomerSalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
+  CustomerSalesBloc({
+    @required AuthBloc authBloc,
+    @required ChartRepository chartRepository,
+  }) : super(authBloc: authBloc, chartRepository: chartRepository);
 
   @override
   Stream<ChartState> mapLoadSeriesToState() async* {

@@ -1,31 +1,41 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quantifico/bloc/auth/barrel.dart';
 import 'package:quantifico/bloc/nf_screen/barrel.dart';
+import 'package:quantifico/data/model/network_exception.dart';
 import 'package:quantifico/data/model/nf/nf_screen_filter.dart';
 import 'package:quantifico/data/model/nf/nf_screen_record.dart';
 import 'package:quantifico/data/repository/nf_repository.dart';
 import 'package:meta/meta.dart';
 
 class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
+  final AuthBloc authBloc;
   final NfRepository nfRepository;
   NfScreenFilter _activeFilter;
   int _page = 1;
   int _colorIdx = 0;
 
-  NfScreenBloc({@required this.nfRepository});
+  NfScreenBloc({
+    @required this.authBloc,
+    @required this.nfRepository,
+  });
 
   @override
   NfScreenState get initialState => NfScreenLoading();
 
   @override
   Stream<NfScreenState> mapEventToState(NfScreenEvent event) async* {
-    if (event is LoadNfScreen) {
-      yield* _mapLoadNfScreenToState();
-    } else if (event is LoadMoreNfScreen) {
-      yield* _mapLoadMoreNfScreenToState();
-    } else if (event is UpdateFilterNfScreen) {
-      yield* _mapUpdateFilterNfScreenToState(event);
+    try {
+      if (event is LoadNfScreen) {
+        yield* _mapLoadNfScreenToState();
+      } else if (event is LoadMoreNfScreen) {
+        yield* _mapLoadMoreNfScreenToState();
+      } else if (event is UpdateFilterNfScreen) {
+        yield* _mapUpdateFilterNfScreenToState(event);
+      }
+    } on UnauthorizedRequestException {
+      authBloc.add(const CheckAuthentication());
     }
   }
 

@@ -21,7 +21,7 @@ class NfWebProvider {
     String customerName,
     int page,
   }) async {
-    final headers = await _buildHeaders();
+    final headers = await _getHeaders();
     final Map<String, String> params = Map();
 
     if (initialDate != null) {
@@ -54,7 +54,7 @@ class NfWebProvider {
     int month,
     int year,
   }) async {
-    final headers = await _buildHeaders();
+    final headers = await _getHeaders();
     final Map<String, String> params = Map();
 
     if (month != null) {
@@ -75,7 +75,7 @@ class NfWebProvider {
     return data;
   }
 
-  Future<Map<String, String>> _buildHeaders() async {
+  Future<Map<String, String>> _getHeaders() async {
     final token = await tokenLocalProvider.getToken();
     return {
       HttpHeaders.authorizationHeader: token,

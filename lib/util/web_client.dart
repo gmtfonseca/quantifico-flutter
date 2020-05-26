@@ -33,7 +33,7 @@ class WebClient {
       );
 
       return _handleResponse(response);
-    } on SocketException catch (_) {
+    } on SocketException {
       throw NoConnectionException();
     }
   }
@@ -57,23 +57,23 @@ class WebClient {
       );
 
       return _handleResponse(response);
-    } on SocketException catch (_) {
+    } on SocketException {
       throw NoConnectionException();
     }
   }
 
   dynamic _handleResponse(http.Response response) {
-    Map<dynamic, dynamic> body;
+    dynamic body;
     if (response.body != null) {
-      body = jsonDecode(response.body) as Map<dynamic, dynamic>;
+      body = jsonDecode(response.body);
     }
     switch (response.statusCode) {
       case HttpStatus.ok:
         return body;
       case HttpStatus.badRequest:
-        throw BadRequestException(response.statusCode, body);
+        throw BadRequestException(response.statusCode, body as Map<dynamic, dynamic>);
       case HttpStatus.unauthorized:
-        throw UnauthorizedRequestException(response.statusCode, body);
+        throw UnauthorizedRequestException(response.statusCode, body as Map<dynamic, dynamic>);
       default:
         throw HttpException(response.statusCode);
     }

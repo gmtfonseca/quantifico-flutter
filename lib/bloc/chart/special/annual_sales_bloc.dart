@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:intl/intl.dart';
+import 'package:quantifico/bloc/auth/auth_bloc.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/data/model/chart/filter/annual_sales_filter.dart';
@@ -14,7 +15,10 @@ class AnnualSalesBloc extends ChartBloc {
     endYear: DateTime.now().year,
   );
 
-  AnnualSalesBloc({@required ChartRepository chartRepository}) : super(chartRepository: chartRepository);
+  AnnualSalesBloc({
+    @required AuthBloc authBloc,
+    @required ChartRepository chartRepository,
+  }) : super(authBloc: authBloc, chartRepository: chartRepository);
 
   @override
   Stream<ChartState> mapLoadSeriesToState() async* {

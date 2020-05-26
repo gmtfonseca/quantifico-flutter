@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:quantifico/bloc/login_screen/barrel.dart';
-import 'package:quantifico/data/repository/auth_repository.dart';
+import 'package:quantifico/data/repository/user_repository.dart';
 
 class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
-  final AuthRepository authRepository;
+  final UserRepository userRepository;
 
   LoginScreenBloc({
-    @required this.authRepository,
+    @required this.userRepository,
   });
 
   @override
@@ -25,7 +25,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
   Stream<LoginScreenState> _mapSignInToState(SignIn event) async* {
     try {
       yield SigningIn();
-      final session = await authRepository.signIn(
+      final session = await userRepository.signIn(
         email: event.email,
         password: event.password,
       );
