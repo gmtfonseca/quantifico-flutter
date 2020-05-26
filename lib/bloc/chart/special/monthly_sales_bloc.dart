@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
-import 'package:quantifico/bloc/auth/auth_bloc.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/data/model/chart/filter/monthly_sales_filter.dart';
 import 'package:quantifico/data/model/chart/record/monthly_sales_record.dart';
-
+import 'package:quantifico/data/model/network_exception.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:quantifico/bloc/auth/barrel.dart';
 
 class MonthlySalesBloc extends ChartBloc {
   MonthlySalesFilter _activeFilter = MonthlySalesFilter(years: [DateTime.now().year]);
@@ -36,6 +36,9 @@ class MonthlySalesBloc extends ChartBloc {
       }
     } catch (e) {
       yield SeriesNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 
@@ -46,6 +49,9 @@ class MonthlySalesBloc extends ChartBloc {
       yield* mapLoadSeriesToState();
     } catch (e) {
       yield SeriesNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 

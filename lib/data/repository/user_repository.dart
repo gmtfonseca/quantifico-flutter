@@ -2,20 +2,23 @@ import 'package:meta/meta.dart';
 import 'package:quantifico/data/model/auth/session.dart';
 import 'package:quantifico/data/model/network_exception.dart';
 import 'package:quantifico/data/provider/token_local_provider.dart';
+import 'package:quantifico/data/provider/user_local_provider.dart';
 import 'package:quantifico/util/web_client.dart';
 
 class InvalidCredentialsException implements Exception {
-  final String msg;
-  const InvalidCredentialsException(this.msg);
+  final String error;
+  const InvalidCredentialsException(this.error);
 }
 
 class UserRepository {
   final WebClient webClient;
   final TokenLocalProvider tokenLocalProvider;
+  final UserLocalProvider userLocalProvider;
 
   UserRepository({
     @required this.webClient,
     @required this.tokenLocalProvider,
+    @required this.userLocalProvider,
   });
 
   Future<Session> signIn({
@@ -30,6 +33,7 @@ class UserRepository {
 
       final session = Session.fromJson(jsonBody);
       tokenLocalProvider.setToken(session.token);
+      userLocalProvider.setUser(session.user);
       return session;
     } catch (e) {
       if (e is UnauthorizedRequestException || e is BadRequestException) {
@@ -45,9 +49,15 @@ class UserRepository {
     return tokenLocalProvider.hasValidToken();
   }
 
-  Future<String> getToken() async {
-    return tokenLocalProvider.getToken();
+  Future<Session> getSession() async {
+    final token = await tokenLocalProvider.getToken();
+    final user = userLocalProvider.getUser();
+
+    return Session(user: user, token: token);
   }
 
-  Future<void> signOut() async {}
+  Future<void> signOut() async {
+    tokenLocalProvider.clearToken();
+    userLocalProvider.clearUser();
+  }
 }

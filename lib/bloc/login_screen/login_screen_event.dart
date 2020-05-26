@@ -16,3 +16,5 @@ class SignIn extends LoginScreenEvent {
   @override
   String toString() => 'SignIn';
 }
+
+class LoadLoginScreen extends LoginScreenEvent {}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/auth/barrel.dart';
-import 'package:quantifico/bloc/login_screen/login_screen_bloc.dart';
+import 'package:quantifico/bloc/login_screen/barrel.dart';
 import 'package:quantifico/data/repository/user_repository.dart';
 import 'package:quantifico/presentation/screen/login_screen.dart';
 
@@ -24,7 +24,7 @@ class AuthGuard extends StatelessWidget {
           return child;
         } else {
           return LoginScreen(
-            bloc: LoginScreenBloc(userRepository: userRepository),
+            bloc: LoginScreenBloc(userRepository: userRepository)..add(LoadLoginScreen()),
           );
         }
       },

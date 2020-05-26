@@ -17,8 +17,20 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
 
   @override
   Stream<LoginScreenState> mapEventToState(LoginScreenEvent event) async* {
-    if (event is SignIn) {
+    if (event is LoadLoginScreen) {
+      yield* _mapLoadScreenToState();
+    } else if (event is SignIn) {
       yield* _mapSignInToState(event);
+    }
+  }
+
+  Stream<LoginScreenState> _mapLoadScreenToState() async* {
+    try {
+      final session = await userRepository.getSession();
+      final email = session.user?.email;
+      yield LoginScreenLoaded(email: email);
+    } catch (e) {
+      yield const NotSignedIn();
     }
   }
 
@@ -31,7 +43,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
       );
       yield SignedIn(session);
     } on InvalidCredentialsException catch (e) {
-      yield NotSignedIn(msg: e.msg);
+      yield NotSignedIn(error: e.error);
     } catch (e) {
       yield const NotSignedIn();
     }

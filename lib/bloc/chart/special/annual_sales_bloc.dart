@@ -6,7 +6,9 @@ import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/data/model/chart/filter/annual_sales_filter.dart';
 import 'package:quantifico/data/model/chart/record/annual_sales_record.dart';
+import 'package:quantifico/data/model/network_exception.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
+import 'package:quantifico/bloc/auth/barrel.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
 class AnnualSalesBloc extends ChartBloc {
@@ -39,6 +41,9 @@ class AnnualSalesBloc extends ChartBloc {
       }
     } catch (e) {
       yield SeriesNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 
@@ -49,6 +54,9 @@ class AnnualSalesBloc extends ChartBloc {
       yield* mapLoadSeriesToState();
     } catch (e) {
       yield SeriesNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 

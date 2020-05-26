@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
-import 'package:quantifico/bloc/auth/auth_bloc.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
 import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/record/city_sales_record.dart';
 import 'package:quantifico/data/model/chart/filter/city_sales_filter.dart';
+import 'package:quantifico/data/model/network_exception.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:quantifico/util/string_util.dart';
+import 'package:quantifico/bloc/auth/barrel.dart';
 
 class CitySalesBloc extends ChartBloc {
   CitySalesFilter _activeFilter = CitySalesFilter(
@@ -44,6 +45,9 @@ class CitySalesBloc extends ChartBloc {
       }
     } catch (e) {
       yield SeriesNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 
@@ -54,6 +58,9 @@ class CitySalesBloc extends ChartBloc {
       yield* mapLoadSeriesToState();
     } catch (e) {
       yield SeriesNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 

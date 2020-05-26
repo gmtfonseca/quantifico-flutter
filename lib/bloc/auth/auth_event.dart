@@ -15,6 +15,8 @@ class CheckAuthentication extends AuthEvent {
   String toString() => 'CheckAuthentication';
 }
 
+class DeAuthenticate extends AuthEvent {}
+
 class Authenticate extends AuthEvent {
   final Session session;
   const Authenticate({this.session});

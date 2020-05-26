@@ -18,14 +18,10 @@ class ChartScreenBloc extends Bloc<ChartScreenEvent, ChartScreenState> {
 
   @override
   Stream<ChartScreenState> mapEventToState(ChartScreenEvent event) async* {
-    try {
-      if (event is LoadChartScreen) {
-        yield* _mapLoadChartScreenToState();
-      } else if (event is RefreshChartScreen) {
-        _mapRefreshChartScreenToState();
-      }
-    } on UnauthorizedRequestException {
-      authBloc.add(const CheckAuthentication());
+    if (event is LoadChartScreen) {
+      yield* _mapLoadChartScreenToState();
+    } else if (event is RefreshChartScreen) {
+      _mapRefreshChartScreenToState();
     }
   }
 
@@ -39,6 +35,9 @@ class ChartScreenBloc extends Bloc<ChartScreenEvent, ChartScreenState> {
       yield const ChartScreenLoaded();
     } catch (e) {
       yield ChartScreenNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 

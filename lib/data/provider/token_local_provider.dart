@@ -24,6 +24,10 @@ class TokenLocalProvider {
     storage.write(key: accessKey, value: token);
   }
 
+  void clearToken() {
+    storage.delete(key: accessKey);
+  }
+
   Future<String> getToken() async {
     final token = await storage.read(key: 'token');
     return token;

@@ -20,16 +20,12 @@ abstract class ChartBloc extends Bloc<ChartEvent, ChartState> {
 
   @override
   Stream<ChartState> mapEventToState(ChartEvent event) async* {
-    try {
-      if (event is LoadSeries) {
-        yield* mapLoadSeriesToState();
-      } else if (event is UpdateFilter) {
-        yield* mapUpdateFilterToState(event);
-      } else if (event is RefreshSeries) {
-        yield* mapRefreshSeriesToState();
-      }
-    } on UnauthorizedRequestException {
-      authBloc.add(const CheckAuthentication());
+    if (event is LoadSeries) {
+      yield* mapLoadSeriesToState();
+    } else if (event is UpdateFilter) {
+      yield* mapUpdateFilterToState(event);
+    } else if (event is RefreshSeries) {
+      yield* mapRefreshSeriesToState();
     }
   }
 

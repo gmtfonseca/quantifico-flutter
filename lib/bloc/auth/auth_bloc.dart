@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quantifico/bloc/auth/barrel.dart';
-import 'package:quantifico/data/model/auth/session.dart';
-import 'package:quantifico/data/model/auth/user.dart';
 import 'package:quantifico/data/repository/user_repository.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -19,6 +17,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       yield* _mapAuthenticateToState(event);
     } else if (event is CheckAuthentication) {
       yield* _mapCheckAuthentication();
+    } else if (event is DeAuthenticate) {
+      yield* _mapDeAuthenticateToState();
     }
   }
 
@@ -30,16 +30,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final isAuthenticated = await userRepository.isAuthenticated();
 
     if (isAuthenticated) {
-      // TODO - Também buscar email e usuario
-      final token = await userRepository.getToken();
-      yield Authenticated(
-        Session(
-          user: const User(organization: '', name: '', email: ''),
-          token: token,
-        ),
-      );
+      final session = await userRepository.getSession();
+      yield Authenticated(session);
     } else {
       yield NotAuthenticated();
     }
+  }
+
+  Stream<AuthState> _mapDeAuthenticateToState() async* {
+    await userRepository.signOut();
+    yield NotAuthenticated();
   }
 }

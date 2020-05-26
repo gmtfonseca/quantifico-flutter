@@ -8,15 +8,21 @@ abstract class LoginScreenState extends Equatable {
   List<Object> get props => [];
 }
 
+class LoginScreenLoaded extends LoginScreenState {
+  final String email;
+
+  const LoginScreenLoaded({this.email});
+}
+
 class SigningIn extends LoginScreenState {}
 
 class NotSignedIn extends LoginScreenState {
-  final String msg;
+  final String error;
 
-  const NotSignedIn({this.msg});
+  const NotSignedIn({this.error});
 
   @override
-  List<Object> get props => [msg];
+  List<Object> get props => [error];
 }
 
 class SignedIn extends LoginScreenState {

@@ -35,6 +35,8 @@ class WebClient {
       return _handleResponse(response);
     } on SocketException {
       throw NoConnectionException();
+    } catch (e) {
+      rethrow;
     }
   }
 
@@ -59,6 +61,8 @@ class WebClient {
       return _handleResponse(response);
     } on SocketException {
       throw NoConnectionException();
+    } catch (e) {
+      rethrow;
     }
   }
 

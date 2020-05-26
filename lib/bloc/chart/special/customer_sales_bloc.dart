@@ -6,9 +6,11 @@ import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/chart/filter/customer_sales_filter.dart';
 import 'package:quantifico/data/model/chart/record/customer_sales_record.dart';
+import 'package:quantifico/data/model/network_exception.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:quantifico/util/string_util.dart';
+import 'package:quantifico/bloc/auth/barrel.dart';
 
 class CustomerSalesBloc extends ChartBloc {
   CustomerSalesFilter _activeFilter = CustomerSalesFilter(
@@ -44,6 +46,9 @@ class CustomerSalesBloc extends ChartBloc {
       }
     } catch (e) {
       yield SeriesNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 
@@ -54,6 +59,9 @@ class CustomerSalesBloc extends ChartBloc {
       yield* mapLoadSeriesToState();
     } catch (e) {
       yield SeriesNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:quantifico/bloc/auth/barrel.dart';
 import 'package:quantifico/bloc/chart/special/barrel.dart';
 import 'package:quantifico/bloc/chart/special/product_sales_bloc.dart';
 import 'package:quantifico/bloc/chart_container/barrel.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
 import 'package:quantifico/config.dart';
-
 import 'package:quantifico/presentation/chart/barrel.dart';
 import 'package:quantifico/presentation/chart/product_sales_chart.dart';
 import 'package:quantifico/presentation/chart/shared/chart_container.dart';
@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           children: [
             verticalSpacing,
-            _buildUserTile(),
+            _buildUserTile(context),
             verticalSpacing,
             const Divider(),
             verticalSpacing,
@@ -80,27 +80,40 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildUserTile() {
+  Widget _buildUserTile(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          const Text('Olá, Gustavo Fonseca',
-              style: TextStyle(
-                fontSize: 24.0,
-                color: Colors.black54,
-              )),
-          CircleAvatar(
-            radius: 25.0,
-            backgroundImage: const NetworkImage(
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTpn3Bhs-gOlfSs70SLjIyBlR5A7XF2cVl2OjruOzZ5ptO3P5UE&usqp=CAU'),
-            backgroundColor: Colors.transparent,
+        children: [
+          _buildUserIntroduction(context),
+          GestureDetector(
+            onTap: () {
+              final authBloc = BlocProvider.of<AuthBloc>(context);
+              authBloc.add(DeAuthenticate());
+            },
+            child: CircleAvatar(
+              radius: 25.0,
+              backgroundImage: const NetworkImage(
+                  'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTpn3Bhs-gOlfSs70SLjIyBlR5A7XF2cVl2OjruOzZ5ptO3P5UE&usqp=CAU'),
+              backgroundColor: Colors.transparent,
+            ),
           )
         ],
       ),
     );
+  }
+
+  Widget _buildUserIntroduction(BuildContext context) {
+    final authBloc = BlocProvider.of<AuthBloc>(context);
+    final session = (authBloc.state as Authenticated).session;
+    final userName = session.user.name;
+    return Text('Olá, $userName',
+        style: const TextStyle(
+          fontSize: 24.0,
+          color: Colors.black54,
+        ));
   }
 
   Widget _buildContextTitle(String title) {

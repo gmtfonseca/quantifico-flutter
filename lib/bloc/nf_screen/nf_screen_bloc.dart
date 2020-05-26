@@ -26,16 +26,12 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
 
   @override
   Stream<NfScreenState> mapEventToState(NfScreenEvent event) async* {
-    try {
-      if (event is LoadNfScreen) {
-        yield* _mapLoadNfScreenToState();
-      } else if (event is LoadMoreNfScreen) {
-        yield* _mapLoadMoreNfScreenToState();
-      } else if (event is UpdateFilterNfScreen) {
-        yield* _mapUpdateFilterNfScreenToState(event);
-      }
-    } on UnauthorizedRequestException {
-      authBloc.add(const CheckAuthentication());
+    if (event is LoadNfScreen) {
+      yield* _mapLoadNfScreenToState();
+    } else if (event is LoadMoreNfScreen) {
+      yield* _mapLoadMoreNfScreenToState();
+    } else if (event is UpdateFilterNfScreen) {
+      yield* _mapUpdateFilterNfScreenToState(event);
     }
   }
 
@@ -57,6 +53,9 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
       );
     } catch (e) {
       yield NfScreenNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 
@@ -84,6 +83,9 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
         );
       } catch (e) {
         yield NfScreenNotLoaded();
+        if (e is UnauthorizedRequestException) {
+          authBloc.add(const CheckAuthentication());
+        }
       }
     }
   }
@@ -98,6 +100,9 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
       yield* _mapLoadNfScreenToState();
     } catch (e) {
       yield NfScreenNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 

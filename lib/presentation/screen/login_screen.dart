@@ -10,8 +10,8 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController passwordController;
 
   LoginScreen({this.bloc})
-      : emailController = TextEditingController(text: 'alex@gmail.com1'),
-        passwordController = TextEditingController(text: '123456');
+      : emailController = TextEditingController(),
+        passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,26 +64,31 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildEmailField(LoginScreenState state) {
+    if (state is LoginScreenLoaded) {
+      emailController.text = state.email;
+    }
     return TextField(
       controller: emailController,
       decoration: const InputDecoration(labelText: 'Email'),
-      enabled: state is NotSignedIn,
+      enabled: state is! SigningIn,
     );
   }
 
   Widget _buildPasswordField(LoginScreenState state) {
     return TextField(
-        controller: passwordController,
-        decoration: const InputDecoration(labelText: 'Senha'),
-        enabled: state is NotSignedIn);
+      controller: passwordController,
+      decoration: const InputDecoration(labelText: 'Senha'),
+      enabled: state is! SigningIn,
+      obscureText: true,
+    );
   }
 
   Widget _buildInvalidCredentialsText(LoginScreenState state) {
-    if (state is NotSignedIn && state.msg != null) {
+    if (state is NotSignedIn && state.error != null) {
       return Align(
         alignment: Alignment.topLeft,
         child: Text(
-          state.msg,
+          state.error,
           style: TextStyle(
             color: Colors.red,
           ),

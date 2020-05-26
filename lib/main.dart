@@ -8,6 +8,7 @@ import 'package:quantifico/bloc/simple_bloc_delegate.dart';
 import 'package:quantifico/data/provider/chart_web_provider.dart';
 import 'package:quantifico/data/provider/nf_web_provider.dart';
 import 'package:quantifico/data/provider/token_local_provider.dart';
+import 'package:quantifico/data/provider/user_local_provider.dart';
 import 'package:quantifico/data/repository/chart_repository.dart';
 import 'package:quantifico/data/repository/nf_repository.dart';
 import 'package:quantifico/data/repository/user_repository.dart';
@@ -19,18 +20,21 @@ import 'data/repository/chart_container_repository.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
+  final sharedPreferences = await SharedPreferences.getInstance();
   const tokenLocalProvider = TokenLocalProvider(storage: FlutterSecureStorage());
+  final userLocalProvider = UserLocalProvider(sharedPreferences: sharedPreferences);
   final webClient = WebClient();
   final userRepository = UserRepository(
     webClient: WebClient(),
     tokenLocalProvider: tokenLocalProvider,
+    userLocalProvider: userLocalProvider,
   );
   final chartWebProvider = ChartWebProvider(
     webClient: webClient,
     tokenLocalProvider: tokenLocalProvider,
   );
   final chartRepository = ChartRepository(chartWebProvider: chartWebProvider);
-  final sharedPreferences = await SharedPreferences.getInstance();
+
   final chartContainerRepository = ChartContainerRepository(sharedPreferences: sharedPreferences);
   final nfWebProvider = NfWebProvider(
     webClient: webClient,

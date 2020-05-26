@@ -28,16 +28,12 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   @override
   Stream<HomeScreenState> mapEventToState(HomeScreenEvent event) async* {
-    try {
-      if (event is LoadHomeScreen) {
-        yield* _mapLoadHomeScreenToState();
-      } else if (event is RefreshHomeScreen) {
-        yield* _mapRefreshHomeScreenToState();
-      } else if (event is UpdateStarredCharts) {
-        yield* _mapUpdateStarredCharts();
-      }
-    } on UnauthorizedRequestException {
-      authBloc.add(const CheckAuthentication());
+    if (event is LoadHomeScreen) {
+      yield* _mapLoadHomeScreenToState();
+    } else if (event is RefreshHomeScreen) {
+      yield* _mapRefreshHomeScreenToState();
+    } else if (event is UpdateStarredCharts) {
+      yield* _mapUpdateStarredCharts();
     }
   }
 
@@ -55,6 +51,9 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       );
     } catch (e) {
       yield HomeScreenNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 
@@ -72,6 +71,9 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
       );
     } catch (e) {
       yield HomeScreenNotLoaded();
+      if (e is UnauthorizedRequestException) {
+        authBloc.add(const CheckAuthentication());
+      }
     }
   }
 
@@ -87,6 +89,9 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         );
       } catch (e) {
         yield HomeScreenNotLoaded();
+        if (e is UnauthorizedRequestException) {
+          authBloc.add(const CheckAuthentication());
+        }
       }
     }
   }
