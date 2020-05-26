@@ -27,12 +27,7 @@ class CustomerSalesBloc extends ChartBloc {
   Stream<ChartState> mapLoadSeriesToState() async* {
     try {
       yield SeriesLoading();
-      final customerSalesData = await chartRepository.getCustomerSalesData(
-        startDate: _activeFilter?.startDate,
-        endDate: _activeFilter?.endDate,
-        limit: _activeFilter.limit,
-        sort: _activeFilter.sort,
-      );
+      final customerSalesData = await chartRepository.getCustomerSalesData(filter: _activeFilter);
       if (customerSalesData.isNotEmpty) {
         final series = _buildSeries(customerSalesData);
         yield SeriesLoaded<CustomerSalesRecord, String, CustomerSalesFilter>(

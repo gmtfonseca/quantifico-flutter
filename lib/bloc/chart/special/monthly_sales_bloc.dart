@@ -21,9 +21,7 @@ class MonthlySalesBloc extends ChartBloc {
   Stream<ChartState> mapLoadSeriesToState() async* {
     try {
       yield SeriesLoading();
-      final monthlySalesData = await chartRepository.getMonthlySalesData(
-        years: _activeFilter.years,
-      );
+      final monthlySalesData = await chartRepository.getMonthlySalesData(filter: _activeFilter);
       if (monthlySalesData.isNotEmpty) {
         final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
         final seriesList = _buildSeries(monthlySalesMap);

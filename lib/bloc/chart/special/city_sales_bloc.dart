@@ -26,12 +26,7 @@ class CitySalesBloc extends ChartBloc {
   Stream<ChartState> mapLoadSeriesToState() async* {
     try {
       yield SeriesLoading();
-      final citySalesData = await chartRepository.getCitySalesData(
-        startDate: _activeFilter.startDate,
-        endDate: _activeFilter.endDate,
-        limit: _activeFilter.limit,
-        sort: _activeFilter.sort,
-      );
+      final citySalesData = await chartRepository.getCitySalesData(filter: _activeFilter);
       if (citySalesData.isNotEmpty) {
         final series = _buildSeries(citySalesData);
         yield SeriesLoaded<CitySalesRecord, String, CitySalesFilter>(
