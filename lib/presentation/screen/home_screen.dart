@@ -62,7 +62,7 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           children: [
             verticalSpacing,
-            _buildUserTile(context),
+            _buildUserTile(context, state),
             verticalSpacing,
             const Divider(),
             verticalSpacing,
@@ -80,14 +80,14 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildUserTile(BuildContext context) {
+  Widget _buildUserTile(BuildContext context, HomeScreenLoaded state) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _buildUserIntroduction(context),
+          _buildUserIntroduction(context, state),
           GestureDetector(
             onTap: () {
               showDialog<Widget>(
@@ -135,15 +135,15 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildUserIntroduction(BuildContext context) {
-    final authBloc = BlocProvider.of<AuthBloc>(context);
-    final session = (authBloc.state as Authenticated).session;
-    final userName = session.user.name;
-    return Text('Olá, $userName',
-        style: const TextStyle(
-          fontSize: 24.0,
-          color: Colors.black54,
-        ));
+  Widget _buildUserIntroduction(BuildContext context, HomeScreenLoaded state) {
+    final userName = state.user.name;
+    return Text(
+      'Olá, $userName',
+      style: const TextStyle(
+        fontSize: 24.0,
+        color: Colors.black54,
+      ),
+    );
   }
 
   Widget _buildContextTitle(String title) {
