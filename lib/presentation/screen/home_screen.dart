@@ -90,18 +90,48 @@ class HomeScreen extends StatelessWidget {
           _buildUserIntroduction(context),
           GestureDetector(
             onTap: () {
-              final authBloc = BlocProvider.of<AuthBloc>(context);
-              authBloc.add(DeAuthenticate());
+              showDialog<Widget>(
+                context: context,
+                builder: (BuildContext _) => _buildSignOutDialog(context),
+              );
             },
             child: CircleAvatar(
               radius: 25.0,
-              backgroundImage: const NetworkImage(
-                  'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTpn3Bhs-gOlfSs70SLjIyBlR5A7XF2cVl2OjruOzZ5ptO3P5UE&usqp=CAU'),
+              backgroundImage: const AssetImage('assets/profile.jpeg'),
               backgroundColor: Colors.transparent,
             ),
           )
         ],
       ),
+    );
+  }
+
+  Widget _buildSignOutDialog(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Sair'),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: const [
+            Text('Realmente deseja sair?'),
+          ],
+        ),
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: const Text('NÃO'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        FlatButton(
+          child: const Text('SIM'),
+          onPressed: () {
+            final authBloc = BlocProvider.of<AuthBloc>(context);
+            authBloc.add(DeAuthenticate());
+            Navigator.of(context).pop();
+          },
+        ),
+      ],
     );
   }
 
