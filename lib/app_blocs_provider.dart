@@ -21,13 +21,13 @@ import 'package:quantifico/bloc/chart_container/barrel.dart';
 import 'package:quantifico/bloc/chart_screen/barrel.dart';
 import 'package:quantifico/bloc/home_screen/barrel.dart';
 
-class AppBlocs extends StatelessWidget {
+class AppBlocsProvider extends StatelessWidget {
   final ChartRepository chartRepository;
   final ChartContainerRepository chartContainerRepository;
   final NfRepository nfRepository;
   final Widget child;
 
-  const AppBlocs({
+  const AppBlocsProvider({
     @required this.chartRepository,
     @required this.chartContainerRepository,
     @required this.nfRepository,

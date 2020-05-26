@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:quantifico/app_blocs.dart';
+import 'package:quantifico/app_blocs_provider.dart';
 import 'package:quantifico/auth_guard.dart';
 import 'package:quantifico/bloc/auth/barrel.dart';
 import 'package:quantifico/bloc/simple_bloc_delegate.dart';
@@ -21,25 +21,26 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final sharedPreferences = await SharedPreferences.getInstance();
+  final webClient = WebClient();
+
   const tokenLocalProvider = TokenLocalProvider(storage: FlutterSecureStorage());
   final userLocalProvider = UserLocalProvider(sharedPreferences: sharedPreferences);
-  final webClient = WebClient();
+  final chartWebProvider = ChartWebProvider(
+    webClient: webClient,
+    tokenLocalProvider: tokenLocalProvider,
+  );
+  final nfWebProvider = NfWebProvider(
+    webClient: webClient,
+    tokenLocalProvider: tokenLocalProvider,
+  );
+
   final userRepository = UserRepository(
     webClient: WebClient(),
     tokenLocalProvider: tokenLocalProvider,
     userLocalProvider: userLocalProvider,
   );
-  final chartWebProvider = ChartWebProvider(
-    webClient: webClient,
-    tokenLocalProvider: tokenLocalProvider,
-  );
   final chartRepository = ChartRepository(chartWebProvider: chartWebProvider);
-
   final chartContainerRepository = ChartContainerRepository(sharedPreferences: sharedPreferences);
-  final nfWebProvider = NfWebProvider(
-    webClient: webClient,
-    tokenLocalProvider: tokenLocalProvider,
-  );
   final nfRepository = NfRepository(nfWebProvider: nfWebProvider);
 
   runApp(Quantifico(
@@ -74,7 +75,7 @@ class Quantifico extends StatelessWidget {
         create: (context) => AuthBloc(userRepository: userRepository)..add(const CheckAuthentication()),
         child: AuthGuard(
           userRepository: userRepository,
-          child: AppBlocs(
+          child: AppBlocsProvider(
             chartRepository: chartRepository,
             chartContainerRepository: chartContainerRepository,
             nfRepository: nfRepository,
