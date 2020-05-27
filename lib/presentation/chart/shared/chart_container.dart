@@ -113,7 +113,7 @@ class ChartContainer extends StatelessWidget {
       style: TextStyle(
         fontSize: 16.0,
         fontWeight: FontWeight.w400,
-        color: state is ChartContainerLoaded ? Colors.white : Colors.black45,
+        color: state is ChartContainerLoaded ? _getTextColor(state) : Colors.black45,
       ),
     );
   }
@@ -139,11 +139,12 @@ class ChartContainer extends StatelessWidget {
 
   Widget _buildPortraitOptions(BuildContext context, ChartContainerState state) {
     if (state is ChartContainerLoaded) {
+      final textColor = _getTextColor(state);
       return PopupMenuButton<ChartContainerOptions>(
         color: state.color,
         icon: Icon(
           Icons.more_vert,
-          color: Colors.white,
+          color: textColor,
         ),
         onSelected: (ChartContainerOptions result) {
           switch (result) {
@@ -162,55 +163,55 @@ class ChartContainer extends StatelessWidget {
           }
         },
         itemBuilder: (BuildContext context) => <PopupMenuEntry<ChartContainerOptions>>[
-          const PopupMenuItem<ChartContainerOptions>(
+          PopupMenuItem<ChartContainerOptions>(
             value: ChartContainerOptions.refresh,
             child: ListTile(
               leading: Icon(
                 Icons.refresh,
-                color: Colors.white,
+                color: textColor,
               ),
               title: Text(
                 'Atualizar',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: textColor),
               ),
             ),
           ),
-          const PopupMenuItem<ChartContainerOptions>(
+          PopupMenuItem<ChartContainerOptions>(
             value: ChartContainerOptions.color,
             child: ListTile(
               leading: Icon(
                 Icons.color_lens,
-                color: Colors.white,
+                color: textColor,
               ),
               title: Text(
                 'Alterar cor',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: textColor),
               ),
             ),
           ),
-          const PopupMenuItem<ChartContainerOptions>(
+          PopupMenuItem<ChartContainerOptions>(
             value: ChartContainerOptions.filter,
             child: ListTile(
               leading: Icon(
                 Icons.filter_list,
-                color: Colors.white,
+                color: textColor,
               ),
               title: Text(
                 'Filtrar',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: textColor),
               ),
             ),
           ),
-          const PopupMenuItem<ChartContainerOptions>(
+          PopupMenuItem<ChartContainerOptions>(
             value: ChartContainerOptions.expand,
             child: ListTile(
               leading: Icon(
                 Icons.fullscreen,
-                color: Colors.white,
+                color: textColor,
               ),
               title: Text(
                 'Expandir',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: textColor),
               ),
             ),
           ),
@@ -233,7 +234,7 @@ class ChartContainer extends StatelessWidget {
       return IconButton(
         icon: Icon(
           state.isStarred ? Icons.star : Icons.star_border,
-          color: Colors.white,
+          color: _getTextColor(state),
         ),
         onPressed: () {
           _starOrUnstar(state);
@@ -250,9 +251,9 @@ class ChartContainer extends StatelessWidget {
   Widget _buildChangeColorButton(BuildContext context, ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-        icon: const Icon(
+        icon: Icon(
           Icons.color_lens,
-          color: Colors.white,
+          color: _getTextColor(state),
         ),
         onPressed: () {
           _showColorPickerDialog(context, state.color);
@@ -260,7 +261,10 @@ class ChartContainer extends StatelessWidget {
       );
     } else {
       return const IconButton(
-        icon: Icon(Icons.color_lens),
+        icon: Icon(
+          Icons.color_lens,
+          color: Colors.black45,
+        ),
         onPressed: null,
       );
     }
@@ -271,13 +275,13 @@ class ChartContainer extends StatelessWidget {
       return IconButton(
           icon: Icon(
             Icons.refresh,
-            color: Colors.white,
+            color: _getTextColor(state),
           ),
           onPressed: () {
             bloc.add(const RefreshChart());
           });
     } else {
-      return IconButton(
+      return const IconButton(
         icon: Icon(
           Icons.refresh,
           color: Colors.black45,
@@ -290,12 +294,15 @@ class ChartContainer extends StatelessWidget {
   Widget _buildFilterButton(BuildContext context, ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-          icon: Icon(Icons.filter_list, color: Colors.white),
+          icon: Icon(
+            Icons.filter_list,
+            color: _getTextColor(state),
+          ),
           onPressed: () {
             _showFilterDialog(context);
           });
     } else {
-      return IconButton(
+      return const IconButton(
         icon: Icon(Icons.filter_list),
         onPressed: null,
       );
@@ -305,11 +312,14 @@ class ChartContainer extends StatelessWidget {
   Widget _buildFullScreenButton(BuildContext context, ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-        icon: Icon(Icons.fullscreen, color: Colors.white),
+        icon: Icon(
+          Icons.fullscreen,
+          color: _getTextColor(state),
+        ),
         onPressed: () => _openFullScreenMode(context, state.color),
       );
     } else {
-      return IconButton(
+      return const IconButton(
         icon: Icon(Icons.fullscreen),
         onPressed: null,
       );
@@ -343,6 +353,7 @@ class ChartContainer extends StatelessWidget {
           bloc.add(ChangeContainerColor(color));
         },
         colors: [
+          Colors.white,
           Colors.blue,
           Colors.red,
           Colors.green,
@@ -350,7 +361,6 @@ class ChartContainer extends StatelessWidget {
           Colors.teal,
           Colors.indigo,
           Colors.deepOrange,
-          Colors.redAccent,
         ],
       ),
     );
@@ -378,5 +388,10 @@ class ChartContainer extends StatelessWidget {
     );
 
     Navigator.of(context).push(fullScreenRoute);
+  }
+
+  Color _getTextColor(ChartContainerLoaded state) {
+    final brightess = ThemeData.estimateBrightnessForColor(state.color);
+    return brightess == Brightness.light ? Colors.black.withOpacity(0.75) : Colors.white;
   }
 }

@@ -20,11 +20,6 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
   }) : chartName = C.toString() {
     chartSubscription = chartBloc.listen((state) {
       if (state is SeriesLoaded || state is SeriesLoadedEmpty) {
-        /*if (state is SeriesLoaded) {
-          final multiSeries = state.series.length > 1;
-          final seriesColor = hexToColor(state.series[0].colorFn(0).hexString);
-          _color = multiSeries ? Colors.deepPurpleAccent : seriesColor;
-        }*/
         add(const LoadContainer());
       }
     });
@@ -50,7 +45,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
 
   Stream<ChartContainerState> _mapLoadContainerToState() async* {
     try {
-      final defaultColor = Colors.deepPurple.value;
+      final defaultColor = Colors.white.value;
       final isStarred = chartContainerRepository.isStarred(chartName);
       final color = chartContainerRepository.getColor(chartName) ?? defaultColor;
       yield ChartContainerLoaded(isStarred: isStarred, color: Color(color));
