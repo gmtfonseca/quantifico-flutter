@@ -28,8 +28,8 @@ class CustomerSalesChart extends Chart {
       animate: true,
       vertical: false,
       barRendererDecorator: charts.BarLabelDecorator<String>(
-        insideLabelStyleSpec: charts.TextStyleSpec(color: charts.Color.white, fontSize: 11),
-        outsideLabelStyleSpec: const charts.TextStyleSpec(fontSize: 11),
+        insideLabelStyleSpec: const charts.TextStyleSpec(color: charts.Color.white, fontSize: 11),
+        outsideLabelStyleSpec: charts.TextStyleSpec(color: charts.Color.black.lighter, fontSize: 11),
       ),
       domainAxis: const charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
       primaryMeasureAxis: charts.NumericAxisSpec(

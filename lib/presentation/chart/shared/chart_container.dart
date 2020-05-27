@@ -5,6 +5,8 @@ import 'package:quantifico/config.dart';
 import 'package:quantifico/presentation/chart/shared/chart.dart';
 import 'package:quantifico/presentation/chart/shared/full_screen_chart.dart';
 
+enum ChartContainerOptions { refresh, filter, expand }
+
 class ChartContainer extends StatelessWidget {
   final String title;
   final ChartContainerBloc bloc;
@@ -18,7 +20,7 @@ class ChartContainer extends StatelessWidget {
     @required this.chart,
     @required this.title,
     this.onStarOrUnstar,
-    this.height = 420,
+    this.height = 440,
   }) : super(key: key);
 
   @override
@@ -50,8 +52,11 @@ class ChartContainer extends StatelessWidget {
                 _buildHeader(context),
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: chart,
+                    padding: const EdgeInsets.all(12.0),
+                    child: Opacity(
+                      opacity: 0.90,
+                      child: chart,
+                    ),
                   ),
                 )
               ],
@@ -89,8 +94,10 @@ class ChartContainer extends StatelessWidget {
                 child: _buildTitle(state),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: _buildOptions(context, state),
+                children: [
+                  _buildStarButton(state),
+                  _buildOptions(context, state),
+                ],
               ),
             ],
           ),
@@ -103,71 +110,131 @@ class ChartContainer extends StatelessWidget {
     return Text(
       title,
       style: TextStyle(
-        fontSize: SizeConfig.safeBlockHorizontal * 3.3,
+        fontSize: 16.0,
         fontWeight: FontWeight.w400,
         color: state is ChartContainerLoaded ? Colors.white : Colors.black45,
       ),
     );
   }
 
-  List<Widget> _buildOptions(
-    BuildContext context,
-    ChartContainerState state,
-  ) {
-    final iconSize = SizeConfig.safeBlockHorizontal * 4.5;
-    final options = [
-      _buildStarButton(state, iconSize),
-      _buildRefreshButton(state, iconSize),
-      _buildFilterButton(context, state, iconSize),
-      _buildFullScreenButton(context, state, iconSize),
-    ];
-
-    return options;
+  Widget _buildOptions(BuildContext context, ChartContainerState state) {
+    if (MediaQuery.of(context).orientation == Orientation.landscape) {
+      return _buildLandscapeOptions(context, state);
+    } else {
+      return _buildPortraitOptions(context, state);
+    }
   }
 
-  Widget _buildStarButton(
-    ChartContainerState state,
-    double iconSize,
-  ) {
+  Widget _buildLandscapeOptions(BuildContext context, ChartContainerState state) {
+    return Row(
+      children: [
+        _buildRefreshButton(state),
+        _buildFilterButton(context, state),
+        _buildFullScreenButton(context, state),
+      ],
+    );
+  }
+
+  Widget _buildPortraitOptions(BuildContext context, ChartContainerState state) {
+    if (state is ChartContainerLoaded) {
+      return PopupMenuButton<ChartContainerOptions>(
+        color: state.color,
+        icon: Icon(
+          Icons.more_vert,
+          color: Colors.white,
+        ),
+        onSelected: (ChartContainerOptions result) {
+          switch (result) {
+            case ChartContainerOptions.refresh:
+              bloc.add(const RefreshChart());
+              break;
+            case ChartContainerOptions.filter:
+              _showFilterDialog(context);
+              break;
+            case ChartContainerOptions.expand:
+              _openFullScreenMode(context, state.color);
+              break;
+          }
+        },
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<ChartContainerOptions>>[
+          PopupMenuItem<ChartContainerOptions>(
+            value: ChartContainerOptions.refresh,
+            child: ListTile(
+              leading: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Atualizar',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          PopupMenuItem<ChartContainerOptions>(
+            value: ChartContainerOptions.filter,
+            child: ListTile(
+              leading: Icon(
+                Icons.filter_list,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Filtrar',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          PopupMenuItem<ChartContainerOptions>(
+            value: ChartContainerOptions.expand,
+            child: ListTile(
+              leading: Icon(
+                Icons.fullscreen,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Expandir',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return PopupMenuButton<ChartContainerOptions>(
+        enabled: false,
+        itemBuilder: null,
+        icon: Icon(
+          Icons.more_vert,
+          color: Colors.white,
+        ),
+      );
+    }
+  }
+
+  Widget _buildStarButton(ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
         icon: Icon(
           state.isStarred ? Icons.star : Icons.star_border,
           color: Colors.white,
-          size: iconSize,
         ),
         onPressed: () {
-          if (state.isStarred) {
-            bloc.add(const UnstarChart());
-          } else {
-            bloc.add(const StarChart());
-          }
-          if (onStarOrUnstar != null) {
-            onStarOrUnstar();
-          }
+          _starOrUnstar(state);
         },
       );
     } else {
       return IconButton(
-        icon: Icon(
-          Icons.star_border,
-          size: iconSize,
-        ),
+        icon: Icon(Icons.star_border),
         onPressed: null,
       );
     }
   }
 
-  Widget _buildRefreshButton(
-    ChartContainerState state,
-    double iconSize,
-  ) {
+  Widget _buildRefreshButton(ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
           icon: Icon(
             Icons.refresh,
             color: Colors.white,
-            size: iconSize,
           ),
           onPressed: () {
             bloc.add(const RefreshChart());
@@ -177,65 +244,57 @@ class ChartContainer extends StatelessWidget {
         icon: Icon(
           Icons.refresh,
           color: Colors.black45,
-          size: iconSize,
         ),
         onPressed: null,
       );
     }
   }
 
-  Widget _buildFilterButton(
-    BuildContext context,
-    ChartContainerState state,
-    double iconSize,
-  ) {
+  Widget _buildFilterButton(BuildContext context, ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-          icon: Icon(
-            Icons.filter_list,
-            color: Colors.white,
-            size: iconSize,
-          ),
+          icon: Icon(Icons.filter_list, color: Colors.white),
           onPressed: () {
-            showDialog<Widget>(
-              context: context,
-              builder: (BuildContext context) => chart.buildFilterDialog(),
-            );
+            _showFilterDialog(context);
           });
     } else {
       return IconButton(
-        icon: Icon(
-          Icons.filter_list,
-          size: iconSize,
-        ),
+        icon: Icon(Icons.filter_list),
         onPressed: null,
       );
     }
   }
 
-  Widget _buildFullScreenButton(
-    BuildContext context,
-    ChartContainerState state,
-    double iconSize,
-  ) {
+  Widget _buildFullScreenButton(BuildContext context, ChartContainerState state) {
     if (state is ChartContainerLoaded) {
       return IconButton(
-        icon: Icon(
-          Icons.fullscreen,
-          color: Colors.white,
-          size: iconSize,
-        ),
+        icon: Icon(Icons.fullscreen, color: Colors.white),
         onPressed: () => _openFullScreenMode(context, state.color),
       );
     } else {
       return IconButton(
-        icon: Icon(
-          Icons.fullscreen,
-          size: iconSize,
-        ),
+        icon: Icon(Icons.fullscreen),
         onPressed: null,
       );
     }
+  }
+
+  void _starOrUnstar(ChartContainerLoaded state) {
+    if (state.isStarred) {
+      bloc.add(const UnstarChart());
+    } else {
+      bloc.add(const StarChart());
+    }
+    if (onStarOrUnstar != null) {
+      onStarOrUnstar();
+    }
+  }
+
+  void _showFilterDialog(BuildContext context) {
+    showDialog<Widget>(
+      context: context,
+      builder: (BuildContext context) => chart.buildFilterDialog(),
+    );
   }
 
   void _openFullScreenMode(BuildContext context, Color appBarColor) {

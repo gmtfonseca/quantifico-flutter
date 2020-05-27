@@ -63,12 +63,15 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   Stream<HomeScreenState> _mapRefreshHomeScreenToState() async* {
     try {
       yield HomeScreenLoading();
+      final user = (authBloc.state as Authenticated).session.user;
       final starredCharts = chartContainerRepository.getStarred();
       _refreshStarredCharts(starredCharts);
       starredCharts.sort();
       // Month and year were set just for testing
       final stats = await nfRepository.getStats(year: 2019, month: 5);
       yield HomeScreenLoaded(
+        user: user,
+        currDate: DateTime.now(),
         stats: stats,
         starredCharts: starredCharts,
       );
@@ -82,11 +85,13 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   Stream<HomeScreenState> _mapUpdateStarredCharts() async* {
     if (state is HomeScreenLoaded) {
-      final currState = state as HomeScreenLoaded;
       try {
+        final currState = state as HomeScreenLoaded;
         final starredCharts = chartContainerRepository.getStarred();
         starredCharts.sort();
         yield HomeScreenLoaded(
+          user: currState.user,
+          currDate: DateTime.now(),
           stats: currState.stats,
           starredCharts: starredCharts,
         );

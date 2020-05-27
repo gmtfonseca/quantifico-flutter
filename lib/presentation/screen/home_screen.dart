@@ -137,7 +137,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildUserIntroduction(BuildContext context, HomeScreenLoaded state) {
-    final userName = state.user.name;
+    final userName = state.user?.name;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

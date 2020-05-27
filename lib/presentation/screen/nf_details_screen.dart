@@ -250,15 +250,9 @@ class NfDetailsScreenHeader extends StatelessWidget implements PreferredSizeWidg
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Hero(
-            tag: nf.number,
-            child: Material(
-              color: Colors.transparent,
-              child: Text(
-                nf.number.toString(),
-                style: primaryInfoTextStyle,
-              ),
-            ),
+          Text(
+            nf.number.toString(),
+            style: primaryInfoTextStyle,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

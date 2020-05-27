@@ -19,7 +19,7 @@ class AuthGuard extends StatelessWidget {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
         if (state is Authenticating) {
-          return Container(color: Theme.of(context).backgroundColor);
+          return Container(color: Colors.white);
         } else if (state is Authenticated) {
           return child;
         } else {

@@ -144,17 +144,11 @@ class NfScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Hero(
-                  tag: nfScreenRecord.nf.number,
-                  child: Material(
-                    color: Colors.transparent,
-                    child: Text(
-                      nfScreenRecord.nf.number.toString(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                      ),
-                    ),
+                Text(
+                  nfScreenRecord.nf.number.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
                   ),
                 )
               ],
