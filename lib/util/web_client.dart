@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:quantifico/data/model/network_exception.dart';
 
-const String _baseUrl = '10.0.2.2:3000';
-// const String _baseUrl = '34cf1449.ngrok.io';
+// const String _baseUrl = '10.0.2.2:3000';
+const String _baseUrl = 'bd5f1f93.ngrok.io';
 
 class WebClient {
   final String baseUrl;

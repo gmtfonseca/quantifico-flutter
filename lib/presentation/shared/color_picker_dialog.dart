@@ -43,10 +43,12 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
   Widget _buildColors() {
     return Padding(
       padding: const EdgeInsets.all(24.0),
-      child: Wrap(
-        spacing: 10,
-        runSpacing: 10,
-        children: widget.colors.map((color) => _buildColorTile(color)).toList().cast<Widget>(),
+      child: Center(
+        child: Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children: widget.colors.map((color) => _buildColorTile(color)).toList().cast<Widget>(),
+        ),
       ),
     );
   }

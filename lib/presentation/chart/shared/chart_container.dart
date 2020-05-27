@@ -222,7 +222,7 @@ class ChartContainer extends StatelessWidget {
         itemBuilder: (BuildContext context) => <PopupMenuEntry<ChartContainerOptions>>[],
         icon: Icon(
           Icons.more_vert,
-          color: Colors.white,
+          color: Colors.black45,
         ),
       );
     }
