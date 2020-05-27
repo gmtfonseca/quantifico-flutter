@@ -7,14 +7,12 @@ import 'package:quantifico/bloc/chart/chart_bloc.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_event.dart';
 import 'package:quantifico/bloc/chart_container/chart_container_state.dart';
 import 'package:quantifico/data/repository/chart_container_repository.dart';
-import 'package:quantifico/util/string_util.dart';
 
 class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerState> {
   final String chartName;
   final ChartContainerRepository chartContainerRepository;
   final ChartBloc chartBloc;
   StreamSubscription chartSubscription;
-  Color _color = Colors.deepPurpleAccent;
 
   ChartContainerBloc({
     @required this.chartContainerRepository,
@@ -22,11 +20,11 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
   }) : chartName = C.toString() {
     chartSubscription = chartBloc.listen((state) {
       if (state is SeriesLoaded || state is SeriesLoadedEmpty) {
-        if (state is SeriesLoaded) {
+        /*if (state is SeriesLoaded) {
           final multiSeries = state.series.length > 1;
           final seriesColor = hexToColor(state.series[0].colorFn(0).hexString);
           _color = multiSeries ? Colors.deepPurpleAccent : seriesColor;
-        }
+        }*/
         add(const LoadContainer());
       }
     });
@@ -39,6 +37,8 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
   Stream<ChartContainerState> mapEventToState(ChartContainerEvent event) async* {
     if (event is LoadContainer) {
       yield* _mapLoadContainerToState();
+    } else if (event is ChangeContainerColor) {
+      yield* _mapChangeContainerColorToState(event);
     } else if (event is StarChart) {
       yield* _mapStarToState();
     } else if (event is UnstarChart) {
@@ -50,30 +50,50 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
 
   Stream<ChartContainerState> _mapLoadContainerToState() async* {
     try {
+      final defaultColor = Colors.deepPurple.value;
       final isStarred = chartContainerRepository.isStarred(chartName);
-      yield ChartContainerLoaded(isStarred: isStarred, color: _color);
+      final color = chartContainerRepository.getColor(chartName) ?? defaultColor;
+      yield ChartContainerLoaded(isStarred: isStarred, color: Color(color));
     } catch (e) {
       yield ChartContainerNotLoaded();
+    }
+  }
+
+  Stream<ChartContainerState> _mapChangeContainerColorToState(ChangeContainerColor event) async* {
+    if (state is ChartContainerLoaded) {
+      final currState = state as ChartContainerLoaded;
+      try {
+        await chartContainerRepository.changeColor(chartName, event.color.value);
+        yield ChartContainerLoaded(isStarred: currState.isStarred, color: event.color);
+      } catch (e) {
+        yield ChartContainerNotLoaded();
+      }
     }
   }
 
   Stream<ChartContainerState> _mapStarToState() async* {
-    try {
-      chartContainerRepository.star(chartName);
-      final isStarred = chartContainerRepository.isStarred(chartName);
-      yield ChartContainerLoaded(isStarred: isStarred, color: _color);
-    } catch (e) {
-      yield ChartContainerNotLoaded();
+    if (state is ChartContainerLoaded) {
+      final currState = state as ChartContainerLoaded;
+      try {
+        chartContainerRepository.star(chartName);
+        final isStarred = chartContainerRepository.isStarred(chartName);
+        yield ChartContainerLoaded(isStarred: isStarred, color: currState.color);
+      } catch (e) {
+        yield ChartContainerNotLoaded();
+      }
     }
   }
 
   Stream<ChartContainerState> _mapUnstarToState() async* {
-    try {
-      chartContainerRepository.unstar(chartName);
-      final isStarred = chartContainerRepository.isStarred(chartName);
-      yield ChartContainerLoaded(isStarred: isStarred, color: _color);
-    } catch (e) {
-      yield ChartContainerNotLoaded();
+    if (state is ChartContainerLoaded) {
+      final currState = state as ChartContainerLoaded;
+      try {
+        chartContainerRepository.unstar(chartName);
+        final isStarred = chartContainerRepository.isStarred(chartName);
+        yield ChartContainerLoaded(isStarred: isStarred, color: currState.color);
+      } catch (e) {
+        yield ChartContainerNotLoaded();
+      }
     }
   }
 

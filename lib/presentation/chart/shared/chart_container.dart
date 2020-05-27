@@ -4,8 +4,9 @@ import 'package:quantifico/bloc/chart_container/barrel.dart';
 import 'package:quantifico/config.dart';
 import 'package:quantifico/presentation/chart/shared/chart.dart';
 import 'package:quantifico/presentation/chart/shared/full_screen_chart.dart';
+import 'package:quantifico/presentation/shared/color_picker_dialog.dart';
 
-enum ChartContainerOptions { refresh, filter, expand }
+enum ChartContainerOptions { refresh, filter, color, expand }
 
 class ChartContainer extends StatelessWidget {
   final String title;
@@ -129,6 +130,7 @@ class ChartContainer extends StatelessWidget {
     return Row(
       children: [
         _buildRefreshButton(state),
+        _buildChangeColorButton(context, state),
         _buildFilterButton(context, state),
         _buildFullScreenButton(context, state),
       ],
@@ -148,6 +150,9 @@ class ChartContainer extends StatelessWidget {
             case ChartContainerOptions.refresh:
               bloc.add(const RefreshChart());
               break;
+            case ChartContainerOptions.color:
+              _showColorPickerDialog(context, state.color);
+              break;
             case ChartContainerOptions.filter:
               _showFilterDialog(context);
               break;
@@ -157,40 +162,53 @@ class ChartContainer extends StatelessWidget {
           }
         },
         itemBuilder: (BuildContext context) => <PopupMenuEntry<ChartContainerOptions>>[
-          PopupMenuItem<ChartContainerOptions>(
+          const PopupMenuItem<ChartContainerOptions>(
             value: ChartContainerOptions.refresh,
             child: ListTile(
               leading: Icon(
                 Icons.refresh,
                 color: Colors.white,
               ),
-              title: const Text(
+              title: Text(
                 'Atualizar',
                 style: TextStyle(color: Colors.white),
               ),
             ),
           ),
-          PopupMenuItem<ChartContainerOptions>(
+          const PopupMenuItem<ChartContainerOptions>(
+            value: ChartContainerOptions.color,
+            child: ListTile(
+              leading: Icon(
+                Icons.color_lens,
+                color: Colors.white,
+              ),
+              title: Text(
+                'Alterar cor',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          const PopupMenuItem<ChartContainerOptions>(
             value: ChartContainerOptions.filter,
             child: ListTile(
               leading: Icon(
                 Icons.filter_list,
                 color: Colors.white,
               ),
-              title: const Text(
+              title: Text(
                 'Filtrar',
                 style: TextStyle(color: Colors.white),
               ),
             ),
           ),
-          PopupMenuItem<ChartContainerOptions>(
+          const PopupMenuItem<ChartContainerOptions>(
             value: ChartContainerOptions.expand,
             child: ListTile(
               leading: Icon(
                 Icons.fullscreen,
                 color: Colors.white,
               ),
-              title: const Text(
+              title: Text(
                 'Expandir',
                 style: TextStyle(color: Colors.white),
               ),
@@ -224,6 +242,25 @@ class ChartContainer extends StatelessWidget {
     } else {
       return IconButton(
         icon: Icon(Icons.star_border),
+        onPressed: null,
+      );
+    }
+  }
+
+  Widget _buildChangeColorButton(BuildContext context, ChartContainerState state) {
+    if (state is ChartContainerLoaded) {
+      return IconButton(
+        icon: const Icon(
+          Icons.color_lens,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          _showColorPickerDialog(context, state.color);
+        },
+      );
+    } else {
+      return const IconButton(
+        icon: Icon(Icons.color_lens),
         onPressed: null,
       );
     }
@@ -294,6 +331,28 @@ class ChartContainer extends StatelessWidget {
     showDialog<Widget>(
       context: context,
       builder: (BuildContext context) => chart.buildFilterDialog(),
+    );
+  }
+
+  void _showColorPickerDialog(BuildContext context, Color initialColor) {
+    showDialog<Widget>(
+      context: context,
+      builder: (BuildContext context) => ColorPickerDialog(
+        initialColor: initialColor,
+        onSelected: (Color color) {
+          bloc.add(ChangeContainerColor(color));
+        },
+        colors: [
+          Colors.blue,
+          Colors.red,
+          Colors.green,
+          Colors.deepPurple,
+          Colors.teal,
+          Colors.indigo,
+          Colors.deepOrange,
+          Colors.redAccent,
+        ],
+      ),
     );
   }
 

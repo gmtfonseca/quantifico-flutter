@@ -8,6 +8,15 @@ class ChartContainerRepository {
     @required this.sharedPreferences,
   });
 
+  Future<void> changeColor(String chartName, int color) async {
+    await sharedPreferences.setString('${chartName}_color', color.toString());
+  }
+
+  int getColor(String chartName) {
+    final color = sharedPreferences.getString('${chartName}_color');
+    return color != null ? int.parse(color) : null;
+  }
+
   Future<void> star(String chartName) async {
     final starred = getStarred();
     starred.add(chartName);

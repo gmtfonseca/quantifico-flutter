@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class ChartContainerEvent extends Equatable {
   const ChartContainerEvent();
@@ -12,6 +13,15 @@ class LoadContainer extends ChartContainerEvent {
 
   @override
   String toString() => 'LoadContainer';
+}
+
+class ChangeContainerColor extends ChartContainerEvent {
+  final Color color;
+
+  const ChangeContainerColor(this.color);
+
+  @override
+  String toString() => 'ChangeContainerColor';
 }
 
 class RefreshChart extends ChartContainerEvent {
