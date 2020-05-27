@@ -201,7 +201,7 @@ class ChartContainer extends StatelessWidget {
     } else {
       return PopupMenuButton<ChartContainerOptions>(
         enabled: false,
-        itemBuilder: null,
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<ChartContainerOptions>>[],
         icon: Icon(
           Icons.more_vert,
           color: Colors.white,

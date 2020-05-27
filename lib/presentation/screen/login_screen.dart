@@ -27,25 +27,29 @@ class LoginScreen extends StatelessWidget {
         bloc: bloc,
         builder: (context, state) {
           return Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Center(
-                child: SingleChildScrollView(
+            body: ListView(
+              children: <Widget>[
+                CustomPaint(
+                  painter: OvalPainter(),
+                  child: Container(height: 80),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(40.0),
                   child: Column(
                     children: [
                       _buildLogo(),
-                      const SizedBox(height: 20.0),
+                      const SizedBox(height: 40.0),
                       _buildEmailField(state),
                       const SizedBox(height: 20.0),
                       _buildPasswordField(state),
                       const SizedBox(height: 20.0),
                       _buildInvalidCredentialsText(state),
-                      const SizedBox(height: 45.0),
+                      const SizedBox(height: 40.0),
                       _buildSigninButton(context, state),
                     ],
                   ),
                 ),
-              ),
+              ],
             ),
           );
         },
@@ -54,12 +58,19 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _buildLogo() {
-    return const SizedBox(
+    return SizedBox(
       height: 150,
       width: 150,
-      child: Image(
-        image: AssetImage('assets/logo.png'),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.deepPurple.withOpacity(0.85),
+          shape: BoxShape.circle,
+        ),
+        child: Center(child: Text('LOGO', style: TextStyle(fontSize: 25.0, color: Colors.white))),
       ),
+      /* child: Image(
+        image: AssetImage('assets/logo.png'),
+      ), */
     );
   }
 
@@ -69,7 +80,11 @@ class LoginScreen extends StatelessWidget {
     }
     return TextField(
       controller: emailController,
-      decoration: const InputDecoration(labelText: 'Email'),
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: 'Email',
+        filled: true,
+      ),
       enabled: state is! SigningIn,
     );
   }
@@ -77,7 +92,11 @@ class LoginScreen extends StatelessWidget {
   Widget _buildPasswordField(LoginScreenState state) {
     return TextField(
       controller: passwordController,
-      decoration: const InputDecoration(labelText: 'Senha'),
+      decoration: const InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: 'Senha',
+        filled: true,
+      ),
       enabled: state is! SigningIn,
       obscureText: true,
     );
@@ -124,5 +143,25 @@ class LoginScreen extends StatelessWidget {
         ],
       );
     }
+  }
+}
+
+const double _kCurveHeight = 35;
+
+class OvalPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final p = Path();
+    p.lineTo(0, size.height - _kCurveHeight);
+    p.relativeQuadraticBezierTo(size.width / 2, 2 * _kCurveHeight, size.width, 0);
+    p.lineTo(size.width, 0);
+    p.close();
+
+    canvas.drawPath(p, Paint()..color = Colors.deepPurple);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }
