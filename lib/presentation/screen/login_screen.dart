@@ -83,7 +83,6 @@ class LoginScreen extends StatelessWidget {
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
         labelText: 'Email',
-        filled: true,
       ),
       enabled: state is! SigningIn,
     );
@@ -95,7 +94,6 @@ class LoginScreen extends StatelessWidget {
       decoration: const InputDecoration(
         border: OutlineInputBorder(),
         labelText: 'Senha',
-        filled: true,
       ),
       enabled: state is! SigningIn,
       obscureText: true,
