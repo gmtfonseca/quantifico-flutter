@@ -111,27 +111,32 @@ class AppBlocsProvider extends StatelessWidget {
               BlocProvider<ChartContainerBloc<AnnualSalesChart>>(
                 create: (context) => ChartContainerBloc<AnnualSalesChart>(
                     chartBloc: BlocProvider.of<AnnualSalesBloc>(context),
-                    chartContainerRepository: chartContainerRepository),
+                    chartContainerRepository: chartContainerRepository)
+                  ..add(const LoadContainer()),
               ),
               BlocProvider<ChartContainerBloc<CustomerSalesChart>>(
                 create: (context) => ChartContainerBloc<CustomerSalesChart>(
                     chartBloc: BlocProvider.of<CustomerSalesBloc>(context),
-                    chartContainerRepository: chartContainerRepository),
+                    chartContainerRepository: chartContainerRepository)
+                  ..add(const LoadContainer()),
               ),
               BlocProvider<ChartContainerBloc<ProductSalesChart>>(
                 create: (context) => ChartContainerBloc<ProductSalesChart>(
                     chartBloc: BlocProvider.of<ProductSalesBloc>(context),
-                    chartContainerRepository: chartContainerRepository),
+                    chartContainerRepository: chartContainerRepository)
+                  ..add(const LoadContainer()),
               ),
               BlocProvider<ChartContainerBloc<CitySalesChart>>(
                 create: (context) => ChartContainerBloc<CitySalesChart>(
                     chartBloc: BlocProvider.of<CitySalesBloc>(context),
-                    chartContainerRepository: chartContainerRepository),
+                    chartContainerRepository: chartContainerRepository)
+                  ..add(const LoadContainer()),
               ),
               BlocProvider<ChartContainerBloc<MonthlySalesChart>>(
                 create: (context) => ChartContainerBloc<MonthlySalesChart>(
                     chartBloc: BlocProvider.of<MonthlySalesBloc>(context),
-                    chartContainerRepository: chartContainerRepository),
+                    chartContainerRepository: chartContainerRepository)
+                  ..add(const LoadContainer()),
               )
             ],
             child: child,

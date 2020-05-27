@@ -63,14 +63,14 @@ class LoginScreen extends StatelessWidget {
       width: 150,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.deepPurple.withOpacity(0.85),
+          color: Colors.deepPurple,
           shape: BoxShape.circle,
         ),
-        child: Center(child: Text('LOGO', style: TextStyle(fontSize: 25.0, color: Colors.white))),
+        child: const Center(
+            child: Image(
+          image: AssetImage('assets/logo.png'),
+        )),
       ),
-      /* child: Image(
-        image: AssetImage('assets/logo.png'),
-      ), */
     );
   }
 

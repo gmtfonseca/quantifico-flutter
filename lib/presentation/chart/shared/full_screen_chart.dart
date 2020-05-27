@@ -16,9 +16,22 @@ class FullScreenChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    final brightess = ThemeData.estimateBrightnessForColor(appBarColor);
+    final textColor = brightess == Brightness.light ? Colors.black.withOpacity(0.70) : Colors.white;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: textColor,
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        title: Text(
+          title,
+          style: TextStyle(color: textColor),
+        ),
         backgroundColor: appBarColor,
       ),
       body: Center(
