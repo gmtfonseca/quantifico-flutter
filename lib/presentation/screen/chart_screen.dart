@@ -138,7 +138,7 @@ class ChartScreen extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 22,
           color: Colors.black54,
         ),
       ),
