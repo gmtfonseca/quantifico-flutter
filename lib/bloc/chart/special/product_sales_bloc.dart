@@ -25,7 +25,7 @@ class ProductSalesBloc extends ChartBloc {
   @override
   Stream<ChartState> mapLoadSeriesToState() async* {
     try {
-      yield SeriesLoading();
+      yield const SeriesLoading();
       final productSalesData = await chartRepository.getProductSalesData(filter: _activeFilter);
       if (productSalesData.isNotEmpty) {
         final series = _buildSeries(productSalesData);
@@ -39,7 +39,7 @@ class ProductSalesBloc extends ChartBloc {
         );
       }
     } catch (e) {
-      yield SeriesNotLoaded();
+      yield const SeriesNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }
@@ -52,7 +52,7 @@ class ProductSalesBloc extends ChartBloc {
       _activeFilter = event.filter as ProductSalesFilter;
       yield* mapLoadSeriesToState();
     } catch (e) {
-      yield SeriesNotLoaded();
+      yield const SeriesNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }

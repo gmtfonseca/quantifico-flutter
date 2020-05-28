@@ -20,7 +20,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
   }) : chartName = C.toString();
 
   @override
-  ChartContainerState get initialState => ChartContainerLoading();
+  ChartContainerState get initialState => const ChartContainerLoading();
 
   @override
   Stream<ChartContainerState> mapEventToState(ChartContainerEvent event) async* {
@@ -44,7 +44,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
       final color = chartContainerRepository.getColor(chartName) ?? defaultColor;
       yield ChartContainerLoaded(isStarred: isStarred, color: Color(color));
     } catch (e) {
-      yield ChartContainerNotLoaded();
+      yield const ChartContainerNotLoaded();
     }
   }
 
@@ -55,7 +55,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
         await chartContainerRepository.changeColor(chartName, event.color.value);
         yield ChartContainerLoaded(isStarred: currState.isStarred, color: event.color);
       } catch (e) {
-        yield ChartContainerNotLoaded();
+        yield const ChartContainerNotLoaded();
       }
     }
   }
@@ -68,7 +68,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
         final isStarred = chartContainerRepository.isStarred(chartName);
         yield ChartContainerLoaded(isStarred: isStarred, color: currState.color);
       } catch (e) {
-        yield ChartContainerNotLoaded();
+        yield const ChartContainerNotLoaded();
       }
     }
   }
@@ -81,7 +81,7 @@ class ChartContainerBloc<C> extends Bloc<ChartContainerEvent, ChartContainerStat
         final isStarred = chartContainerRepository.isStarred(chartName);
         yield ChartContainerLoaded(isStarred: isStarred, color: currState.color);
       } catch (e) {
-        yield ChartContainerNotLoaded();
+        yield const ChartContainerNotLoaded();
       }
     }
   }

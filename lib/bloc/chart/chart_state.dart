@@ -8,11 +8,17 @@ abstract class ChartState extends Equatable {
   List<Object> get props => [];
 }
 
-class SeriesUninitialized extends ChartState {}
+class SeriesUninitialized extends ChartState {
+  const SeriesUninitialized();
+}
 
-class SeriesLoading extends ChartState {}
+class SeriesLoading extends ChartState {
+  const SeriesLoading();
+}
 
-class SeriesNotLoaded extends ChartState {}
+class SeriesNotLoaded extends ChartState {
+  const SeriesNotLoaded();
+}
 
 class FilterableState<F> extends ChartState {
   final F activeFilter;

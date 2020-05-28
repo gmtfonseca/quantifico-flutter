@@ -36,7 +36,7 @@ class LoginScreenBloc extends Bloc<LoginScreenEvent, LoginScreenState> {
 
   Stream<LoginScreenState> _mapSignInToState(SignIn event) async* {
     try {
-      yield SigningIn();
+      yield const SigningIn();
       final session = await userRepository.signIn(
         email: event.email,
         password: event.password,

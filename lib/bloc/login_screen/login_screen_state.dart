@@ -14,7 +14,9 @@ class LoginScreenLoaded extends LoginScreenState {
   const LoginScreenLoaded({this.email});
 }
 
-class SigningIn extends LoginScreenState {}
+class SigningIn extends LoginScreenState {
+  const SigningIn();
+}
 
 class NotSignedIn extends LoginScreenState {
   final String error;

@@ -5,8 +5,8 @@ class ChartConfig {
 }
 
 class NetworkConfig {
-  // static const String baseUrl = 'bd5f1f93.ngrok.io';
-  static const String baseUrl = '10.0.2.2:3000';
+  static const String baseUrl = '366e51fd7c87.ngrok.io';
+  // static const String baseUrl = '10.0.2.2:3000';
 }
 
 class SizeConfig {

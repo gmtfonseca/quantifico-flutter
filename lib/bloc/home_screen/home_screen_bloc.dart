@@ -24,7 +24,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
   });
 
   @override
-  HomeScreenState get initialState => HomeScreenLoading();
+  HomeScreenState get initialState => const HomeScreenLoading();
 
   @override
   Stream<HomeScreenState> mapEventToState(HomeScreenEvent event) async* {
@@ -39,7 +39,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   Stream<HomeScreenState> _mapLoadHomeScreenToState() async* {
     try {
-      yield HomeScreenLoading();
+      yield const HomeScreenLoading();
       final user = (authBloc.state as Authenticated).session.user;
       final starredCharts = chartContainerRepository.getStarred();
       _initiStarredCharts(starredCharts);
@@ -53,7 +53,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         starredCharts: starredCharts,
       );
     } catch (e) {
-      yield HomeScreenNotLoaded();
+      yield const HomeScreenNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }
@@ -62,7 +62,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
 
   Stream<HomeScreenState> _mapRefreshHomeScreenToState() async* {
     try {
-      yield HomeScreenLoading();
+      yield const HomeScreenLoading();
       final user = (authBloc.state as Authenticated).session.user;
       final starredCharts = chartContainerRepository.getStarred();
       _refreshStarredCharts(starredCharts);
@@ -76,7 +76,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
         starredCharts: starredCharts,
       );
     } catch (e) {
-      yield HomeScreenNotLoaded();
+      yield const HomeScreenNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }
@@ -96,7 +96,7 @@ class HomeScreenBloc extends Bloc<HomeScreenEvent, HomeScreenState> {
           starredCharts: starredCharts,
         );
       } catch (e) {
-        yield HomeScreenNotLoaded();
+        yield const HomeScreenNotLoaded();
         if (e is UnauthorizedRequestException) {
           authBloc.add(const CheckAuthentication());
         }

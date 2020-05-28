@@ -17,4 +17,6 @@ class SignIn extends LoginScreenEvent {
   String toString() => 'SignIn';
 }
 
-class LoadLoginScreen extends LoginScreenEvent {}
+class LoadLoginScreen extends LoginScreenEvent {
+  const LoadLoginScreen();
+}

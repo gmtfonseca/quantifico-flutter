@@ -9,7 +9,9 @@ abstract class NfScreenState extends Equatable {
   List<Object> get props => [];
 }
 
-class NfScreenLoading extends NfScreenState {}
+class NfScreenLoading extends NfScreenState {
+  const NfScreenLoading();
+}
 
 class NfScreenLoaded extends NfScreenState {
   final List<NfScreenRecord> nfScreenRecords;
@@ -34,4 +36,6 @@ class NfScreenLoadingMore extends NfScreenLoaded {
         );
 }
 
-class NfScreenNotLoaded extends NfScreenState {}
+class NfScreenNotLoaded extends NfScreenState {
+  const NfScreenNotLoaded();
+}

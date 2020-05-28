@@ -8,7 +8,9 @@ abstract class ChartScreenState extends Equatable {
   List<Object> get props => [];
 }
 
-class ChartScreenLoading extends ChartScreenState {}
+class ChartScreenLoading extends ChartScreenState {
+  const ChartScreenLoading();
+}
 
 class ChartScreenLoaded extends ChartScreenState {
   final AnnualSalesBloc annualSalesBloc;
@@ -27,4 +29,6 @@ class ChartScreenLoaded extends ChartScreenState {
   List<Object> get props => [annualSalesBloc, customerSalesBloc];
 }
 
-class ChartScreenNotLoaded extends ChartScreenState {}
+class ChartScreenNotLoaded extends ChartScreenState {
+  const ChartScreenNotLoaded();
+}

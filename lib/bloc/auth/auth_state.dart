@@ -8,7 +8,9 @@ abstract class AuthState extends Equatable {
   List<Object> get props => [];
 }
 
-class Authenticating extends AuthState {}
+class Authenticating extends AuthState {
+  const Authenticating();
+}
 
 class Authenticated extends AuthState {
   final Session session;
@@ -19,4 +21,6 @@ class Authenticated extends AuthState {
   List<Object> get props => [session];
 }
 
-class NotAuthenticated extends AuthState {}
+class NotAuthenticated extends AuthState {
+  const NotAuthenticated();
+}

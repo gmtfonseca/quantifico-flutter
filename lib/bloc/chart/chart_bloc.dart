@@ -2,7 +2,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:quantifico/bloc/auth/barrel.dart';
 import 'package:quantifico/bloc/chart/barrel.dart';
-import 'package:quantifico/data/model/network_exception.dart';
 
 import 'package:quantifico/data/repository/chart_repository.dart';
 
@@ -16,7 +15,7 @@ abstract class ChartBloc extends Bloc<ChartEvent, ChartState> {
   });
 
   @override
-  ChartState get initialState => SeriesUninitialized();
+  ChartState get initialState => const SeriesUninitialized();
 
   @override
   Stream<ChartState> mapEventToState(ChartEvent event) async* {
@@ -39,7 +38,7 @@ abstract class ChartBloc extends Bloc<ChartEvent, ChartState> {
   Stream<ChartState> mapRefreshSeriesToState() async* {
     try {
       if (state is FilterableState) {
-        yield SeriesLoading();
+        yield const SeriesLoading();
         final dynamic activeFilter = (state as FilterableState).activeFilter;
         if (activeFilter != null) {
           yield* mapUpdateFilterToState(UpdateFilter<dynamic>(activeFilter));
@@ -50,7 +49,7 @@ abstract class ChartBloc extends Bloc<ChartEvent, ChartState> {
         yield state;
       }
     } catch (e) {
-      yield SeriesNotLoaded();
+      yield const SeriesNotLoaded();
     }
   }
 }

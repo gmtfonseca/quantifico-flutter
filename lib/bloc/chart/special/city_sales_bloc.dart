@@ -25,7 +25,7 @@ class CitySalesBloc extends ChartBloc {
   @override
   Stream<ChartState> mapLoadSeriesToState() async* {
     try {
-      yield SeriesLoading();
+      yield const SeriesLoading();
       final citySalesData = await chartRepository.getCitySalesData(filter: _activeFilter);
       if (citySalesData.isNotEmpty) {
         final series = _buildSeries(citySalesData);
@@ -39,7 +39,7 @@ class CitySalesBloc extends ChartBloc {
         );
       }
     } catch (e) {
-      yield SeriesNotLoaded();
+      yield const SeriesNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }
@@ -52,7 +52,7 @@ class CitySalesBloc extends ChartBloc {
       _activeFilter = event.filter as CitySalesFilter;
       yield* mapLoadSeriesToState();
     } catch (e) {
-      yield SeriesNotLoaded();
+      yield const SeriesNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }

@@ -20,7 +20,7 @@ class MonthlySalesBloc extends ChartBloc {
   @override
   Stream<ChartState> mapLoadSeriesToState() async* {
     try {
-      yield SeriesLoading();
+      yield const SeriesLoading();
       final monthlySalesData = await chartRepository.getMonthlySalesData(filter: _activeFilter);
       if (monthlySalesData.isNotEmpty) {
         final monthlySalesMap = _monthlySalesListToMap(monthlySalesData);
@@ -33,7 +33,7 @@ class MonthlySalesBloc extends ChartBloc {
         yield SeriesLoadedEmpty<MonthlySalesFilter>(activeFilter: _activeFilter);
       }
     } catch (e) {
-      yield SeriesNotLoaded();
+      yield const SeriesNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }
@@ -46,7 +46,7 @@ class MonthlySalesBloc extends ChartBloc {
       _activeFilter = event.filter as MonthlySalesFilter;
       yield* mapLoadSeriesToState();
     } catch (e) {
-      yield SeriesNotLoaded();
+      yield const SeriesNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }

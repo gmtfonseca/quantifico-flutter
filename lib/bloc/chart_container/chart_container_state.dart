@@ -8,7 +8,9 @@ abstract class ChartContainerState extends Equatable {
   List<Object> get props => [];
 }
 
-class ChartContainerLoading extends ChartContainerState {}
+class ChartContainerLoading extends ChartContainerState {
+  const ChartContainerLoading();
+}
 
 class ChartContainerLoaded extends ChartContainerState {
   final bool isStarred;
@@ -23,6 +25,10 @@ class ChartContainerLoaded extends ChartContainerState {
   List<Object> get props => [isStarred, color];
 }
 
-class ChartContainerNotLoaded extends ChartContainerState {}
+class ChartContainerNotLoaded extends ChartContainerState {
+  const ChartContainerNotLoaded();
+}
 
-class ChartContainerEnabled extends ChartContainerState {}
+class ChartContainerEnabled extends ChartContainerState {
+  const ChartContainerEnabled();
+}

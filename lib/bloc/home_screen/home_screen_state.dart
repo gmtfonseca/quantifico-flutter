@@ -9,7 +9,9 @@ abstract class HomeScreenState extends Equatable {
   List<Object> get props => [];
 }
 
-class HomeScreenLoading extends HomeScreenState {}
+class HomeScreenLoading extends HomeScreenState {
+  const HomeScreenLoading();
+}
 
 class HomeScreenLoaded extends HomeScreenState {
   final User user;
@@ -28,4 +30,6 @@ class HomeScreenLoaded extends HomeScreenState {
   List<Object> get props => [starredCharts];
 }
 
-class HomeScreenNotLoaded extends HomeScreenState {}
+class HomeScreenNotLoaded extends HomeScreenState {
+  const HomeScreenNotLoaded();
+}

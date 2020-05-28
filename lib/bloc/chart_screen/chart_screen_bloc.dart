@@ -14,7 +14,7 @@ class ChartScreenBloc extends Bloc<ChartScreenEvent, ChartScreenState> {
   ChartScreenBloc({this.authBloc, this.chartBlocs});
 
   @override
-  ChartScreenState get initialState => ChartScreenLoading();
+  ChartScreenState get initialState => const ChartScreenLoading();
 
   @override
   Stream<ChartScreenState> mapEventToState(ChartScreenEvent event) async* {
@@ -34,7 +34,7 @@ class ChartScreenBloc extends Bloc<ChartScreenEvent, ChartScreenState> {
       }
       yield const ChartScreenLoaded();
     } catch (e) {
-      yield ChartScreenNotLoaded();
+      yield const ChartScreenNotLoaded();
       if (e is UnauthorizedRequestException) {
         authBloc.add(const CheckAuthentication());
       }
