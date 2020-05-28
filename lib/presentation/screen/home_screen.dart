@@ -151,8 +151,8 @@ class HomeScreen extends StatelessWidget {
         const SizedBox(height: 10),
         Text(
           'Olá, $userName',
-          style: const TextStyle(
-            fontSize: 24.0,
+          style: TextStyle(
+            fontSize: SizeConfig.textScaler * 5,
             color: Colors.black54,
           ),
         ),
@@ -201,42 +201,37 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildInsightCard(String label, String value, Color backgroundColor) {
-    return Container(
+    return SizedBox(
       height: 120,
-      decoration: BoxDecoration(
+      child: Material(
         color: backgroundColor,
-        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 1,
+        borderRadius: BorderRadius.circular(11),
+        clipBehavior: Clip.hardEdge,
+        elevation: 1.5,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 12,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ],
         ),
       ),
     );

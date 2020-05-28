@@ -6,17 +6,26 @@ import 'package:quantifico/data/model/nf/nf_item.dart';
 import 'package:quantifico/data/model/nf/nf_stats.dart';
 import 'package:quantifico/data/model/nf/product.dart';
 import 'package:quantifico/data/provider/nf_web_provider.dart';
-import 'package:quantifico/util/web_client.dart';
 
-class MockWebClient extends Mock implements WebClient {}
+import '../mocks.dart';
 
 void main() {
   group('Nf Web Provider', () {
     final webClient = MockWebClient();
-    final nfWebProvider = NfWebProvider(webClient: webClient);
+    final tokenLocalProvider = MockTokenLocalProvider();
+    final nfWebProvider = NfWebProvider(
+      webClient: webClient,
+      tokenLocalProvider: tokenLocalProvider,
+    );
 
     test('should fetch Nfs properly', () async {
-      when(webClient.fetch('nfs')).thenAnswer(
+      when(
+        webClient.fetch(
+          'nfs',
+          params: anyNamed('params'),
+          headers: anyNamed('headers'),
+        ),
+      ).thenAnswer(
         (_) => Future<dynamic>.value(
           {
             'docs': [
@@ -181,7 +190,11 @@ void main() {
     });
 
     test('should fetch monthly sales properly', () async {
-      when(webClient.fetch('nfs/stats')).thenAnswer(
+      when(webClient.fetch(
+        'nfs/stats',
+        params: anyNamed('params'),
+        headers: anyNamed('headers'),
+      )).thenAnswer(
         (_) => Future<dynamic>.value(
           {'totalNf': '100', 'totalFaturado': 3000.50},
         ),

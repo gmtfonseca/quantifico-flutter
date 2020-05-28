@@ -27,41 +27,28 @@ class ChartContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    final borderRadius = BorderRadius.circular(11);
     return Container(
       height: height,
       color: Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: borderRadius,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.3),
-                spreadRadius: 1,
-                blurRadius: 1,
-              ),
-            ],
-          ),
-          child: Material(
-            borderRadius: borderRadius,
-            clipBehavior: Clip.hardEdge,
-            child: Column(
-              children: [
-                _buildHeader(context),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Opacity(
-                      opacity: 0.90,
-                      child: chart,
-                    ),
+        child: Material(
+          elevation: 1.5,
+          borderRadius: BorderRadius.circular(11),
+          clipBehavior: Clip.hardEdge,
+          child: Column(
+            children: [
+              _buildHeader(context),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Opacity(
+                    opacity: 0.90,
+                    child: chart,
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),

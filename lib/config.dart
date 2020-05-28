@@ -21,6 +21,8 @@ class SizeConfig {
   static double safeBlockHorizontal;
   static double safeBlockVertical;
 
+  static double textScaler = safeBlockHorizontal;
+
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
     screenWidth = _mediaQueryData.size.width;
