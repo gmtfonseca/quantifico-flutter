@@ -59,8 +59,8 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
 
   Stream<NfScreenState> _mapLoadMoreNfScreenToState() async* {
     if (state is NfScreenLoaded) {
-      final nfScreenLoadedState = state as NfScreenLoaded;
       try {
+        final nfScreenLoadedState = state as NfScreenLoaded;
         yield NfScreenLoadingMore(
           nfScreenRecords: nfScreenLoadedState.nfScreenRecords,
           activeFilter: _activeFilter,

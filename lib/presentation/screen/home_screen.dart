@@ -152,7 +152,7 @@ class HomeScreen extends StatelessWidget {
         Text(
           'Olá, $userName',
           style: TextStyle(
-            fontSize: SizeConfig.textScaler * 5,
+            fontSize: SizeConfig.textScaler * 5.5,
             color: Colors.black54,
           ),
         ),
