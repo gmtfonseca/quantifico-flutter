@@ -4,6 +4,11 @@ class ChartConfig {
   static const maxRecordLimit = 10;
 }
 
+class NetworkConfig {
+  // static const String baseUrl = 'bd5f1f93.ngrok.io';
+  static const String baseUrl = '10.0.2.2:3000';
+}
+
 class SizeConfig {
   static MediaQueryData _mediaQueryData;
   static double screenWidth;

@@ -1,16 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:quantifico/config.dart';
 import 'package:quantifico/data/model/network_exception.dart';
-
-// const String _baseUrl = '10.0.2.2:3000';
-const String _baseUrl = 'bd5f1f93.ngrok.io';
 
 class WebClient {
   final String baseUrl;
   Map<String, String> _headers;
 
-  WebClient([this.baseUrl = _baseUrl]) {
+  WebClient([this.baseUrl = NetworkConfig.baseUrl]) {
     _headers = {
       HttpHeaders.contentTypeHeader: 'application/json',
     };
