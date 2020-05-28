@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:quantifico/data/model/nf/nf.dart';
+import 'package:quantifico/data/model/nf/nf_screen_filter.dart';
 import 'package:quantifico/data/model/nf/nf_stats.dart';
 import 'package:quantifico/data/provider/nf_web_provider.dart';
 
@@ -9,15 +10,13 @@ class NfRepository {
   NfRepository({@required this.nfWebProvider});
 
   Future<List<Nf>> getNfs({
-    DateTime initialDate,
-    DateTime endDate,
-    String customerName,
+    NfScreenFilter filter,
     int page,
   }) async {
     return await nfWebProvider.fetchNfs(
-      initialDate: initialDate,
-      endDate: endDate,
-      customerName: customerName,
+      initialDate: filter?.initialDate,
+      endDate: filter?.endDate,
+      customerName: filter?.customerName,
       page: page,
     );
   }

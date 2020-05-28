@@ -40,9 +40,7 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
       yield const NfScreenLoading();
       _page = 1;
       final nfs = await nfRepository.getNfs(
-        initialDate: _activeFilter?.initialDate,
-        endDate: _activeFilter?.endDate,
-        customerName: _activeFilter?.customerName,
+        filter: _activeFilter,
         page: _page,
       );
       _colorIdx = 0;
@@ -70,9 +68,7 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
         _page += 1;
         final extendedNfScreenRecords = List<NfScreenRecord>.from(nfScreenLoadedState.nfScreenRecords);
         final nfs = await nfRepository.getNfs(
-          initialDate: _activeFilter?.initialDate,
-          endDate: _activeFilter?.endDate,
-          customerName: _activeFilter?.customerName,
+          filter: _activeFilter,
           page: _page,
         );
         final nfScreenRecords = nfs.map((nf) => NfScreenRecord(color: getColor(), nf: nf)).toList();
@@ -92,11 +88,7 @@ class NfScreenBloc extends Bloc<NfScreenEvent, NfScreenState> {
 
   Stream<NfScreenState> _mapUpdateFilterNfScreenToState(UpdateFilterNfScreen event) async* {
     try {
-      _activeFilter = NfScreenFilter(
-        initialDate: event.filter?.initialDate,
-        endDate: event.filter?.endDate,
-        customerName: event.filter?.customerName,
-      );
+      _activeFilter = event.filter;
       yield* _mapLoadNfScreenToState();
     } catch (e) {
       yield const NfScreenNotLoaded();
