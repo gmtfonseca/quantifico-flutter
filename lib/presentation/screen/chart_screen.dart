@@ -76,7 +76,7 @@ class ChartScreen extends StatelessWidget {
       child: ListView(
         children: [
           chartVerticalSpacing,
-          _buildTitle('Geral'),
+          _buildTitle('Geral', Icons.poll),
           chartVerticalSpacing,
           ChartContainer(
             title: 'Faturamento por Cliente',
@@ -96,7 +96,7 @@ class ChartScreen extends StatelessWidget {
             onStarOrUnstar: onStarOrUnstar,
           ),
           contextVerticalSpacing,
-          _buildTitle('Periódicos'),
+          _buildTitle('Periódicos', Icons.access_time),
           chartVerticalSpacing,
           ChartContainer(
             title: 'Faturamento Anual',
@@ -116,7 +116,7 @@ class ChartScreen extends StatelessWidget {
             onStarOrUnstar: onStarOrUnstar,
           ),
           contextVerticalSpacing,
-          _buildTitle('Geográficos'),
+          _buildTitle('Geográficos', Icons.place),
           chartVerticalSpacing,
           ChartContainer(
             title: 'Faturamento por Cidade',
@@ -132,15 +132,26 @@ class ChartScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTitle(String label) {
+  Widget _buildTitle(String label, IconData icon) {
+    const size = 24.0;
     return Padding(
       padding: const EdgeInsets.only(left: 4.0),
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 22,
-          color: Colors.black54,
-        ),
+      child: Row(
+        children: <Widget>[
+          Icon(
+            icon,
+            color: Colors.black54,
+            size: size,
+          ),
+          const SizedBox(width: 10),
+          Text(
+            label,
+            style: const TextStyle(
+              fontSize: size,
+              color: Colors.black54,
+            ),
+          ),
+        ],
       ),
     );
   }
