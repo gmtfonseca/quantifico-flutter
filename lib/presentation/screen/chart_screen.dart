@@ -96,7 +96,7 @@ class ChartScreen extends StatelessWidget {
             onStarOrUnstar: onStarOrUnstar,
           ),
           contextVerticalSpacing,
-          _buildTitle('Periódicos', Icons.access_time),
+          _buildTitle('Periódicos', Icons.calendar_today),
           chartVerticalSpacing,
           ChartContainer(
             title: 'Faturamento Anual',
@@ -133,7 +133,7 @@ class ChartScreen extends StatelessWidget {
   }
 
   Widget _buildTitle(String label, IconData icon) {
-    const size = 24.0;
+    const size = 22.0;
     return Padding(
       padding: const EdgeInsets.only(left: 4.0),
       child: Row(
