@@ -1,6 +1,6 @@
 # Quantifico
 
-Quantifico is a Mobile App builded with Flutter that was designed to provide the user valuable insights on their company. The data is presented in a visual manner throught multiple kinds of plots, making them extremely simple to digest.
+Quantifico is a Mobile app that was designed to provide the user valuable insights on their company. The data is presented in a visual manner through multiple kinds of plots, making them extremely simple to digest.
 
 ## Architecture
 
@@ -9,3 +9,8 @@ For this project I've used the [BloC pattern](https://www.didierboelens.com/2018
 ## DEMO
 
 ![](demo.gif)
+
+
+## DISCLAIMER
+
+Although this project is supposed to run on both mobile platforms (Android and iOS), I've only tested it on Android.
