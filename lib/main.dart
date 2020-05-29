@@ -71,6 +71,7 @@ class Quantifico extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
+      debugShowCheckedModeBanner: false,
       home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc(userRepository: userRepository)..add(const CheckAuthentication()),
         child: AuthGuard(

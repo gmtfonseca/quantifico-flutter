@@ -57,9 +57,13 @@ class LoginScreen extends StatelessWidget {
       height: 180,
       width: 180,
       child: Center(
+        child: Opacity(
+          opacity: 0.95,
           child: Image(
-        image: AssetImage('assets/logo.png'),
-      )),
+            image: AssetImage('assets/logo.png'),
+          ),
+        ),
+      ),
     );
   }
 
