@@ -1,6 +1,6 @@
 # Quantifico
 
-Quantifico is a Mobile app that was designed to provide the user valuable insights on their company. The data is presented in a visual manner through multiple kinds of plots, making them extremely simple to digest.
+Quantifico is a Mobile app that was designed to provide the users valuable insights on their company. The data is presented in a visual manner through multiple types of plots, making it extremely simple to digest.
 
 ## Architecture
 
